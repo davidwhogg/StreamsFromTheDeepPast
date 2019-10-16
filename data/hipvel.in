@@ -1,0 +1,5 @@
+pointfile hipvel.pts
+windowsize 500
+scale 100. 
+pointcolor 1. 1. 1. 0.7
+pointsize 1.4

@@ -1,0 +1,71 @@
+\begin{thebibliography}{17}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{{Bienaym{\' e}}(1999)}]{bienayme99a}
+{Bienaym{\' e}}, O. 1999, \aap, 341, 86
+
+\bibitem[{{Binney} {et~al.}(2000){Binney}, {Dehnen}, \& {Bertelli}}]{binney00a}
+{Binney}, J., {Dehnen}, W., \& {Bertelli}, G. 2000, \mnras, 318, 658
+
+\bibitem[{Chereul {et~al.}(1998)Chereul, Cr{\'e}z{\'e}, \&
+  Bienaym{\'e}}]{chereul98a}
+Chereul, E., Cr{\'e}z{\'e}, M., \& Bienaym{\'e}, O. 1998, \aap, 340, 384
+
+\bibitem[{Chereul {et~al.}(1999)Chereul, Cr{\' e}z{\' e}, \& Bienaym{\'
+  e}}]{chereul99a}
+Chereul, E., Cr{\' e}z{\' e}, M., \& Bienaym{\' e}, O. 1999, \aaps, 135, 5
+
+\bibitem[{Dehnen(1998)}]{dehnen98b}
+Dehnen, W. 1998, \aj, 115, 2384
+
+\bibitem[{{Dehnen}(2000)}]{dehnen00a}
+{Dehnen}, W. 2000, \aj, 119, 800
+
+\bibitem[{Dehnen \& Binney(1998)}]{dehnen98a}
+Dehnen, W. \& Binney, J.~J. 1998, \mnras, 298, 387
+
+\bibitem[{Dempster {et~al.}(1977)Dempster, Laird, \& Rubin}]{dempster77a}
+Dempster, A.~P., Laird, N.~M., \& Rubin, D.~B. 1977, Journal of the Royal
+  Statistical Society series B, 39, 1
+
+\bibitem[{{ESA}(1997)}]{esa97a}
+{ESA}. 1997, The Hipparcos Catalogue (ESA SP-1136)
+
+\bibitem[{{Fux}(2001)}]{fux01a}
+{Fux}, R. 2001, \aap, 373, 511
+
+\bibitem[{Lutz \& Kelker(1973)}]{lutz73a}
+Lutz, T.~E. \& Kelker, D.~H. 1973, \pasp, 85, 573
+
+\bibitem[{{Majewski} {et~al.}(2000){Majewski}, {Ostheimer}, {Kunkel}, \&
+  {Patterson}}]{majewski00a}
+{Majewski}, S.~R., {Ostheimer}, J.~C., {Kunkel}, W.~E., \& {Patterson}, R.~J.
+  2000, \aj, 120, 2550
+
+\bibitem[{Quillen(2003)}]{quillen03a}
+Quillen, A.~C. 2003, \aj, 125, 785
+
+\bibitem[{{Sirko} {et~al.}(2004){Sirko}, {Goodman}, {Knapp}, {Brinkmann},
+  {Ivezi{\' c}}, {Knerr}, {Schlegel}, {Schneider}, \& {York}}]{sirko04a}
+{Sirko}, E., {Goodman}, J., {Knapp}, G.~R., {Brinkmann}, J., {Ivezi{\' c}}, {\v
+  Z}., {Knerr}, E.~J., {Schlegel}, D., {Schneider}, D.~P., \& {York}, D.~G.
+  2004, \aj, 127, 914
+
+\bibitem[{{Skrutskie} {et~al.}(1997){Skrutskie}, {Schneider}, {Stiening},
+  {Strom}, {Weinberg}, {Beichman}, {Chester}, {Cutri}, {Lonsdale}, {Elias},
+  {Elston}, {Capps}, {Carpenter}, {Huchra}, {Liebert}, {Monet}, {Price}, \&
+  {Seitzer}}]{skrutskie97a}
+{Skrutskie}, M.~F., {Schneider}, S.~E., {Stiening}, R., {Strom}, S.~E.,
+  {Weinberg}, M.~D., {Beichman}, C., {Chester}, T., {Cutri}, R., {Lonsdale},
+  C., {Elias}, J., {Elston}, R., {Capps}, R., {Carpenter}, J., {Huchra}, J.,
+  {Liebert}, J., {Monet}, D., {Price}, S., \& {Seitzer}, P. 1997, in ASSL Vol.
+  210: The Impact of Large Scale Near-IR Sky Surveys, 25--+
+
+\bibitem[{{Skuljan} {et~al.}(1999){Skuljan}, {Hearnshaw}, \&
+  {Cottrell}}]{skuljan99a}
+{Skuljan}, J., {Hearnshaw}, J.~B., \& {Cottrell}, P.~L. 1999, \mnras, 308, 731
+
+\bibitem[{York {et~al.}(2000)}]{york00a}
+York, D. {et~al.} 2000, \aj, 120, 1579
+
+\end{thebibliography}

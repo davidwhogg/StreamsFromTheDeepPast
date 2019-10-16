@@ -1,0 +1,258 @@
+% this is a LaTeX file
+\documentclass{article}
+
+\newcommand{\hipparcos}{\textsc{hipparcos}}
+
+\begin{document}
+
+\section{Algorithm}
+
+\subsection{Model}
+
+Any set of $N$ points $\vec{x}_i$ in $p$-dimensional space $\vec{x}$
+can be modeled as being drawn from a probability distribution
+$f(\vec{x})$ which is a sum of $M$ gaussians, each with an amplitude
+$A_j$, a $p$-dimensional mean vector (ie, central value) $\vec{m}_j$,
+and a $p\times p$ variance matrix $\mathbf{V}_j$:
+\begin{equation}
+f(\vec{x})= \sum_{j=1}^M\,f_j(\vec{x}) \;\;\; ;
+\end{equation}
+\begin{equation}
+f_j(\vec{x})\equiv
+  \frac{A_j}{(2\pi)^\frac{p}{2}\,\sqrt{\det(\mathbf{V}_j)}}\,
+  \exp\left\{-\frac{1}{2}\,
+  (\vec{x}-\vec{m}_j)\cdot(\mathbf{V}_j)^{-1}\cdot(\vec{x}-\vec{m}_j)\right\}
+  \;\;\; .
+\end{equation}
+
+In the case of stars in the Galaxy, the points could be in velocity
+space ($p=3$), phase space ($p=6$), or even phase-color-magnitude
+space ($p=8$).  In what follows, we will restrict our attention to
+velocity space.
+
+\subsection{Basic EM}
+
+When there are $N$ points and each has had its full position
+$\vec{x}_i$ measured in the space, the expectation-maximation (EM)
+algorithm is a robust method for finding the maximum-likelihood values
+of the parameters.  The EM algorithm begins with a guess at the
+parameters $A_j$, $\vec{m}_j$, and $\mathbf{V}_j$.  Probabilities
+$P_{ij}$ that each of the $N$ points $i$ was drawn from each of the
+$M$ gaussians $j$ can be computed using the guess:
+\begin{equation}
+P_{ij}= \frac{f_j(\vec{x}_i)}{\sum_{j=1}^M\,f_j(\vec{x}_i)} \;\;\; .
+\end{equation}
+These probabilities are used to compute updated (ie, ``new'') values
+for the parameters:
+\begin{equation}
+A_j^\mathrm{(new)}= \sum_{i=1}^N\,P_{ij} \;\;\; ,
+\end{equation}
+\begin{equation}
+\left[\sum_{i=1}^N\,P_{ij}\right]\,\vec{m}_j^\mathrm{(new)}= 
+  \sum_{i=1}^N\,P_{ij}\,\vec{x}_i \;\;\;,
+\end{equation}
+\begin{equation}
+\left[\sum_{i=1}^N\,P_{ij}\right]\,\mathbf{V}_j^\mathrm{(new)}= 
+  \sum_{i=1}^N\,P_{ij}\,(\vec{x}_i-\vec{m}_j^\mathrm{(new)})\otimes
+  (\vec{x}_i-\vec{m}_j^\mathrm{(new)})
+  \;\;\; ,
+\end{equation}
+where the ``$\otimes$'' symbol represents the outer product operator.
+
+\subsection{Projected EM}
+
+In the case of phase-space measurements, it is often the case that the
+position $\vec{x}_i$ of each point in phase space is not directly
+measured in all its $p$-dimensional glory, but rather a
+$q$-dimensional position $\vec{y}_i$, with $q<p$, is measured in some
+subspace.  For example, in the case of \hipparcos, we are interested
+in the distribution of stars in the 3-dimensional velocity space, but
+only have measurements of 2-dimensional tangential velocities (from
+parallax and proper motion).
+
+The measured position $\vec{y}_i$ is related to the full position
+$\vec{x}_i$ of the point by a non-square matrix $\mathbf{R}_i$,
+\begin{equation}
+\vec{y}_i= \mathbf{R}_i\cdot\vec{x}_i \;\;\; ,
+\end{equation}
+where the non-square matrix $\mathbf{R}_i$ gets a subscript $i$
+because each point will, in general, be measured in a different
+subspace.  The matrices $(\mathbf{R}_i^\mathsf{T}\cdot\mathbf{R}_i)$
+are $p\times p$ and symmetric, and the rows of the $\mathbf{R}_i$ can
+be normalized so that
+\begin{equation}
+(\mathbf{R}_i^\mathsf{T}\cdot\mathbf{R}_i)\cdot
+(\mathbf{R}_i^\mathsf{T}\cdot\mathbf{R}_i)=
+(\mathbf{R}_i^\mathsf{T}\cdot\mathbf{R}_i) \;\;\; ;
+\end{equation}
+ie, such that the matrices
+$(\mathbf{R}_i^\mathsf{T}\cdot\mathbf{R}_i)$ are projection matrices.
+
+In the case of \hipparcos\ measurements of stellar velocities, the
+projection matrices project full three-dimensional velocities to
+tangential velocity components measured via proper motion and
+parallax.  Each projection matrix
+$(\mathbf{R}_i^\mathsf{T}\cdot\mathbf{R}_i)$ depends on the sky
+position (RA$_i$ and Dec$_i$) of the corresponding star.
+
+The likelihood of point $i$ is computed not using the full gaussians
+$f_j(\vec{x})$ but using projections $f_{ij}(\vec{y})$ onto the $i$
+point's subspace
+\begin{equation}
+f_{ij}(\vec{y})\equiv
+  \frac{A_j}{(2\pi)^\frac{q}{2}\,\sqrt{\det(\mathbf{\tilde{V}}_{ij})}}\,
+  \exp\left\{-\frac{1}{2}\,
+  (\vec{y}-\mathbf{R}_i\cdot\vec{m}_j)
+  \cdot(\mathbf{\tilde{V}}_{ij})^{-1}\cdot
+  (\vec{y}-\mathbf{R}_i\cdot\vec{m}_j)\right\} \;\;\; ,
+\end{equation}
+where the $p\times p$ variance matrix $\mathbf{V}_j$ has been replaced
+by its $q\times q$ projection
+\begin{equation}
+\mathbf{\tilde{V}}_{ij}\equiv
+  \mathbf{R}_i\cdot\mathbf{V}_j\cdot\mathbf{R}_i^\mathsf{T} \;\;\; .
+\end{equation}
+
+When points are measured in the $q$-dimensional subspaces, the EM
+algorithm is modified as follows:
+\begin{equation}
+P_{ij}= \frac{f_{ij}(\vec{y}_i)}{\sum_{j=1}^M\,f_{ij}(\vec{y}_i)} \;\;\; ;
+\end{equation}
+\begin{equation}
+A_j^\mathrm{(new)}= \sum_{i=1}^N\,P_{ij} \;\;\; ;
+\end{equation}
+\begin{equation}
+\label{eq:newmeanproj}
+\left[\sum_{i=1}^N\,P_{ij}\,
+  (\mathbf{R}_i^\mathsf{T}\cdot\mathbf{R}_i)\right]\cdot
+  \vec{m}_j^\mathrm{(new)}= 
+  \sum_{i=1}^N\,P_{ij}\,\mathbf{R}_i^\mathsf{T}\cdot\vec{y}_i \;\;\; ;
+\end{equation}
+\begin{equation}
+\label{eq:newvarproj}
+\sum_{i=1}^N\,P_{ij}\,(\mathbf{R}_i^\mathsf{T}\cdot\mathbf{R}_i)\cdot
+  \mathbf{V}_j^\mathrm{(new)}\cdot
+  (\mathbf{R}_i^\mathsf{T}\cdot\mathbf{R}_i)=
+  \sum_{i=1}^N\,P_{ij}\,
+  \left[\mathbf{R}_i^\mathsf{T}\cdot(\vec{y}_i-\mathbf{R}_i\cdot\vec{m}_j)
+  \right]\otimes
+  \left[\mathbf{R}_i^\mathsf{T}\cdot(\vec{y}_i-\mathbf{R}_i\cdot\vec{m}_j)
+  \right] \;\;\; .
+\end{equation}
+Equation (\ref{eq:newmeanproj}) can be solved to obtain the
+$\vec{m}_j^\mathrm{(new)}$ as long as the matrices
+\begin{equation}
+\mathbf{M}_j\equiv
+  \left[\sum_{i=1}^N\,P_{ij}\,
+  (\mathbf{R}_i^\mathsf{T}\cdot\mathbf{R}_i)\right]
+\end{equation}
+are invertible.  In principle, these matrices will be invertible as
+long as different points $i$ have different non-square matrices
+$\mathbf{R}_i$.  In practice, the inversions will only be stable if
+different points $i$ with significantly different $\mathbf{R}_i$ have
+comparable probabilities $P_{ij}$.  In the case of \hipparcos\
+measurements of velocity space, the $\mathbf{M}_j$ will be stably
+invertible when the stars contributing to each velocity-space gaussian
+span a wide range of RA and Dec.  Equation (\ref{eq:newvarproj}) can
+be solved for the $\mathbf{V}_j^\mathrm{(new)}$ under similar
+conditions; but the solution requires one more step: For each gaussian
+$j$, equation (\ref{eq:newvarproj}) can be thought of as $p\,(p+1)/2$
+linearly independent linear equations for the $p\,(p+1)/2$ independent
+parameters of the symmetric $p\times p$ matrix
+$\mathbf{V}_j^\mathrm{(new)}$.  Once the equation is re-cast in this
+form it can be solved using standard linear algebra.
+
+\subsection{Restriction to spherical gaussians}
+
+Unfortunately, although equation (\ref{eq:newvarproj}) is correct,
+when it acts on real, finite data sets, it often produces unphysical
+variance matrices which are near-singular or which have negative
+variances in some directions.  The algorithm can also be slow, because
+it involves large numbers of matrix inversions.  One way to avoid
+these problems is to restrict the algorithm to consider not arbitrary
+$p$-dimensional gaussians for the model, but only spherically
+symmetric gaussians.  In this case, the model becomes
+\begin{equation}
+f(\vec{x})= \sum_{j=1}^M\,f_j(\vec{x}) \;\;\; ;
+\end{equation}
+\begin{equation}
+f_j(\vec{x})\equiv
+  \frac{A_j}{(2\pi\,V_j)^\frac{p}{2}}\,
+  \exp\left\{-\frac{1}{2\,V_j}\,
+  (\vec{x}-\vec{m}_j)\cdot(\vec{x}-\vec{m}_j)\right\}
+  \;\;\; ,
+\end{equation}
+where the variances $V_j$ are simply scalars.
+
+Under the spherical restriction, the algorithm becomes simpler and
+faster:
+\begin{equation}
+f_{ij}(\vec{y})\equiv
+  \frac{A_j}{(2\pi\,V_j)^\frac{q}{2}}\,
+  \exp\left\{-\frac{1}{2\,V_j}\,
+  (\vec{y}-\mathbf{R}_i\cdot\vec{m}_j)\cdot
+  (\vec{y}-\mathbf{R}_i\cdot\vec{m}_j)\right\} \;\;\; ;
+\end{equation}
+\begin{equation}
+P_{ij}= \frac{f_{ij}(\vec{y}_i)}{\sum_{j=1}^M\,f_{ij}(\vec{y}_i)} \;\;\; ;
+\end{equation}
+\begin{equation}
+A_j^\mathrm{(new)}= \sum_{i=1}^N\,P_{ij} \;\;\; ;
+\end{equation}
+\begin{equation}
+\label{eq:newmeanprojsphere}
+\left[\sum_{i=1}^N\,P_{ij}\,
+  (\mathbf{R}_i^\mathsf{T}\cdot\mathbf{R}_i)\right]\cdot
+  \vec{m}_j^\mathrm{(new)}= 
+  \sum_{i=1}^N\,P_{ij}\,\mathbf{R}_i^\mathsf{T}\cdot\vec{y}_i \;\;\; ;
+\end{equation}
+\begin{equation}
+\label{eq:newvarprojsphere}
+\left[\sum_{i=1}^N\,P_{ij}\right]\,V_j^\mathrm{(new)}=
+  \frac{1}{q}\,\sum_{i=1}^N\,P_{ij}\,
+  (\vec{y}_i-\mathbf{R}_i\cdot\vec{m}_j)\cdot
+  (\vec{y}_i-\mathbf{R}_i\cdot\vec{m}_j) \;\;\; .
+\end{equation}
+
+\subsection{Number of gaussians}
+
+The EM algorithm provides a technique for fitting $M$ gaussians to $N$
+data points, but does not, in itself, provide a criterion for choosing
+the number $M$ of gaussians to use.  A criterion can be developed with
+the concept of information.  An entropy $S$ can be associated with any
+model:
+\begin{equation}
+\label{eq:entropy}
+S= \sum_{i=1}^N\,\log_2\left\{\frac{\Delta^qy\,\sum_{j=1}^M\,f_{ij}(\vec{y}_i)}
+  {\int\mathrm{d}^qy\,\sum_{j=1}^M\,f_{ij}(\vec{y})}\right\} \;\;\; ,
+\end{equation}
+where the measurement is in bits, and the $\Delta^qy$ is an arbitrary
+constant which makes the argument of the logarithm dimensionless.
+Models which fit the data more closely have higher entropies.
+
+If the model is used to optimally code the data for transmission over
+a channel, the data will be compressed (losslessly) by an amount
+related to the entropy $S$, in the sense that two different models, A
+and B, with entropies $S_\mathrm{A}$ and $S_\mathrm{B}$, will provide
+optimal compressions which differ in bits by $\Delta
+S=S_\mathrm{B}-S_\mathrm{A}$.
+
+In general, a model with $M+1$ gaussians will fit the data better, ie,
+have higher entropy $S$, than a model with $M$ gaussians.  However,
+the better fit, and therefore better compression, is offset by the
+additional information required to transmit the $p+2$ parameters
+(amplitude $A_{M+1}$, mean $\vec{m}_{M+1}$, and variance $V_{M+1}$) of
+the additional gaussian.  (This becomes $[p+1]\,[p+2]/2$ parameters
+when we allow non-spherical gaussians).  Once an estimate has been
+made of the number $S_0$ of bits of precision required to describe
+each of these parameters, the best-choice number of gaussians is that
+which maximizes the total information compression criterion
+\begin{equation}
+S_\mathrm{comp}= S-M\,(p+2)\,S_0 \;\;\; ,
+\end{equation}
+where the model entropy $S$ is as defined in equation
+(\ref{eq:entropy}) and the parameter precision estimate $S_0$ is a
+somewhat arbitrary choice which depends on the size and dynamic range
+of the data set.
+
+\end{document}

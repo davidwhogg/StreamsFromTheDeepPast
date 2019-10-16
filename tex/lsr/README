@@ -1,0 +1,125 @@
+Dear Brad,
+
+Please find enclosed (on the FTP site) a re-re-submission entitled
+
+  Modeling the local stellar velocity distribution function
+  with Hipparcos data. I. The velocity ellipsoid
+
+by Hogg, Blanton, Roweis, Johnston.  Below this, I attach the second,
+minor-comment referee report and our comments/responses.
+
+If you have any questions, please feel free to contact me at the info
+below.  I am the corresponding author for this paper and will be
+responsible for the page charges.
+
+Thank you very much,
+
+David
+----- 
+David W. Hogg        *  assistant professor
+Center for Cosmology and Particle Physics
+Department of Physics, New York University
+4 Washington Pl, New York, NY 10003
+212-992-8781 (tel)   *  212-995-4903 (fax)
+david.hogg@nyu.edu   *  http://cosmo.nyu.edu/hogg/
+
+-----
+
+In what follows, the referee's comments are indented and our reply is
+not.
+
+    [from Brad:]
+
+    Dear David:
+
+    Enclosed please find the referee's report on your submission to
+    the ApJ entitled "Modeling Complete Distributions with Incomplete
+    Observations: The Velocity Ellipsoid from Hipparcos Data" by
+    D. W. Hogg, M. R. Blanton, S. T. Roweis, and K. V. Johnston ( MS#
+    61222).
+
+    Both myself and the referee are happy with your revisions, and at
+    this stage I am close to accepting the paper.  First though, could
+    I ask that you consider the minor comments provided by the referee
+    below?
+
+We have fixed up these last things too.
+
+    When you resubmit the paper, please include a detailed cover
+    letter containing the listing of the changes you've made to the
+    text and your responses to the report.
+
+    Processing of your revised manuscript will be expedited if you
+    make your revisions to the manuscript latex file available for
+    downloading from the ApJ Web Peer Review System
+    (http://mss.uchicago.edu/ApJ/).  This version includes your
+    previous submission plus any modifications to latex commands
+    necessary for smooth processing by the ApJ electronic system.  The
+    associated PDF file is the version seen by the referee.
+
+    If you have any questions, feel free to contact me.
+
+    Best regards,
+
+    Brad Gibson, Professor of Astrophysics
+    The Astrophysical Journal
+    Phone:61-3-9214 8036
+    Fax:61-3-9214 8797
+    apj@astro.swin.edu.au
+
+    *************************************************
+
+    ApJ Review MS#61222
+
+    TITLE: Modeling Complete Distributions with Incomplete Observations: 
+    The Velocity Ellipsoid from Hipparcos Data
+
+    AUTHORS: D. W. Hogg, M. R. Blanton, S. T. Roweis, and K. V. Johnston
+
+    I carefully read the corrected manuscript and I am pleased with
+    this revised version. The authors have significantly improved the
+    readability of the paper.  Their explanation of the method and the
+    discussion are concise and precise.
+
+    All the major comments were fully taken into account.  I do not
+    have any significant comment to add besides a few minor comments
+    which are detailed below (mainly typos and references). Those
+    comments are very minor comments and I do not need to see the
+    paper again. I would recommend publication after a carefull
+    reading of the manuscript to correct the remaining typos.
+
+    > AMEX is dead, and we dropped it.  We also added fully spelled-out
+    > names for everything, with references where possible.
+
+    check references (actually the 2MASS one)  ...
+
+Fixed!
+
+    > We agree, but since it is a major confirmation of the methodology, we
+    > still felt it merited mention.
+
+    I would then add the comment that it confirms the methodology,
+    just to make sure the reader gets your point.
+
+Added the comment.
+
+    > We modified the wording here.  Because both studies are using
+    > *exactly* the same input data, there are no known tests for deciding
+    > what kinds of differences are statistically "significant", so we
+    > dropped that loaded word, and replaced with "somewhat".  We now give
+    > the Dehnen result, note that they are within one sigma, warn that they
+    > use the same data, and discuss possible reasons for the discrepancy.
+
+    If you were using the exact same binning, the paired t-tested
+    would apply I believe. Nevertheless, I do not think that Dehnen's
+    binning in color can be exactly reproduced in which case this test
+    would only give you a very crude estimate of the real significance
+    level.
+
+Fine, although we don't entirely agree about the t-test, since both
+data sets are literally identical.
+
+    There are quite a few typos left in the text (especially the annex
+    1), please correct them.
+
+Corrected all I could find -- which were indeed quite a few!

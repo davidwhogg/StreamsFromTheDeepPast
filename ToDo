@@ -1,0 +1,41 @@
+streams project to-do list
+--------------------------
+
+KVJ learn to use CVS.
+
+Write new fake_catalog which takes, as input, the output of
+ex_max_proj.
+
+Fully test ex_max_proj.
+
+Understand and remove multiples correctly from HIPPARCOS catalog.
+
+Write sample selection section for the paper.
+
+Show that the code gets the right answer when we make a fake catalog
+with our model and fit to that fake catalog.
+
+Show that the code is not fooled or screwed-up by spatial gradients of
+velocity (ie, non isotropic distributions of stars in the velocity
+clumps).
+
+Get literature radial velocities.
+
+Check radial velocity predictions.
+
+Include radial velocities explicitly?
+
+Measure the masses of the clumps using only the lower main sequence
+(ie, long-lived stars).
+
+Investigate whether HIPPARCOS selection can create spurious age
+effects in velocity components.
+
+Repeat analysis with only lower main sequence, only upper main
+sequence, only giants to check population differences in the clumps.
+
+Compute expected timescale for velocity streams to disperse.
+
+Get FAME numbers of stars in various limits.
+
+Make weighted C-M diagrams.

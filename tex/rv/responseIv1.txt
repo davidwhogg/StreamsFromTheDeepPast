@@ -1,0 +1,460 @@
+Dear Editor,
+
+Please find below the response to the referees' comments for the
+submission "The velocity distribution of nearby stars from Hipparcos
+data I. The significance of the moving groups" by myself and others
+(submission # ApJ/318741/ART/207748).
+
+We have made a number of small changes following the referee's
+report. The main change that we have made, as suggested by the
+referee, is moving the section describing the Hipparcos dataset to the
+beginning of Section 2 to make the description of the method less
+abstract. The other small changes to the manuscript that we have made
+are the following:
+
+- In Section 1.2, paragraph 6 we updated the discussion of Dehnen's
+  1998 paper to better reflect his results;
+
+- In Section 2.1 (formerly section 2.3) we have defined what the
+  observed quantities w_i are in the description of the method in
+  section 2.2, and we have also explicitly defined the projection
+  matrices R_i that are used to project the velocities in the
+  (v_x,v_y,v_z) frame onto the observed tangential/line-of-sight frame
+  of the observations. We hope that this leads to a better
+  understanding of the method as described in section 2.2.
+
+- We have added a discussion of the star-to-star correlations in the
+  new reduction of the Hipparcos data in section 2.1.
+
+- We have added in the projection matrices R_i in the description of
+  the method and the optimization algorithm.
+
+- We added the definition of q_j below eqs. 17 and 18 in section 2.3.
+
+- In section 3, first paragraph we have clarified the reasoning behind
+  expecting the regularization parameter w to be of order one.
+
+- We have also clarified the different initialization procedures at
+  the beginning of section 3.
+
+- In section 4 we have added a longer description of the "optimal
+  lattice quantizing constant" and why it appears in eq. 21.
+
+- As suggested by the referee, we looked into the distribution of the
+  stars on the sky for which the prediction of the radial velocities
+  based on our reconstruction of the velocity distribution failed. We
+  found no preferred direction (or set of directions) and added this
+  to the discussion in section 5.
+
+- In section 6 we added a sentence stating that the predictions in
+  table 2 could be wrong.
+
+- We section 7.3 we now stress more clearly that the individual
+  Gaussian components in a Gaussian mixture approach to density
+  estimation are meaningless, and that we use the components as
+  proxies for the peaks in the distribution, since the peaks can
+  unambiguously be identified with individual components.
+
+- We have updated the caption of Figure 2 to clarify the meaning of
+  the various contours.
+
+- We changed the labels in Figure 1 to reflect the convention that
+  \mu_\alpha * cos(delta) = \mu_{alpha*}.
+
+A detailed response to all of the referee's comments is included below.
+
+Please contact me by the information given below with any questions
+regarding this re-submission.
+
+With kind regards,
+
+Jo Bovy
+
+-
+Jo Bovy
+Ctr. for Cosmology & Particle Physics, 
+Dept. of Physics
+New York University
+4 Washington Place
+New York, NY 10003
+jb2777@nyu.edu
+
+
+In what follows the referee's comments are indented.
+
+
+
+==================================================================
+
+	Ref: ApJ/318741/ART/207748
+	
+	Dear Mr. Bovy,
+
+	Manuscript #: 318741
+	Title: The Velocity Distribution of Nearby Stars from Hipparcos data I.
+	The Significance of the Moving Groups
+	Authors: Jo Bovy et al
+	
+	I have received the referee's report on your submission to The
+	Astrophysical Journal, and append it below.
+	
+	I hope that you will agree with my assessment that the report
+	is constructive in tone, but you will notice that it does
+	raise a number of issues, some substantive and some more
+	straightforward, that should be addressed before publication
+	in the ApJ.
+
+	Please consider the report carefully, appropriately addressing
+	the concerns and suggestions of the referee, and then resubmit
+	your manuscript. When you resubmit, please include a detailed
+	cover letter indicating point-by-point your responses to the
+	report, and also indicating any other changes you have made to
+	the text.
+
+	You can also find the referee report, and submit your revised
+	version, onyour personal author homepage hosted by IOP
+	Publishing located
+	athttp://ticket.iop.org/atomreg?digest=a89a4a4b58a7ea64ef3d42b3adf47701&urn=207748&expires=2010-05-19&skin=ej&exists=1&return=http://authors.iop.org/.
+	You may need to choose a new username and password.
+
+	The policy of The Astrophysical Journal is to view manuscripts
+	as withdrawn if no revised version is received within six
+	months after the most recent referee's report goes to the
+	authors.
+
+	If you have any questions, please contact me.
+	
+	
+	With best wishes,
+	
+	Butler Burton
+
+	----------------------
+	Prof. W. Butler Burton
+	Associate Editor-in-Chief, The Astrophysical Journal
+	Professor Emeritus, Leiden University
+	National Radio Astronomy Observatory
+	
+	+++++++++++++++++++++++++++++++++++++++++++++++
+	The text of the review is included below, after the double line.
+	===============================================
+	
+	The paper by Bovy et al is in my opinion a very important
+	contribution to the literature on the velocity distribution of
+	stars in the solar neighbourhood:
+
+	1. Using the Geneva-Copenhagen survey data, it provides the
+	first truly reliable test of the amount of complexity needed
+	to explain the velocity distribution.
+
+	2. It demonstrates the power of using all-sky two-dimensional
+	velocity data to infer the properties of a three dimensional
+	distribution, while at the same time demonstrating very
+	clearly the need for follow-up radial velocity surveys for
+	missions such as Hipparcos and Gaia.
+
+	The paper therefore certainly deserves publication. However
+	the description of the methodology in section 2 is not
+	entirely clear in its present form and most of my comments
+	concern questions about this section and some suggestions for
+	making the text easier to follow.
+
+	Section 2
+	---------
+
+	On a first reading the meaning of w_i and v_i in equation (1)
+	became clear to me only after reading subsections 2.3. It may
+	be better to put subsection 2.3 first in section 2 so that the
+	reader can more easily make a concrete connection between the
+	methodology and the observational data involved. The reason I
+	say this will become clearer from the questions that follow.
+
+We agree that describing the data first allows the reader to
+understand the rather abstract methodology better, so we have moved
+section 2.3 up.
+
+	From the text surrounding eq (1) it is not clear what exactly
+	w_i represents.  Going back to the Hogg et al (2005) paper w_i
+	would represent the components of v_i projected on the local
+	directions of increasing galactic longitude and latitude (eq 6
+	in said paper). However from section 2.3 it becomes clear that
+	w_i represents v_i with the radial velocity set to zero. That
+	is, a projection on two-dimensional tangential velocities is
+	not actually used. This fact is not obvious from the statement
+	below equation (1) that the projection matrices R_i are not
+	carried along but that instead a formally infinite eigenvalue
+	is used in the covariance matrix for the missing data
+	components. Does this formally infinite eigenvalue indeed
+	correspond to the uncertainty assigned to the zero radial
+	velocity in section 2.3?
+
+The meaning of w_i and v_i was indeed unclear, mostly because of our
+decision to not carry around the projection matrices (or in this case,
+rotation matrices) and to change the meaning of w_i from the one it
+had in Hogg et al. (2005). The w_i are the v_i projected onto the
+tangential and radial directions, with the tangential direction broken
+up into increasing ra and increasing dec, i.e.,
+
+w_i = [v_r , k/parallax * mu_{ra*} , k/parallax * mu_dec ]^T
+
+which makes the rotation matrix R_i
+
+R_i^{-1} = T A_i
+
+with T and A defined in eqs. 2 and 3. We then use a large value for
+(S_i)_00 (the zero,zero component of the data covariance) as the
+uncertainty for the zero radial velocities which we use in the
+construction of the w_i. Although we always used these rotation
+matrices in practice we thought it would be conceptually simpler to
+leave them out. However, we see how this can be confusing, so we have
+put them back into the expressions everywhere in the paper.
+
+
+	It would also help to mention that the w_i are obtained from
+	equation (13) by setting v_rad to zero.
+
+We now explicitly mention this right after the definition of the w_i,
+below Eq. 3.
+
+
+	In equation (5) S_i appears without explanation. Its meaning
+	only becomes clear after equation (18).
+
+S_i is first mentioned following Eq. (1), where it is stated that S_i
+is the covariance matrix of the Gaussian uncertainty distribution for
+the measurements. Eq. (18) then specifies what S_i is in the case of
+the Hipparcos measurements. 
+
+
+	I cannot fully judge the content of 2.2 for lack of expertise
+	on the subject but I trust that this is explained in the
+	forthcoming Bovy et al paper. The only thing that should be
+	clarified here is what the meaning of q_j in equations (11)
+	and (12) is. Does it represent a summation of q_ij over i?
+
+The paper describing the method in great detail is now available on
+the arXiv (arXiv:0905.2979); we added this in the reference section.
+
+The meaning of q_j is as the referee suspected but was unfortunately
+omitted. We added the definition of q_j below Eqs. (11) and (12).
+
+
+	In section 2.3 the way the sample was obtained from the
+	Hipparcos catalogue is described. Using parallaxes with 10% or
+	better relative errors is mandatory in order to make the error
+	propagation in (18) valid, however this selection introduces a
+	"truncation bias" which leads to the brighter (smaller
+	parallax errors) and/or closer stars (larger parallaxes) being
+	selected preferentially from the Hipparcos catalogue. This
+	effect is not accounted for in this paper and it is probably
+	not trivial to assess the potential biases that may enter the
+	results. Nevertheless it would be good to briefly comment on
+	this issue.
+
+It seems unlikely that this "truncation bias" could influence the
+results of our paper very much. The cut on the relative error of the
+parallaxes is not (strongly) related to the kinematics of the stars as
+the main sources of error for the parallaxes are Poisson noise and the
+accuracy of the attitude reconstruction of the Hipparcos satellite, so
+it is hard to see how the relative error cut could kinematically bias
+the sample. For this reason we do not think it is necessary to discuss
+this in the paper.
+
+Testing this would indeed be hard since the only way to do this would
+be to truncate the relative error distribution even further and see
+whether the results change. Any significant shift in the relative
+parallax error cut will end up cutting out most of the sample.
+
+	At the end of section 2.3 the issue of star-to-star
+	covariances is mentioned. It could be pointed out here already
+	that van Leeuwen specifically worked on reducing this type of
+	error correlations in his new reduction of the Hipparcos
+	data. Figure 2.11 in the book by van Leeuwen in fact shows a
+	factor 30--40 reduction in the correlations of the astrometric
+	measurement errors, as a function of separation on the sky.
+
+We did mention this fact briefly in section 7.1, in the third
+paragraph, while discussing the possible influence of unknown
+star-to-star correlations on the validity of the internal model
+selection tests, but the referee is right to point out that this
+should be mentioned earlier in the description of the data as well. We
+added a sentence explaining that the new reduction has reduced the
+level of star-to-star correlations significantly.
+
+	Section 3
+	---------
+	
+	The regularization parameter is expected to be of order
+	1. This is not obvious to me. How do the typical error values
+	and spatial range of the stars determined or expectation for
+	w?
+
+The moving groups are spread out over the full spatial extent of the
+sample, ~ 100 pc, so even if a moving group is cold and on a circular
+orbit, projecting the full, six-dimensional phase space distribution
+onto the velocity components v_x and v_y at the location of the Sun
+will create elongated structures in the velocity distribution (because
+the circular velocity is not parallel to v_y at 100 pc from the
+Sun). The typical size of these structures will be about 
+
+(\Delta x) / R_0 *v_circ , 
+
+so for Delta x =~ 100 pc, R_0 = 8.5 kpc, and v_circ =~ 220 km/s this
+gives a typical size of 2.5 km/s. Given that the measurement errors
+are about the same size, these elongated structures will be blurred
+into blobs with this typical size. Of course, this is simply a
+heuristic, but one that works well. Also note that using w = 1
+(km/s)^2 is basically the same as using w= 0 (km/s)^2 (no
+regularization) such that our small sample of w values spans the
+interesting range in w.
+
+We made this argument in the introduction (paragraph 2 of Sec. 1.2),
+but we have repeated in Sec. 3 for clarity. 
+
+
+	In the same paragraph the description of the initial
+	conditions is not entirely clear to me. Less complex models in
+	the second initialization method means lower K? If so how can
+	the less complex model have the same K but larger w?
+
+Less complex models means either lower K or larger w (larger w applies
+more regularization leading to less structure in the distribution). In
+practice this means that we compare the result for model (K,w) with
+those of models (K-1,w) and (K, (sqrt(w)+1)^2) and restart if the
+likelihood of either of these last two models is higher than that of
+model (K,w) (adding a small amplitude Gaussian if (K-1,w) has the
+highest likelihood yet). If done in the right order this leads to the
+consistent result of Fig. 5.
+
+	Section 4
+	---------
+	
+	Below eq (21): I have no idea what an "optimal lattice
+	quantizing constant" is.
+
+We have clarified the meaning of the optimal lattice quantizing
+constant and the reason it appears in Eq. (21) in the text. Basically,
+in order to truly minimize the message length, one has to find the
+optimal accuracy to which the model parameters need to be specified in
+the message. The magnitude of the optimal accuracy is set by the
+precision to which the model parameters are known from the data, which
+is approximated using the Fisher matrix in Eq. (21). However, even
+when the magnitude of the optimal accuracy is known, the optimal
+arrangement of quantized values---the arrangement that minimizes the
+squared-quantization-error---is non-trivial in higher dimensional
+spaces (D > 3), and unknown in general. The optimal quantizing
+constant is a geometric constant of proportionality between the
+minimum squared-quantization-error and the magnitude of the accuracy.
+
+For example, in one dimension the optimal arrangement of quantizing
+values is intervals of a constant width s. The squared error in this
+case is equal to s^2/12, the variance of a uniform
+distribution. Therefore, the optimal quantizing constant is given by
+1/12 in 1D.
+
+
+	Eq (23): There seems to be something wrong in the notation
+	p(theta)|{K,w}.  Should this be p(theta|{K,w})?
+
+That is right, that was wrong. It has been corrected.
+
+	Section 5
+	---------
+	
+	2nd paragraph: Can something more be said about the stars for
+	which the radial velocity predictions fail. Are they located
+	in particular directions in the sky with unfavourable
+	projections of the true velocities into the data?
+
+We have looked at the directions of the stars for which the radial
+velocity prediction is particularly bad, but there does not seem to a
+particular direction (or set of directions) associated with the failed
+radial velocity predictions. We have added a short discussion of this
+in the third paragraph of section 5.
+
+We believe that the long tail of the likelihood distribution in the
+top panel of Fig. 12 is explained by the high-velocity stars which the
+data sample that we use does not sample very well (and the bottom
+panel of Fig. 12 shows that most radial velocities with a small
+probability given the model of the velocity distribution are in fact
+high velocity stars).
+
+
+
+	Section 6
+	---------
+
+	2nd paragraph: The stars with the most informative predicted
+	radial velocity are listed but from figure 13 it is clear that
+	these predictions can still be completely wrong.
+
+Indeed! That is partly what makes them interesting. They could teach
+us a lot, even if they turn out to be wrong, since then they would
+lead to a large improvement of the model. We have included this remark.
+
+	Section 7/8
+	-----------
+
+	A remark on the future: Gaia will provide 3D velocity
+	information for "only" 100 million or so of the billion stars
+	it will survey so there will be a very large number of stars
+	with only 2D velocity information to which techniques such as
+	described in this paper can be applied. It would be
+	interesting to investigate whether or not the technique can be
+	extended to stars with low quality parallaxes (by, for
+	example, predicting proper motions and parallaxes instead of
+	tangental velocities).
+
+We have been considering what can be learned from data with large
+parallax errors as well---does the larger number of data points really
+lead to much better constraints?---mostly as it concerns the general
+question of inference of kinematics/dynamics from Gaia but also in
+this particular application. This is a much more general problem than
+the one we are concerned with in this paper; in particular, one would
+have to model the full six-dimensional distribution function to get
+anywhere with this, which would add a significant computational cost,
+both from considering the spatial dimensions as well as from
+projecting the model into the observable coordinates. For this reason
+we think it is better not to speculate about this in the paper.
+
+	Figure 2
+	--------
+
+	I had to look at the figure for a while to figure out what the
+	"innermost dark contour" is. It would help to point out that
+	there are both black and white contours, with the latter
+	blending in the lower panels.
+
+We now explicitly describe which the white contours are (and that
+they are blended together in some panels).
+
+	
+	Minor points
+	------------
+	
+	Equations (13)--(15). Normally the convention is to have the
+	radial velocity as the last entry in the column vector on the
+	right hand side of (13). See for example the Hipparcos
+	catalogue documentation
+
+This does not seem to be set in stone. For example, van Leeuwen uses
+the convention we use in his book on the new reduction of the
+Hipparcos data (see, e.g., Eq. (3.12) in that book). Dehnen's 1998
+paper also uses our convention. Therefore, we have left this unchanged.
+
+	Figure 1: The convention is to use \mu_{\alpha,*}=\mu_alpha x
+	cos(\delta) to indicate that the cos(delta) factor is included
+	in the proper motion.
+
+We made this change in the labelling of Figure 1.
+
+	Typos
+	-----
+
+	Page 8, 2nd line from top: spacial --> spatial
+	
+	Page 28, 4th line from bottom: add "test" after "conservative"
+
+Both of these have been corrected. Thanks for catching these.
+
+	===================================================

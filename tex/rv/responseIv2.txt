@@ -1,0 +1,173 @@
+Dear Editor,
+
+Please find below the response to the referees' brief remarks for the
+submission "The velocity distribution of nearby stars from Hipparcos
+data I. The significance of the moving groups" by myself and others
+(submission # ApJ/318741/ART/207748).
+
+We have made the changes and clarifications suggested by the referee,
+but we have not made any changes to the scientific content of the
+paper:
+
+- In the second paragraph of section 2.2 we clarified how the
+  projection matrices become rotation matrices in the specific
+  application of the deconvolution technique described in section 2.2
+  to the velocity distribution.
+
+- In the third paragraph of section 7.3 we clarified why we do not
+  consider the component of the Gaussian mixture with the largest
+  weight to be a moving group. This should make it clear why we say
+  that the moving group with the largest weight is located at
+  (-23,-10) and not at (5,-7) (which is part of the background
+  distribution).
+
+- We added the discussion of the "truncation bias" which we gave in
+  response to a question from the referee in the previous report to
+  the first paragraph of section 2.1, the description of the sample.
+
+A detailed response to all of the referee's comments is included below.
+
+Please contact me by the information given below with any questions
+regarding this re-submission.
+
+With kind regards,
+
+Jo Bovy
+
+-
+Jo Bovy
+Ctr. for Cosmology & Particle Physics, 
+Dept. of Physics
+New York University
+4 Washington Place
+New York, NY 10003
+jb2777@nyu.edu
+
+
+In what follows the referee's comments are indented.
+
+
+
+==================================================================
+
+	Ref: ApJ/318741/ART/207748
+	
+	Dear Mr. Bovy,
+
+	Manuscript #: 318741
+	Title: The Velocity Distribution of Nearby Stars from Hipparcos data I.
+	The Significance of the Moving Groups
+	Authors: Jo Bovy et al.
+	
+	Appended below please find the referee's brief report on your
+	revised submission to The Astrophysical Journal. Although
+	quite pleased with the manuscript, the referee offers some
+	rather straightforward suggestions for further improvement. I
+	hope that you will consider the referee's suggestions, and
+	will then soon resubmit the paper. If your response seems
+	appropriate, and if you have made no other changes to the
+	scientific content, then I expect that acceptance for
+	publication can follow quickly.
+
+	You can find the referee report and submit your revised
+	version onyour personal author homepage hosted by IOP
+	Publishing located
+	athttp://ticket.iop.org/atomreg?digest=a89a4a4b58a7ea64ef3d42b3adf47701&urn=207748&expires=2010-05-19&skin=ej&exists=1&return=http://authors.iop.org/.
+	You may need to choose a new username and password.
+
+	The referee, Anthony Brown, has chosen to waive the customary
+	anonymity. The ApJ prefers that you do not communicate
+	directly with the referee. But if you do have any
+	correspondence with Dr. Brown regarding this manuscript before
+	its status is formally settled, please send me a copy, in
+	accordance with ApJ policy.
+
+	The policy of The Astrophysical Journal is to view manuscripts
+	as withdrawn if no revised version is received within six
+	months after the most recent referee's report goes to the
+	authors.
+
+	If you have any questions, please contact me.
+
+
+	With best wishes,
+	
+	Butler Burton
+	
+	----------------------
+	Prof. W. Butler Burton
+	Associate Editor-in-Chief, The Astrophysical Journal
+	Professor Emeritus, Leiden University
+	National Radio Astronomy Observatory
+	
+	+++++++++++++++++++++++++++++++++++++++++++++++
+	The text of the review is included below, after the double line.
+	===============================================
+	
+	The authors have implemented most of my suggestions and
+	section 2 isnow much clearer. The paper can be accepted for
+	publication after theauthors the few remaining points below. I
+	do not need to see a revisedversion of the paper.
+
+	Comments
+	--------
+	
+	At the top ofpage 12 the authors state that the projection
+	matrices become rotationmatrices when vrad is set to
+	zero. However, the matrix TA is aprojection matrix regardless
+	of the value of vrad (all the matrices ineqs 2 and 3 are
+	rotation matrices).
+
+This was slightly unclear. In general the operator R_i can be a
+projection matrix, however, in this application we use a large
+uncertainty on the radial velocity and set vrad to zero, so in this
+case R_i is a rotation matrix, whose inverse is TA. So it is in going
+from the general situation to the specific application at hand that
+the operator R_i goes from being a projection matrix to being a
+rotation matrix, not by setting vrad to zero. We have cleared this up
+in the text.
+
+	Page 19, second paragraph,line 7 from the bottom: "and the
+	dimension D of the space" should be"and D the dimension of the
+	space" (?)
+
+Yes, after adding a comma after D, I think that is right. This has
+been changed in the text.
+
+	Page 32, secondparagraph: The group with largest weight is
+	located at (-23,-10) invelocity space. However, if I look at
+	table 1, the largest amplitudeGaussian is at (5,-7).
+
+The component at (5,-7) has the largest weight, but we do not consider
+it a moving group in our first, naive analysis: Its large velocity
+dispersion seems to indicate that it is part of the background
+distribution of stars and it also does not correspond to any peak in
+the distribution (see Fig. 20). So the moving group with the largest
+weight is the component with the second largest weight. We have
+cleared up this confusion in the text.
+
+	In response to my question about thetruncation bias the
+	authors argued that this is unlikely to affect thefact that
+	the sample is kinematically unbiased, which is what mattersin
+	the context of this paper. This was the kind of brief comment
+	I hadin mind so it may as well be included in the text.
+
+We have included it in the first paragraph of Section 2.1 where we
+discus the sample.
+
+	Typos
+	-----
+	
+	Bottom of page 5: The name "Cabrera-Cano" is spelled with a
+	tilde on the last n.
+
+	Page 12, line 2 above eq (9): simply --> simple
+	
+	Page 13, 1 line above bottom of first paragraph: probabiitiy -->
+	probability
+	
+	Page 14, second line of last paragraph: paramters --> parameters
+
+All fixed! Thank you.
+
+=	==================================================

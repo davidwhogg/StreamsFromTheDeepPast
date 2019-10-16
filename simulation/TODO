@@ -1,0 +1,39 @@
+Make clip showing not *closest* stream but stream with largest single-star displacement (by the end of the time).
+
+
+run it backwards for a variable number of steps then run it forwards for twice that number (but keep the stars that you have run backwards). do same for perturber.
+
+there is a big problem with numerical integration, so rewind and go back to the beginning without taking into account the perturber at all, then email hogg.
+
+
+
+
+Make all numbers global variables
+Traceback (most recent call last):
+  File "../StarStream2.py", line 636, in <module>
+    S.runPotential()
+  File "../StarStream2.py", line 458, in runPotential
+    self.updatePotential(run)
+  File "../StarStream2.py", line 336, in updatePotential
+    i.update(run,self.timestep,self.perturber)
+  File "../StarStream2.py", line 104, in update
+    self.stars.append(self.unusedstars.pop())
+IndexError: pop from empty list
+
+
+perturber is moving too quickly
+
+Traceback (most recent call last):
+  File "../../StarStream2.py", line 648, in <module>
+    S.runPotential()
+  File "../../StarStream2.py", line 461, in runPotential
+    self.updatePotential(run)
+  File "../../StarStream2.py", line 339, in updatePotential
+    i.update(run,self.timestep,self.perturber)
+  File "../../StarStream2.py", line 107, in update
+    self.stars.append(self.unusedstars.pop())
+IndexError: pop from empty list
+
+
+
+ebrgy

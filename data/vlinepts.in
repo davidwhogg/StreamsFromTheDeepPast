@@ -1,0 +1,6 @@
+pointfile vline.pts
+pickfile pick.dat
+windowsize 800
+zclip 0.01
+boundarysize 0.
+scale 100.

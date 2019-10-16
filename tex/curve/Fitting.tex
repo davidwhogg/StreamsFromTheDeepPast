@@ -1,0 +1,573 @@
+\documentclass[12pt,preprint]{aastex}
+\usepackage{amsmath, amssymb, graphicx, graphics, subfig, mathrsfs, bbm, amsthm,fullpage,natbib}
+\newcounter{address}
+
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+
+\theoremstyle{definition}
+\newtheorem{example}{Example}[section]
+
+% vector and tensor stuff
+\newcommand{\mtensor}[1]{\boldsymbol{#1}}
+  \newcommand{\mS}{\mtensor{S}}
+  \newcommand{\mSigma}{\mtensor{\Sigma}}
+\newcommand{\mvector}[1]{\mtensor{#1}}
+%  \newcommand{\ve}{\mvector{e}}
+  \renewcommand{\vr}{\mvector{r}}
+  \newcommand{\vv}{\mvector{v}}
+  \newcommand{\vV}{\mvector{V}}
+  \newcommand{\vx}{\mvector{x}}
+  \newcommand{\vX}{\mvector{X}}
+\newcommand{\ve}[1]{\mvector{e}_{#1}}
+  \newcommand{\vbeta}{\mvector{\beta}}
+  \newcommand{\vtheta}{\mvector{\theta}}
+  \newcommand{\vphi}{\mvector{\phi}}
+  \newcommand{\vomega}{\mvector{\omega}}
+\newcommand{\inverse}[1]{{#1}^{-1}}
+\newcommand{\transpose}[1]{{#1}^{\textsf{T}}}
+\renewcommand{\det}[1]{||{#1}||}
+\newcommand{\rhat}{\hat{\vr}}
+\newcommand{\thetahat}{\hat{\vtheta}}
+\newcommand{\phihat}{\hat{\vphi}}
+\newcommand{\vhat}{\hat{\vv}}
+\newcommand{\err}[1]{\delta{#1}}
+% units
+\newcommand{\unit}[1]{\mathrm{#1}}
+  \newcommand{\kpc}{\unit{kpc}}
+  \newcommand{\Myr}{\unit{Myr}}
+  \newcommand{\kpcpMyr}{\kpc\,\Myr^{-1}}
+  \newcommand{\km}{\unit{km}}
+  \newcommand{\s}{\unit{s}}
+  \newcommand{\kmps}{\km\,\s^{-1}}
+  \newcommand{\rad}{\unit{rad}}
+  \newcommand{\radpMyr}{\rad\,\Myr^{-1}}
+  \renewcommand{\arcsec}{\unit{arcsec}}
+  \newcommand{\mas}{\unit{mas}}
+  \newcommand{\yr}{\unit{yr}}
+  \newcommand{\maspyr}{\mas\,\yr^{-1}}
+
+% other random symbols
+\renewcommand{\d}{\mathrm{d}}
+\newcommand{\like}{\mathscr{L}}
+\newcommand{\normal}{\mathscr{N}}
+\newcommand{\margchi}{{\chi_t}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\pbg}{p_{\mathrm{bg}}}
+\newcommand{\RA}{\mathrm{RA}}
+\newcommand{\Dec}{\mathrm{Dec}}
+\newcommand{\obs}{\mathrm{obs}}
+\newcommand{\vxobs}{\vx_{\mathrm{obs}}}
+\newcommand{\tmin}{t_{\mathrm{min}}}
+\newcommand{\tmax}{t_{\mathrm{max}}}
+\newcommand{\indicator}[1]{\mathbbm{1}_{\{#1\}}}
+
+
+% words
+\newcommand{\foreign}[1]{\textit{#1}}
+\newcommand{\documentname}{\textsl{Article}}
+\newcommand{\sectionname}{Section}
+\newcommand{\equationname}{equation}
+
+\begin{document}
+
+\title{Fitting streams of stars in phase space}
+\author{Aukosh Jagannath\altaffilmark{\ref{CIMS},\ref{CCPP}},
+        David W. Hogg\altaffilmark{\ref{CCPP},\ref{MPIA},\ref{email}},
+	Daniel Forman-Mackey\altaffilmark{\ref{CCPP}}
+        Adrian Price-Whelan\altaffilmark{\ref{CCPP}}}
+%        Dustin Lang\altaffilmark{\ref{Princeton}}}
+\setcounter{address}{1}
+\altaffiltext{\theaddress}{\stepcounter{address}\label{CIMS} Department of Mathematics, Courant Institute of Mathematical Sciences, New York University, 251 Mercer Street, New York, NY 10012}
+\altaffiltext{\theaddress}{\stepcounter{address}\label{CCPP} Center
+for Cosmology and Particle Physics, Department of Physics, New York
+University, 4 Washington Place, New York, NY 10003}
+\altaffiltext{\theaddress}{\stepcounter{address}\label{MPIA}
+Max-Planck-Institut f\"ur Astronomie, K\"onigstuhl 17,
+D-69117 Heidelberg, Germany}
+\altaffiltext{\theaddress}{\stepcounter{address}\label{email} To whom
+correspondence should be addressed: \texttt{david.hogg@nyu.edu}}
+%\altaffiltext{\theaddress}{\stepcounter{address}\label{Princeton}
+%Princeton University Observatory, Princeton, NJ 08544}
+
+
+\begin{abstract}
+Precise modeling of the Milky Ways galactic gravitation potential using tidal streams appears possible given the forthcoming missions that explore full phase space information of near by stars. In order to test such models, a rigorous probabilistic frame work must be developed for the analysis of the data of such missions. We present a proposal for such a framework that allows for noisy, heteroscedastic, and heterogenous data sets. We formalize the orbit fitting problem in terms of a general curve fitting problem in $\R^n$. We demonstrate these techniques on artificial data and perform numerical studies of the stability of such inference problems under variation in quality of noise. It is found that stream ``thickness'' plays a dominant role in determining the quality of such inferences.
+\end{abstract}
+
+\keywords{
+    TBD ---
+    methods:~statistical ---
+    stars:~kinematics ---
+    TBD
+}
+
+\section{Introduction}
+ [something introductory about modeling the potential]
+
+The obvious way to treat the problem would be to track the phase space properties of some subset of stars in the milky-way as the evolve in time and fit models to their orbits. Such an experiment, however, would take far too long to conduct.\footnote{Assuming average stellar distances of $\sim 10~\kpc$ and average stellar speeds of $\sim 224 ~\kmps$, one would expect to get motion of $\sim 1\deg$ on the sky (neglecting the motion of the observer)  on a time scale of order $1 \Myr$}
+As such, researchers have focused on longer lasting properties of the galaxy. For some time steady-state, or ``Schwarzchild'', modelling was used for such problems. Theoretical problems with steady-state modeling has led researchers to shift their focus on long lasting phase space structure [CITE SOMETHING]. Of such structures, Tidal stream stand out as particularly promising tools.
+
+Cold streams are of particular interest as their phase space properties are particularly tractable: their (relatively) low internal velocity dispersion (hence ``cold'') allows one to approximate them as essentially tracing out an orbit, usually taken to be that of its progenitor \citep{GD1}. Using this property, one can then attempt to fit orbits to tidal stream in order to constrain models to the region of model-space that best describes the data. Many studies have been presented in which techniques like this have been used to constrain properties of the galaxy, such as probing the halo mass density (\citet{Bell}; \citet{LMJ}), gravitational potential parameters (\citet{KRH}; \citet{LMJ}; \citet{JZSH}; \citet{Bin}). 
+
+
+There have been a few proposals as to how best to use tidal streams to infer the Galactic gravitational Potential. Binney and Eyre have presented a methodology for fitting an orbit to streams in which they constrain cubic spline fits to data using multiple quality-of-fit scalars associated with arguments involving the conservation of energy  and the accuracy of Hamilton's equations (\citet{Bin}; \citet{EB}). To allow for observational error, they introduce ``bow-tie'' regions of confidence and carefully perturb fits to the data, picking the optimal orbit. Law \foreign{et al.} presented another methodology that is tailored specifically for the Sagittarius stream \citep{LMJ}. They used  \foreign{a priori} constraints which have been gleaned from many previous observational and analytical studies of the stream in question, coupled with a $\chi^2$ minimization over 11 different heuristic constrains, some of which are taken to be \foreign{a priori} and some of which are taken to be probabilistic, to decide between many different N-body simulations of the data.
+
+
+Neither of these methodologies are wholly satisfactory. Firstly, these methods require very subtle and tedious calculations which involve by-eye corrections, and delicate optimization problems over high dimensional parameter space. Secondly, though these technique allow for observational and systematic uncertainties through delicate processes, such error analyses are not inherent to these procedures and thus their ability to constrain models degrades dramatically with the quality of the data.  Thirdly, these techniques require the seemingly inconsistent use of prior information, sometimes as \foreign{a priori} and some times as statistical, with little justification. Finally, many basic questions about these techniques have yet to be completely resolved. In particular, their quality of fit statistics have little to no probabilistic justification and they neglect or briefly treat the ``stream thickness'' problem, that is, the fact that tidal streams are \emph{not} infinitely thin 1-D curves.
+
+In this \documentname, we present a general, self-consistent probabilistic framework for fitting orbits to tidal streams. By realizing this problem as an instance of one of the most fundamental and pervasive questions in science, the problem of fitting curves in $\R^n$, we are afforded the powerful and well studied techniques of modern data analysis. These techniques are trivially justifiable and also very easy to implement and use. They allow for the use of heterogenous and heteroscedastic data sets in which error properties can wildly vary along the stream. This technique is specific to neither the stream under study nor the model used to study the stream. That is, this methodology is inherently modular: as better models of tidal stream dynamics are created, they can be substituted in without substantive changes to the techniques described. We also present a methodology for treating the ``thickness'' issue, but by no means do we believe this methodology to be anywhere near the last word on the subject. 
+
+We begin by presenting the theory behind the methodology that we developed for the tidal stream fitting problem (\sectionname~\ref{sec:theory}), with a follow-up section describing its numerical implementation (\sectionname ~\ref{sec:imp}). Then numerical studies using these inferential techniques are presented (\sectionname ~\ref{sec:exp}). Firstly, we show the techniques on a test stream created using fake data with realistic noise properties. Then we present numerical studies of the stability of the problem under variation of observational noise properties and physical properties of the stream itself. We find that the latter are far more important when attempting to infer gravitational potential parameters. In particular, we find that the intrinsic thickness of the stream is a far more important factor in ones ability to constrain galactic potential model parameters, than the quality of the phase space data itself. We conclude with a discussion of the results and techniques presented, and directions for further study.
+
+
+ 
+\section{\label{sec:theory} Probabilistic Methodology of Tidal Stream Fitting: Theory}
+\subsection{Generalities}
+
+
+Before we focus on the particulars of the tidal stream fitting problem, it is helpful to step back and look at the problem as a particular instance of a much broader class of problems that occur throughout the sciences. Indeed this will be the main thrust of this \documentname, that the tidal stream fitting problem should be viewed as an instance of the general problem of probabilistically modeling curves. From this standpoint, we will be afforded the tools and techniques developed by the modern data analysis community to attack this much studied problem. 
+
+Suppose we have $N$ noisy data points, $\vx_i$, each of which is taken to be a vector in $d$-dimensional euclidean space, that are assumed to lie on a curve that is parameterized by an affine parameters $s$ and a k-manifold of adjustable parameters $\vomega$. Given the distribution from which the noise vectors $\ve{i}$ are drawn, which will generically depend on the adjustable parameters $\vomega_i$ and the affine parameter at that point $s_i$, we can evaluate the likelihood of the data, given our model, at the particular data points,
+\begin{equation}\label{unmarginalized_like}
+\like = p(N) \prod_{i=1}^{N} p(\vx_i | s_i,\vomega_i),
+\end{equation}
+where for complete generality we have allowed N to be a random variable as well. Using this likelihood, one can then infer the underlying model parameters $\vomega$. 
+
+Often times there are nuisance parameters which are either not well measured, or irrelevant all together to the inference in question. In such scenarios, it is necessary to marginalize out these nuisance parameters. For example, the affine parameter may not be well measured, in which case the relevant quantity is not the likelihood described by \eqref{unmarginalized_like}, but rather
+\begin{equation}\label{marginalized_like}
+\like = p(N)\prod_{i=1}^{N} \int p(\vx_i | s, \vomega_i) p_i(s) ds_i,
+\end{equation}
+where $p(s)$ is the prior probability of observing a data point at $s$. It is worthwhile to note here the importance of the $p(s)$ term. Without it, we cannot perform this marginalization as it specifies the integration measure. 
+
+It is also important to notice possible free parameters in one's model of the noise underlying the system. For example, in the following development we allow for intrinsic scatter term for the system to vary in our model. The methodology one uses to handle this is necessarily dependent upon the noise model one assumes, and as such we will only be examining the regime relevant to the tidal stream modeling problem in this \documentname. 
+
+\subsection{Modeling Tidal Streams}
+For the problem of tidal stream modeling, we imagine that the number of data points, henceforth stars, is not a random number, but rather some fixed number, N, and that the data points, $\vx_i$, are the $d = 6$ dimensional vectors stellar positions and velocities. We assume that the noise underlying our system is described by a multivariate normal distribution with variance tensor $\tilde{\mS_i}$ at the $i$th star. We make the assumption of Gaussian noise not because we believe it is entirely accurate, but rather because we believe it is the best available approximation to reality and is in-line with common assumptions in developments of this type. Finally, we take the points to lie on an orbit described by an affine parameter, $s$, which we take to be the orbital phase. In this description of the problem, the vector $\vomega$ is the vector corresponding to the noise parameters, the model parameters in the hamiltonian , e.g. the parameters in the gravitational potential model, and the initial conditions of the stream. 
+
+Notice that in this formulation there are four outstanding issues that we must resolve. Firstly, the orbital phase is often either poorly measured or entirely unknown. Secondly, as we noted above, tidal streams are \emph{not} 1-$D$ curves. Thirdly, the orbits we obtain do not necessarily correspond to any individual orbiter in the stream. Fourthly, these techniques as present do not present a methodology for determining stream membership. We present a  methodology for treating the first of these issues. We also present a methodology for resolving the ``thickness'' problem, however we must add the following disclaimer: we do not believe that this will be the final word on the stream thickness problem. This will merely be a stop-gap measure that is inline with the state of the art in tidal stream modeling. We will briefly discuss the third issue, which we believe to be minor, and we will leave the fourth issue to later studies. 
+
+In the following we present the following simplified model of the ``thickness''. As the thickness of a stream corresponds to an inherent (6d) positional dispersion in the initial undisrupted object, we treat this thickness as an intrinsic scatter in the system. The idea is that one can treat the object in a statistical mechanical way in which there is an internal velocity and position distribution, and that this thickness is the statement that this distribution function is not a delta function, but rather has support on a set of positive measure.  We can then treat the thickness as a component of the variance tensor. In this regime, the variance tensor is best described in terms of its decomposition into two tensors. Firstly, at the $i$th data point, there is a fixed tensor $\mS_i$ which accounts for observational noise. Secondly, there is a tensor $\mSigma$, which takes into account this intrinsic scatter associated with the ``thickness", which, for the current development, we take to be constant along the stream. The unmarginalized probability of any given data point, given the model, is then given by
+\begin{equation}\label{unmarginalized_prob}
+p(\vx_i | t_i, \vomega_i)  = \normal(\vx_i |\vX(t_i), \mS_i + \mSigma).
+\end{equation}
+ 
+
+Notice that we have made no preconditions on the nature of $\mS_i$: it may vary wildly along the stream, allowing for severe correlations between positions and velocities, and may be such that certain eigenvalues of the corresponding inverse covariance matrix, $\inverse{\mS_i}$, are vanishingly small. Allowing for this scenario is necessary. Any thorough technique for analyzing data must be able to account for missing or incomplete data. Also notice that in introducing the second tensor, we have introduced many new parameters corresponding to the eigenvalues and eigen-directions corresponding to this thickness tensor. We shall see that this requirement is not as severe as it may appear as great reductions can be made. 
+
+We set the affine parameter $s$ to be an orbital phase parameter. As noted above, this parameter is often unmeasured, or very poorly measured. That being said, it is unnecessary for the problem of inferring the underlying galactic potential parameters. As such, in order to continue with this problem, it is necessary to introduce a prior probability on the affine parameter to allow for the marginalization of this parameter. The best uninformative prior on the affine variable is one that is flat in the conjugate angle variable of the action variable associated with motion in the orbital plane, i.e. one that is uniform in time, as this is simply the statement that the probability of observing a particular time $t_i$ is proportional to the amount of time spent at that point. To describe this probability, we need to allow for two further model variables, $t_{min}$ and $t_{max}$, though once again the reality of this situation is not so severe as a reduction can be made. In this scenario, the prior probability on the orbital phase a parameter is described by
+\begin{equation}
+p(t) = \frac{1}{t_{max} - t_{min}}\mathbbm{1}_{(t_{max},t_{min})}(t).
+\end{equation}
+It is important to note that the variables $t_{min}$ and $t_{max}$ are hierarchical model parameters, model parameters that are used only in defining a prior, and thus should be marginalized out as they have no true physical meaning.
+
+With this description, \eqref{unmarginalized_prob} should be marginalized, leaving it in the form
+\begin{equation}\label{eq:marginalized_prob}
+p(\vx_i | \vomega_i) = \int \normal(\vx_i|\vX(t), \vomega_i)\frac{1}{t_{max} - t_{min}}dt . 
+\end{equation}
+The likelihood function can the been written succinctly in the form 
+\begin{equation}
+\like = \prod_{i=0}^{N}p(\vx_i | \vomega_i).
+\end{equation}
+here it is helpful to note, as above, the similarity between this equation and the more familiar $\chi^2$ statistic
+\[
+\chi^2 = -2 \ln\like.
+\]
+Notice that this presupposes that we are able to perform these calculations. Clearly the best technique to do this will be to use a computer, however, in doing so we will necessarily discretize the problem. We shall see in the next \sectionname~that the marginalization step will play a key role in eliminating the errors in the problem due to this discretization.
+
+With the above likelihood functions, we hope to be able to generate the density function so as to infer the underlying parameters of the Hamiltonian, which describe both the potential, and the orbits underlying this system. We wish to emphasize here that these orbits will not be definitively associated with any individual orbiter in the stream, nor will they be definitively associated with the progenitor of the stream. As such we see that the exact values for the initial conditions corresponding to the orbit are not useful in and of themselves. That is, expectations and confidence intervals related to the initial conditions of this term should not be misconstrued as being related to the progenitor orbit. Indeed, we believe that the question of how best to determine this orbit is very much open. Instead, we believe that these parameters are interesting insofar as they place reasonable likelihoods on a family of curves that can be associated with the orbit. As tidal streams are inherently ``thick'' objects, we believe that such analyses, though of limited interest, are still of some use scientifically for understanding the nature of the tidal stream itself. That being said, we do believe that the results obtained as they relate to parameters of interest in the Hamiltonian, particularly the model parameters in the potential term, will be useful and can be taken to accurately model these properties.
+
+
+
+\section{\label{sec:imp} Probabilistic Methodology of Tidal Stream Fitting:  Implementation}
+In order to make use of the techniques described above, we have developed computational techniques for performing these calculations. These techniques are described in the following sections. In brief, we develop a methodology for generating models for curves underlying the system, in which we will vary all of the parameters associated with the dynamics of the system, $\vomega_i$, which we take to be parameters in the Hamiltonian,  the initial conditions of some fiducial point from which we perform our integrations,  and a parameters that describes a grid of affine parameter values on which we perform our integration. This last parameter accounts for the inherent discretization made when performing such computations
+
+\subsection{representing the data}
+First we specify that the positions $\vx_i$ are measured in galactocentric cartesian coordinates, and we imagine these as ordered in the form
+\[
+\transpose{\vx_i} = [x_i,y_i,z_i, v_{x,i}, v_{y,i}, v_{z,i}].
+\]
+In what follows, the observer will be at the position $\vx_{obs}$.
+
+Work in units in which distances are measured in $\kpc$ and times are measured in $\Myr$. For reference, the following are coversions to other standard astronomical units. 
+\begin{eqnarray}\displaystyle
+1~\kpcpMyr &=& 978~\kmps
+\nonumber \\
+1~\radpMyr &=& 206~\maspyr
+\quad .
+\end{eqnarray}
+In this coordinate system, we take our observer to be a Sun-like observer, with position 
+\begin{equation}
+\transpose{\vxobs} = [(-10~\kpc), 0, 0, 0, (0.205~\kpcpMyr), 0]
+\quad.
+\end{equation}
+
+
+
+
+\subsection{\label{ssec:vartens}Observational Error and Covariance Tensors}
+For most realistic data sets, observational uncertainties live in the
+independent space of fractional distance uncertainty $(\delta D/D)$,
+angular ($\RA, \Dec$) uncertainty $(\delta\theta)$, radial velocity
+uncertainty $(\delta v)$, and proper motion uncertainty
+$(\delta\dot{\theta})$.  We impose the additional assumption for the rest of this \documentname that this noise is gaussian. That is, we assume that there is independent gaussian noise in each of the positon variables $(r, \theta,\phi, v_r,  \mu_\theta,\mu_\phi)$.  Notice that this distribution is \emph{not} gaussian in the cartesian variables associated with this system. As we will be performing our computations in the cartesian coordinate system as described above, we run in to serious computational issues in computing this distribution: it will be generically quite expensive to boost back and forth between spherical polar and cartesian coordinate systems when performing the calculations. As such it is worthwhile to introduce an approximation to this distribution that is gaussian in the cartesian variables. 
+
+For any star $i$ at (6d) position $[\vx_i,\vv_i]$, there is a radial
+direction unit (3-)vector $\rhat_i$ pointing from the observer at $\vxobs$
+to the star at $\vx_i$
+\begin{eqnarray}\displaystyle
+\transpose{\rhat_i} &=& \frac{1}{D_i}\,[(x_i-x_\obs), (y_i-y_\obs), (z_i-z_\obs)]
+\nonumber\\
+D_i &\equiv& \sqrt{(x_i-x_\obs)^2+(y_i-y_\obs)^2+(z_i-z_\obs)^2}
+\quad,
+\end{eqnarray}
+and similar for the transverse position unit vectors $\thetahat_i$ and
+$\phihat_i$. We can then introduce the coordinate (6) vector $\ve{r},\ve{\theta}...$ in each of the coordinate direction. Notice that with the above 3-vectors, the usual spherical coordinates are easy to compute, for example 
+\[
+D = \vx\cdot\rhat
+\]
+and
+\[
+\mu_\theta = \frac{1}{D}\vv\cdot\thetahat.
+\]
+As the covariance tensor is diagonal in the coordinate basis specified above (i.e. since the noise in independent in those variables, we can describe the covariance tensor by the following coordinate free expression:\begin{eqnarray}\displaystyle
+\mS_i &=&
+  \left(\frac{\delta D}{D}\right)^2
+    (D_i^2\,\ve{r_i}\cdot\transpose{\ve{r_i}}) +
+ \nonumber\\
+&&+ (\delta\theta)^2\,D_i^2\,
+    (\ve{\theta_i}\cdot\transpose{\ve{\theta_i}}
+   + \ve{\phi_i}\cdot\transpose{\ve{\phi_i}})
+\nonumber\\
+&&+ (\delta v)^2\,\ve{v_{r_i}}\cdot\transpose{\ve{v_r i}}
+\nonumber\\
+&&+ (\delta\mu_{\theta})^2\,D_i^2\,
+    (\ve{\mu_{\theta_i}}\cdot\transpose{\ve{\mu_{\theta_i}}}
+   + \vhat{\mu_{\phi_i}}\cdot\transpose{\ve{\mu_{\phi_i}}})
+\quad ,
+\end{eqnarray}
+where outer products like $\rhat\cdot\transpose{\rhat}$ return tensors not scalars. We can then make a simple approxiation in the small noise limit. If we assume the noise to be small, then we can approximate the coordinate vectors in cartesian coordinates using the expressions
+\begin{subequations}
+\begin{align}
+\ve{r_i} &= [\rhat, \mu_\theta \thetahat + \mu_\phi \phihat] \\
+\ve{\theta_i} &= [D_i\thetahat_i, 0,0,0]\\
+\ve{\phi_i} &= [D_i\phihat_i,0,0,0]\\
+\ve{v_{r_i}} &= [0,0,0,\rhat_i]\\
+\ve{\mu_{\theta_i}} &= [0,0,0,D_i\thetahat_i] \\
+\ve{\mu_{\phi_i}} &= [ 0,0,0, D_i\phihat_i]
+\end{align}
+\end{subequations}
+From which the covariance tensor  written in cartesian coordiantes becomes clear. We can then treat this new approximate form of the tensor as the covariance tensor of a gaussian distribution in the cartesian coordinates. Though this description is not exact, we believe that it is a highly accurate Gaussian approximation.  An example of draws from such a tensor is shown in
+\figurename~\ref{fig:EllipseTest}.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.3]{plots/EllipseTest.png}
+\caption{Draws from a covariance tensor of the form described in \sectionname \ref{ssec:vartens}. The observer is at $\transpose{\vxobs} =  [(-10~\kpc), 0, 0, 0, (0.205~\kpcpMyr), 0]$ and the star is at $\transpose{\vx} = [(-10~\kpc), 0, (10~\kpc), 0, (0.205~\kpcpMyr), 0]$. As expected the errors in $x_1$ and $x_2$, which correspond to angular resolution error, are negligible in comparision to the extreme error in $x_3$, which is due to radial velocity error. Also the errors in $x_4$ and $x_5$, which correpond to proper motion error, are similarly extreme in comparison to the radial velocity error of $x_6$.}
+\label{fig:EllipseTest}
+\end{center}
+\end{figure}
+
+As mentioned in \sectionname~\ref{sec:theory}, in addition to the observational uncertainty, there is also the
+intrinsic thickness of the stream, which we will model as an isotropic
+(in space and in velocity) scatter around an underlying curve, such as the progenitor orbit.  This
+thickness can be described with a diagonal variance tensor $\mSigma$
+parameterized by a spatial variance $\Sigma_x$ and a velocity variance
+$\Sigma_v$
+\begin{equation}
+\mSigma =
+  \Sigma_x\,(\rhat\cdot\transpose{\rhat}
+            +\thetahat\cdot\transpose{\thetahat}
+            +\phihat\cdot\transpose{\phihat})
+ +\Sigma_v\,(\vhat_{\vr}\cdot\transpose{\vhat_{\vr}}
+            +\vhat_{\vtheta}\cdot\transpose{\vhat_{\vtheta}}
+            +\vhat_{\vphi}\cdot\transpose{\vhat_{\vphi}})
+\quad .
+\end{equation}
+In the following experiments, we set $\Sigma_v=0$, not because we imagine that
+there will be no thickness in velocity space but because the
+observational uncertainties are much larger than any sensible
+thickness for a cold stellar stream like GD-1.
+
+\subsection{generating model curves}
+When performing our fit, we must generate model curves that we treat as models of the orbit of the progenitor. Note that, as mentioned above, no individual orbit can be said to define a true stream, thus this is an approximation. As the goal is to obtain information about the galaxy rather than the stream itself, we believe that this approximation is reasonable. 
+
+To generate these curves, we take a fiducial point, $\vX_0$ taken to be the center of the stream where we use the model potential at given model parameters $\vomega_{pot}$. We then generate the stream by integrating forward and backward in time from this fiducial point using the leap-frog method (note: one can use any integration scheme one wishes) on a grid of $M$ affine parameter values $T_j$ in the range $t_{min} < T_j < t_{max}$ that satisfy
+\begin{eqnarray}\displaystyle
+T_j &=& T_1 + [j-1]\,\Delta t
+\nonumber\\
+\Delta t &=& \frac{1}{M}\,[\tmax-\tmin]
+\nonumber\\
+T_1 &=& \tmin+\frac{1}{2}\,\Delta t
+\quad,
+\end{eqnarray}
+where we fix $\Delta t = const.$. We place a model ``star'' at each $T_j$, so that in total we have $M$ stars. In the upcoming experiments $\Delta t = 1 \Myr$. Finally, we associate with the stream a thickness tensor $\Sigma$. Thus a model stream is completely determined by the tuple $(M, \vX_0, \vomega_{pot}, \Sigma)$.
+
+\subsection{evaluating the likelihood function}
+Since we have discretized the system, and since streams are not evenly space grid points, we must marginalize over the affine parameter. As in the end these values are of little interest to the problem of at hand, and as these quantities tend to be poorly measured, we imagine that this marginalization is not problematic. To do so, notice that in this marginalization, we are really marginalizing over the exponent in the exponential term in our likelihood. Calling this exponent $-\frac{1}{2}\chi_t^2$, we see that it suffices to compute
+\begin{eqnarray}\displaystyle
+\margchi^2 &\equiv& \sum_{i=1}^N \margchi_i^2
+\nonumber\\
+\margchi_i^2 &\approx& -2\,\ln\sum_{j=1}^M \exp(-\frac{1}{2}\,\chi_{ij}^2)\,\frac{\Delta t}{\tmax-\tmin}
+\nonumber\\
+\chi_{ij}^2 &\equiv& \ln\det{\mS_i + \mSigma}
+  + \transpose{\left[\vX(T_j) - \vx_i\right]}
+  \cdot\inverse{\left[\mS_i+\mSigma\right]}\cdot\left[\vX(T_j) - \vx_i\right]
+\quad,
+\end{eqnarray}
+where the integral in \equationname~\eqref{eq:marginalized_prob} becomes a sum
+over discrete times $T_j$, and we have included the intrinsic stream
+thickness variance $\mSigma$.\footnote{Due to the numerical instability of computing the log of sums, we use the techniques presented in \cite{BHR}}
+
+\subsection{sampling}
+The goal of these techniques is to have an importance sampling of the likelihood that is faithful to its statistical properties. To do so, we take our data, and evaluate the likelihood at any given set of model parameters $(M, \vX_0, \vomega_{pot}, \Sigma)$ point using the aforementioned techniques. We use this function, in conjunction with an importance sampling algorithm to perform our sampling. In the following experiments we have found that the likelihood functions are highly anisotropic, and as such we used a sampler that has better performance than more popular samplers in such situations. In particular, we use the Affine-invariant sampling algorithm developed by Goodman and Weare in \cite{GW}.
+
+To generate the ``walkers'' for the algorithm, we use the following algorithm. Consider the vector of model parameters $\vX =(\vX_{guess},\vomega_{guess})$. We consider an interval of length $.0002\vX$ (element-wise) centered at $\vX$, and we sample these intervals uniformly. It is recommended that the generation of the ensemble is done heuristically on a case-by- case
+basis. Any methodology to randomly generate an ensemble that is not contained in a
+hyperplane of dimension less than that of the model space is sufficient.
+For example, one could take an initial guess for the truth and add
+gaussian noise to it to generate the walkers. Upon generating the
+walkers, we sample the distribution until it has been decided that the
+chain has converged.
+
+In order for the statistics of the sampled distribution to be reliable, we have to use the chain only after the ensemble has become ``mixed'', that is, only after the chain has converged to a point where it truly is sampling states with frequency proportional to their likelihood. Determining when the chain has converged to the region of the most likely family is also to be performed on a case by case basis and
+should be determined experimentally. We decided that for this kind of
+problem a good heuristic is as follows: examine the chosen value for
+the parameter as a function of time, divide this data in to even
+groups, calculate the 5th and 95th percentile for each group. When the
+5th and 95th percentiles remain essentially unchanged in every
+variable for a sufficiently long time, i.e. when the chain appears
+fairly confined to a certain region for sufficiently long, we decide
+that the chain has converged. As an example of this methodology see Fig.
+\ref{fig:mcmcPlotPos} \ref{fig:mcmcPlotPot} for the draws from the distribution
+of streams used for this experiment.
+
+Please note that much of these techniques have been tailored to the sampler and experiments at hand. That being said, all of the above techniques are be modular in the sense that changes in any of the individual components described above, both computational and theoretical, such as better modeling of tidal streams or better sampling algorithms, should not affect other components of the framework we present. 
+
+\section{\label{sec:exp} Experiments}
+In this \sectionname, we present numerical studies of the tidal stream problem using the techniques we have developed above. In the first study, we present a mock inference. We generate fake data with realistic noise properties, and perform the sampling. In the second study, we perform numerical studies of the stability of the inference problem under the variation of noise quality. The main finding of these experiments is that the ``thickness'' of the stream is far more important than the quality of the phase space information, in a sense that we will quantify shortly. In the third and final study, we present a brief numerical study of the stability of the inference problem under the variation of the number of stars in the stream, the results of this experiment are in-line with ones intuition.
+
+In what follows, we generate fake streams by treating them as if they trace out test particle orbits in our potential. As we have noted above and discuss below, this is probably not an excellent 
+approximation to reality.  For the purposes of these experiments, however, we need a
+specific stream model, and this suffices.  As our understanding of
+stellar streams improves, these models can be replaced by more accurate or  
+appropriate models. In principle, nothing about the inference framework changes 
+with this substitution, except possibly the total number of model parameters. That is, the methodology we have presented is a black-box.
+
+For the following experiments, we take a model potential, the flattened logarithmic potential 
+\begin{equation}
+V(\vr) = V_c^2 \ln(x^2 + y^2 + (\frac{z}{q})^2)
+\end{equation}
+where $V_c^2$ is the squared circular velocity, and $q$ is a flattening parameter, associated with the eccentricity of equipotential surfaces. 
+
+\subsection{\label{sec:FakeData}Generating fake data}
+In order to generate the data, we specify the circular velocity $V_c^2 = (224~\kmps)^2$ 
+and flattening parameter $q=0.87$ (similar to the parameters found in CITE Kaposov 2009).
+We then randomly choose a fidicual point in phase space from which we integrate
+$N_f = 200$ steps forward and $N_b = 200$ steps backward using a leap-frog integrator
+with a 1 Myr timestep, leaving us with $401$ stars ($1$ for the fiducial point and
+$1$ for each timestep forward and backward). We choose the fidicual point subject 
+to a three criteria. Firstly, the curve must have noticable curvature. This is 
+to both ensure realism and allow for a reasonable chance to distinguish between models.\footnote{For example, flat curves in such models tend to be due to plunge orbits, which exist in any central force law}
+Secondly, the closest star in the stream to the observer must be of order $10~\kpc$ away
+and must be neither of the end points of the stream. Thirdly, the projection of
+the angular momentum vector of the closest star onto the galactic z-axis must be 
+of magnitude roughly $.5~\kpc^2\Myr^{-1}$. These last two conditions are to ensure realism.
+The orbit this process resulted in creating is essentially two-thirds of a leaf of a 
+(not quite closed) trefoil. The exact initial conditions in terms of the parameters
+necessary to fully specify the model are provided in Table~\ref{table:InitConds}
+
+\begin{table}\label{table:InitConds}
+\centering
+\caption{Initial Conditions. True: Flattened Log.} 
+\begin{tabular}{| l | c | }
+\hline
+Curve type & True  \\
+\hline
+$x_1$ (kpc) & $-25.2811$  \\ \hline
+$x_2$ (kpc) & $30.5581$ \\ \hline
+$x_3$ (kpc) & $-19.4142$ \\ \hline
+$x_4$ (kpc/myr) & $ .107725$ \\ \hline
+$x_5$ (kpc/myr) & $-.0230526 $ \\ \hline
+$x_6$ (kpc/myr) & $.0695475$ \\ \hline
+$q$ & $.87$ \\ \hline
+$V_c^2$ $(kpc/myr)^2$ & $0.05248$ \\ \hline
+$\mathbf{\Sigma}_x^2 (kpc)^2$ & $.000001 $ \\
+\hline
+\end{tabular}
+\end{table}
+
+Tidal streams, as noted above, are not 1-D curves that are regularly spaced. To
+account for the irregular spacing between stars we reduce to $M=20$ stars, where
+$20$ was chosen to be generic of such situations, using the following algorithm.
+Index the stars along the stream with integers. Place a uniform 
+distribution on the index set and randomly draw an index. Remove this star, and 
+repeat until $20$ stars remain. For an example of this ``zero-scatter" data, see 
+\figurename~\ref{fig:cleanStreamsPlot}. To account for the intrinsic scatter in 
+the stream, we add to each star a draw from a Gaussian with covariance tensor 
+$\mSigma$ where $\Sigma_x = (.001~\kpc)^2$ and $\Sigma_v = 0$.
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=0.3]{plots/cleanStreamsPlot.png}
+\caption{A plot of the stream described in \sectionname~\ref{sec:FakeData} with the fiducial point described in \tablename~\ref{table:InitConds} without any noise.}
+\label{fig:cleanStreamsPlot}
+\end{center}
+\end{figure}
+With these positions we compute the unit vectors $\rhat$ etc. and, using them, 
+the individual observational noise variance tensors $\mS_i$ with parameters:
+\begin{eqnarray}\displaystyle
+\frac{\delta D}{D} &=& 0.1
+\nonumber\\
+\delta\theta &=& 5e-7~\rad
+\nonumber\\
+\delta v &=& 10~\kmps
+\nonumber\\
+\delta\dot{\theta} &=& 2~\maspyr
+\quad.
+\end{eqnarray}
+We then add to each stellar position another Gaussian random draw, where this Gaussian 
+has the covariance tensor given by that position's observational noise variance 
+tensor $\mS_i$.  This makes the final observed phase-space positions $\vx_i$.  
+We then re-compute the unit vectors given these observed positions and recompute the
+observer's variance tensor $\mS_i$, which is slightly different from
+the tensor used to generate the errors because the observed position
+is shifted from the true position. For the aforementioned mock data with noise
+see \figurename~\ref{fig:noisyStreamsPlot} 
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.3]{plots/noisyStreamsPlot.png}
+\caption{A plot of the stream described in \sectionname~\ref{sec:FakeData} with the fiducial point described in \tablename~\ref{table:InitConds} with noise added as described in that section.}
+\label{fig:noisyStreamsPlot}
+\end{center}
+\end{figure}
+
+
+\subsection{\label{sec:Experiment1} Experiment 1: Inferring parameters using an individual stream.}
+
+Using the above techniques, this we calculated the
+posterior probability, where we place an additional prior on the model that is vanishing when $q \notin [.5,-1.5]$ and when $\Sigma_x \leq 10^{-12}$ 
+and vanishes like the inverse of the number of model points:
+\begin{equation}\displaystyle
+p(q) = \left\{ \begin{array}{cl}  1 & q \in [.5,1.5] \\
+				 10^{-20} & \text{otherwise,} 
+\end{array}
+\right.
+\end{equation}
+\begin{equation}\displaystyle
+p(\Sigma_x) = \left\{ \begin{array}{cl} 1 & \Sigma_x > 10^{-12} (kpc)^2 \\
+							10^{-20} &\text{otherwise,}
+\end{array}
+\right.
+\end{equation}
+and
+\begin{equation}\displaystyle
+p(M) = \frac{1}{M}.
+\end{equation}
+We describe the state of the system by the vector of parameters 
+\[
+\vx = [ M, \vX_{0,x}, \vX_{0,v}, q, V_c^2, \Sigma_x]. 
+\] 
+Once we have generated the data set, using the initial choice of
+parameters give above (and summarized in Table~\ref{table:InitConds}), we then use
+the Affine-Invariant sampler to sample our distribution over the space
+of possible model curves. 
+
+To do so, we set a = 2.0. This choice is arbitrary, and must be made heuristically
+on a case-by-case basis. We generate $n_{walkers} = 100$ walkers. For computational ease, we chose $\vX_{guess}$ to be the true value. 
+
+We ran the Affine-invariant sampler for $n = 5000$ steps so 
+as to ensure that the sampler is mixed in every variable. This test took $8 hrs$ on Leo. At the end of this sampling,  the sampler has met 
+the convergence criteria described above (see Fig.s \eqref{fig:mcmcPlotPos} \eqref{fig:mcmcPlotPot}). 
+Examining histogram plots of accepted values in each variable for the second half of the chain (we reject 
+the first half as a 'burn-in' phase as is standard practice), we see that the sampler has fully sampled the 
+distribution (see Fig.s \ref{fig:mcmchistq} \ref{fig:mcmchistVc} \ref{fig:mcmchistSigmax}). The 
+histograms have the shapes one would expect from the distributions described above. 
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.3]{plots/mcmcPlotPos.png}
+\caption{The sampled distribution of fiducial point values. The lines represent the true value. The diagonals represent the sampled value as a function of link number and the off-diagonals are covariance plots. As we can see the sampler essentially a region around the ``true'' value. As expected there is significant position-velocity covariance. }
+\label{fig:mcmcPlotPos}
+\end{center}
+\end{figure}
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.3]{plots/mcmcPlotPot.png}
+\caption{The sampled distribution of the model parameters. The lines represent the true value. The diagonals represent the sampled value as a function of link number and the off-diagonals are covaraiance plots. As we can see the sampler once again samples around the truth. There is bias toward lower values of circular velocity. Notice the range of variation of M: the sampler naturally would have bias toward longer streams as it adds more positive terms to the log likelihood, however, the prior biases against very long streams. Similarly there is a sharp cut-off at a minimum value (which happens to correspond to the ``true'' value, though this value has no meaning whatsoever) as there is an extreme bias against ignoring points.}
+\label{fig:mcmcPlotPot}
+\end{center}
+\end{figure}
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.3]{plots/mcmc-hist-R-7.png}
+\caption{The marginalized distribution of values q. The vertical bars represent the 2.5th percentile, mean, and 97.5th percentile respectively. As we can see the flattening parameter, $q$ is very well constrained by this orbit.}
+\label{fig:mcmchistq}
+\end{center}
+\end{figure}
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.3]{plots/mcmc-hist-R-8.png}
+\caption{The marginalized distribution of values $V_c$. The vertical bars represent the 2.5th percentile, mean, and 97.5th percentile respectively. As we can see the flattening parameter, $V_C$ is well constrained by this orbit, but there is a bias toward lower values of circular velocity than the ``truth''. }
+\label{fig:mcmchistVc}
+\end{center}
+\end{figure}
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.3]{plots/mcmc-hist-R-9.png}
+\caption{The marginalized distribution of values $\Sigma_x$. The vertical bars represent the 2.5th percentile, mean, and 97.5th percentile respectively. As we can see the flattening parameter, $\Sigma_x$ is well constrained by this orbit. Notice that this distribution is noticeably non-gaussian.}
+\label{fig:mcmchistSigmax}
+\end{center}
+\end{figure}
+
+\subsection{ \label{sec:Experiment2} Experiment 2: Sensitivity to variation in quality of information}
+In this experiment, we study the sensitivity of the inference to quality of phase space information. In particular, we examine the confidence intervals in the z-axis flattening parameter as we vary quality of information in 2 phase space variables, radial velocity, radial position, and as we vary the thickness of the stream. To do so, we vary the relevant parameter and then use the techniques presented in \ref{sec:Experiment1}.
+
+The results of these three studies are presented in \figurename s \ref{fig:radposerr} \ref{fig:radvelerr} \ref{fig:thick}. As we can see from \figurename s \ref{fig:radposerr}  and \ref{fig:radvelerr}, the problem is not very sensitive to very large variations in quality of information. That is, the confidence intervals to not vary dramatically in size as we vary the quality of information. In \figurename \ref{fig:thick}, however, we find that variations in the thickness dramatically effect the size of the confidence intervals. Thus we conclude that the thickness of the stream is by far the most important quantity in question when performing techniques of this type. This result is not too surprising. One of the lynchpins of many arguments as to the use of tidal streams in problems of this type is the coldness of the stream.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.8]{plots/q.png}
+\caption{Confidence intervals for $q$ as a function of the log of the error in radial position. the dots correspond to the 97.5th, 84th, 50th, 16th, and 2.5th percentiles. Notice that as the relative quality of information decreases dramatically, the change in the width of the 95 percent interval grows but not dramatically. This suggests that the quality of radial distance information is not terribly important for contraining the value of the z-axis flattening parameter. }
+\label{fig:radposerr}
+\end{center}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.8]{plots/dv.png}
+\caption{Confidence intervals for $q$ as a function of the error in radial velocity. the dots correspond to the 97.5th, 84th, 50th, 16th, and 2.5th percentiles. Notice that as the relative quality of information decreases dramatically, the change in the width of the 95 percent interval grows but not dramatically. This suggests that the quality of radial velocity information is not terribly important for contraining the value of the z-axis flattening parameter}
+\label{fig:radvelerr}
+\end{center}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.8]{plots/thick.png}
+\caption{Confidence intervals for $q$ as a function of the log of tje thickness. The dots correspond to the 97.5th, 84th, 50th, 16th, and 2.5th percentiles. Notice that as the thickness of the stream increases, the quality of information decrease dramatically. This can be taken as further evidence of the idea that ``cold'' tidal streams are fairly useful tools whereas ``hotter'' tidal streams become unuseful very rapidly.} 
+\label{fig:thick}
+\end{center}
+\end{figure}
+
+\subsection{\label{sec:Experiment3} Experiment 3: Sensitivity to variation in number of stars}
+We performed an additional study as in \ref{sec:Experiment2}, where we varied the number of stars in the data set. As one would expect, we found that there is a very strong correlation between the length the confidence interval and the number of stars, as is expected. In particular, we find that as we increase the number of stars the size of the interval dramatically decreases. The results are summarized in \figurename \ref{fig:num_left}
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.8]{plots/num_left.png}
+\caption{A log-log plot of the confidence intervals for q as a function of the number of stars in the data set. the dots correspond to the 97.5th, 84th, 50th, 16th, and 2.5th percentiles. As is expected, as the number of stars is increased dramatically, the ability to constrain the model parameters increases dramatically. }
+\label{fig:num_left}
+\end{center}
+\end{figure}
+
+\section{Conclusions and Extensions}
+
+In this \documentname, we have presented a probabilistic methodology for solving the tidal stream modeling problem. This methodology allows for a fully probabilistic analysis of tidal stream data which is independent of the nature of the data and the models employed in the analysis. It easily allows for the use of heterogenous and heteroscedastic data sources in performing such inference problems. Unlike alternative methodologies, nothing about these techniques depends fundamentally on the models used for tidal streams or the peculiarities of particular data or particular streams. In this sense, we present a ``black-box''. As tidal stream modeling improves, these  models can be swapped in for the current models used without any further changes. 
+
+We have also presented a methodology for approaching the ``thickness'' problem, though we do not believe this methodology to be the definitive, or even an accurate model of the ``thickness'' of tidal streams. Using the techniques presented above, we performed numerical studies of the sensitivity of the inference problem of inferring the galactic z-axis flattening under variation of different properties of the data. It was found that the ``thickness'' of the tidal stream matters far more than the quality of the phase space information used in the analysis. This result is in-line with many of the justifications of the use of tidal streams in such problems and underscores the necessity of using relatively ``cold'' tidal streams in such inferences.
+
+From here there are many possibly fruitful directions of further study, aside from the ground work that must be accomplished in the modeling of tidal stream dynamics, many of which we hope to investigate in the future. Firstly, the star stream membership problem must be resolved before this methodology can be said to be complete. Secondly, given current observational capabilities, a natural question to ask is if are there  classes of initial conditions for tidal streams that are particularly constraining on the galactic modeling parameters. Thirdly, It would be worthwhile to further investigate the relative importance of the quality of information in various regions phase space. Indeed it would be particularly fruitful to use such techniques to explore the theoretical capabilities of forthcoming missions such as \textit{Gaia} regarding such inferential problems. Such studies would be able to guide the development of future missions as they would allow research to be focused on obtaining better information in those regions of phase space that are particularly important. 
+
+\bibliographystyle{apj}
+\bibliography{PhysThesis}
+
+\end{document}

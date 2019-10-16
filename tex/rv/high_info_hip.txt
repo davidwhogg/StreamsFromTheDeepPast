@@ -1,0 +1,53 @@
+\clearpage
+\begin{deluxetable}{lrrrrrrrrrc}
+\tablecaption{High entropy predictions for Hipparcos stars' radial velocities\label{table:hip_high}}
+\tablecolumns{11}
+\tablewidth{0pt}
+\tabletypesize{\small}
+\tablehead{\colhead{ID\tablenotemark{\protect{\ref{HIPNUMBERone}}}} & \multicolumn{3}{c}{\ra\ (1991.25)}& \multicolumn{3}{c}{\dec\ (1991.25)}{} &\colhead{$v_r$\tablenotemark{\protect{\ref{VRone}}}}&\colhead{$v_r > (95\%)$\tablenotemark{\protect{\ref{VRLOWERone}}}}& \colhead{$v_r < (95\%)$\tablenotemark{\protect{\ref{VRUPPERone}}}} & \colhead{\phantom{bbb}$H$\tablenotemark{\protect{\ref{ENTROPYone}}}\phantom{bbb}}\\
+\colhead{} & \colhead{(h} & \colhead{m} & \colhead{s)} & \colhead{($\degree$} & \colhead{$\prime$} & \colhead{$\prime\prime$)} & \colhead{(km s$^{-1}$)} & \colhead{(km s$^{-1}$)} & \colhead{(km s$^{-1}$)} & \colhead{}}
+\startdata
+HIP67534..........&13&50&16.63&-57&15&40.3&57&-92&209&5.817\\
+HIP64444..........&13&12&32.07&-34&44&50.6&72&-65&210&5.717\\
+HIP95344..........&19&23&49.32&-81&32&24.9&47&-61&216&5.717\\
+HIP117029........&23&43&26.61&58&04&44.9&-46&-205&71&5.694\\
+HIP84164..........&17&12&21.95&-46&33&40.0&40&-100&173&5.663\\
+HIP110618........&22&24&34.39&-72&15&13.6&-37&-142&126&5.639\\
+HIP117702........&23&52&14.21&-61&25&23.4&61&-68&184&5.589\\
+HIP7869............&01&41&14.20&-67&40&33.1&80&-44&198&5.555\\
+HIP117254........&23&46&32.69&-41&34&47.3&25&-98&142&5.529\\
+HIP63559..........&13&01&26.58&-27&22&26.5&-4&-74&171&5.503\\
+HIP102862........&20&50&22.62&-40&36&26.6&-9&-136&99&5.503\\
+HIP55988..........&11&28&27.91&07&31&12.9&61&-57&173&5.493\\
+HIP98532..........&20&01&00.43&-12&15&17.1&-73&-176&62&5.493\\
+HIP111286........&22&32&40.70&-65&26&07.3&39&-73&171&5.465\\
+HIP76976..........&15&43&03.76&-10&55&57.9&44&-70&152&5.451\\
+HIP5549............&01&11&10.39&-82&32&54.0&27&-47&185&5.432\\
+HIP3086............&00&39&12.81&03&07&59.5&13&-130&97&5.423\\
+HIP78400..........&16&00&19.98&-16&31&56.6&-29&-119&92&5.395\\
+HIP17671..........&03&47&06.05&-56&02&29.5&42&-58&152&5.384\\
+HIP107731........&21&49&24.76&-47&58&35.9&19&-112&103&5.337\\
+HIP96185..........&19&33&27.40&33&12&04.8&-49&-185&7&5.336\\
+HIP99224..........&20&08&33.81&-15&43&43.7&-38&-148&43&5.302\\
+HIP100792........&20&26&11.85&09&27&05.2&-88&-185&4&5.293\\
+HIP30439..........&06&23&57.61&-45&56&52.2&60&-11&175&5.284\\
+HIP86013..........&17&34&43.34&06&00&48.3&-87&-182&1&5.261\\
+\enddata
+\tablecomments{Predictions for the radial velocity are based on the velocity density estimate using 10 Gaussians with regularization parameter $w$ = 4 km$^2$ s$^{-2}$, marginalized for the position on the sky of the star and conditioned on the stars' tangential velocity.}
+\setcounter{tableone}{1}
+\makeatletter
+\let\@currentlabel\oldlabel
+\newcommand{\@currentlabel}{\thetableone}
+\makeatother
+\renewcommand{\thetableone}{\alph{tableone}}
+\tablenotetext{\thetableone}{\label{HIPNUMBERone}
+\Hipparcos\ number.\stepcounter{tableone}}
+\tablenotetext{\thetableone}{\label{VRone}
+Maximum likelihood estimate of the radial velocity.\stepcounter{tableone}}
+\tablenotetext{\thetableone}{\label{VRLOWERone}
+Lower limit on the radial velocity (95-percent confidence).\stepcounter{tableone}}
+\tablenotetext{\thetableone}{\label{VRUPPERone}
+Upper limit on the radial velocity (95-percent confidence).\stepcounter{tableone}}
+\tablenotetext{\thetableone}{\label{ENTROPYone}
+Entropy of the probability distribution of the radial velocity.\stepcounter{tableone}}
+\end{deluxetable}

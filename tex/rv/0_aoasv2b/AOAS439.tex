@@ -1,0 +1,1811 @@
+\documentclass[aoas,preprint,authoryear,round]{imsart}
+\RequirePackage[OT1]{fontenc}
+\RequirePackage{amsthm,natbib}
+\RequirePackage{color}
+%\definecolor{linkcolor}{rgb}{0,0,0.5}
+\definecolor{linkcolor}{rgb}{0,0,1}
+\RequirePackage[colorlinks,citecolor=linkcolor,urlcolor=linkcolor]{hyperref}
+\usepackage{graphicx}
+\arxiv{0905.2979}
+\usepackage{amsmath}
+
+\setlength{\emergencystretch}{2em}%No overflowing references
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\eqnnumber}{equation}
+\newcommand{\eg}{e.g.}
+\newcommand{\ie}{i.e.}
+\newcommand{\Ie}{I.e.}
+\newcommand{\etal}{et~al.}
+\newcommand{\Hipparcos}{\emph{Hipparcos}}
+\newcommand{\normal}{{\cal N}}
+\newcommand{\wishart}{{\cal W}}
+\newcommand{\dirichlet}{{\cal D}}
+\renewcommand{\vec}[1]{\mathbf{#1}} % boldface for vectors
+\newcommand{\inv}{^{-1}}
+\newcommand{\bb}{\vec{b}}
+\newcommand{\cc}{\vec{c}}
+\newcommand{\ee}{\vec{\hat{e}}}
+\newcommand{\mm}{\vec{m}}
+\newcommand{\vv}{\vec{v}}
+\newcommand{\xx}{\vec{x}}
+\newcommand{\zz}{\vec{z}}
+\newcommand{\ww}{\vec{w}}
+\newcommand{\bij}{\bb_{ij}}
+\newcommand{\bbij}{\bij}
+\newcommand{\mmj}{\mm_j}
+\newcommand{\mmk}{\mm_k}
+\newcommand{\vvi}{\vv_i}
+\newcommand{\vvj}{\vv_j}
+\newcommand{\wwi}{\ww_i}
+\newcommand{\wwj}{\ww_j}
+\newcommand{\wwk}{\ww_k}
+\newcommand{\ten}[1]{\mathbf{#1}} % boldface for tensors
+\newcommand{\BB}{\ten{B}}
+\newcommand{\CC}{\ten{C}}
+\newcommand{\QQ}{\ten{Q}}
+\newcommand{\RR}{\ten{R}}
+\renewcommand{\SS}{\ten{S}}
+\newcommand{\TT}{\ten{T}}
+\newcommand{\VV}{\ten{V}}
+\newcommand{\PP}{\mbox{\bf P}}
+\newcommand{\WW}{\ten{W}}
+\newcommand{\II}{\ten{I}}
+\newcommand{\BBij}{\BB_{ij}}
+\newcommand{\CCi}{\CC_i}
+\newcommand{\QQi}{\QQ_i}
+\newcommand{\RRi}{\RR_i}
+\newcommand{\SSi}{\SS_i}
+\newcommand{\VVj}{\VV_{\!j}} % \! must be *inside* the subscript, not outside
+\newcommand{\VVk}{\VV_{\!k}} % \! must be *inside* the subscript, not outside
+\newcommand{\TTij}{\TT_{ij}}
+\newcommand{\TTik}{\TT_{ik}}
+\newcommand{\T}{^{\scriptscriptstyle \top}}   % transpose
+\newcommand{\iT}{^{\scriptscriptstyle -\top}} % inverse transpose
+\newcommand{\tr}{\mathrm{tr}}                 % trace
+\newcommand{\alphaj}{\alpha_j}
+\newcommand{\alphak}{\alpha_k}
+\newcommand{\qij}{q_{ij}}
+\newcommand{\pij}{p_{ij}}
+\newcommand{\pik}{p_{ik}}
+\newcommand{\qqj}{q_j}
+\newcommand{\trace}{\mathrm{Trace}}
+\newcommand{\norm}{|\!|}
+\newcommand{\MLE}{MLE}
+\newcommand{\EPhi}{\langle\Phi\rangle}
+\newcommand{\matrixleft}{\left[}
+\newcommand{\matrixright}{\right]}
+
+
+\newcommand{\parallax}{\ensuremath{\pi}}
+\newcommand{\vrr}{\ensuremath{v_r}}
+\newcommand{\ra}{\ensuremath{\alpha}}
+\newcommand{\dec}{\ensuremath{\delta}}
+\newcommand{\pmra}{\ensuremath{\mu_{\ra}}}
+\newcommand{\pmdec}{\ensuremath{\mu_{\dec}}}
+\newcommand{\vx}{\ensuremath{v_x}}
+\newcommand{\vy}{\ensuremath{v_y}}
+\newcommand{\vz}{\ensuremath{v_z}}
+\newcommand{\AAA}{\ten{A}}
+\newcommand{\arcsecs}{\textnormal{arcsec}}
+\newcommand{\ngp}{\textnormal{NGP}}
+\newcommand{\rangp}{\ensuremath{\ra_\ngp}}
+\newcommand{\decngp}{\ensuremath{\dec_\ngp}}
+\newcommand{\degree}{^{\circ}}
+
+
+
+\begin{document}
+
+\begin{frontmatter}
+\title{Extreme deconvolution: inferring complete distribution
+functions from noisy, heterogeneous and incomplete
+observations} \runtitle{Extreme deconvolution}
+
+\begin{aug}
+\author{\fnms{Jo} \snm{Bovy}\thanksref{t1}\ead[label=e1]{jo.bovy@nyu.edu}},
+\author{\fnms{David~W.} \snm{Hogg}\thanksref{t1,t2}\ead[label=e2]{david.hogg@nyu.edu}}
+\and
+\author{\fnms{Sam~T.} \snm{Roweis}\thanksref{t3}\ead[label=e3]{roweis@cs.nyu.edu}}
+
+\thankstext{t1}{Partially supported by NASA (grant
+NNX08AJ48G) and the NSF (grant AST-0908357).}
+\thankstext{t2}{During part of the period in which this research was
+performed, D.W.H. was a research fellow of the Alexander von Humboldt
+Foundation of Germany at the Max-Planck-Institut f\"ur Astronomie,
+Heidelberg, Germany.}
+\thankstext{t3}{Deceased.}
+\runauthor{J.~Bovy et al.}
+
+\affiliation{New York University}
+
+\address{Center for Cosmology and Particle Physics\\
+Department of Physics\\
+New York University\\
+4 Washington Place\\
+New York, NY 10003\\
+\printead{e1,e2}}
+\address{Courant Institute of Mathematical Sciences\\
+New York University\\
+251 Mercer Street\\
+New York, NY 10012\\
+\printead{e3}}
+\end{aug}
+
+
+
+\begin{abstract}
+We generalize the well-known mixtures of Gaussians approach to density
+estimation and the accompanying Expectation-Maximization technique for
+finding the maximum likelihood parameters of the mixture to the case
+where each data point carries an individual $d$-dimensional
+uncertainty covariance and has unique missing data properties. This
+algorithm reconstructs the error-deconvolved or ``underlying''
+distribution function common to all samples, even when the individual
+data points are samples from different distributions, obtained by
+convolving the underlying distribution with the heteroskedastic
+uncertainty distribution of the data point and projecting out the
+missing data directions. We show how this basic algorithm can be
+extended with conjugate priors on all of the model parameters and a
+``split-and-merge'' procedure designed to avoid local maxima of the
+likelihood. We demonstrate the full method by applying it to the
+problem of inferring the three-dimensional velocity distribution of
+stars near the Sun from noisy two-dimensional, transverse velocity
+measurements from the \Hipparcos\ satellite.
+\end{abstract}
+
+
+\begin{keyword}[class=AMS]
+\kwd[Primary ]{62G07}
+\kwd[; secondary ]{62H30, 62P35}
+\end{keyword}
+
+\begin{keyword}
+\kwd{Bayesian inference}
+\kwd{density estimation}
+\kwd{Expectation-Maximization}
+\kwd{missing data}
+\kwd{multivariate estimation}
+\kwd{noise}
+\end{keyword}
+
+\end{frontmatter}
+
+
+
+\section{Introduction}
+
+
+Inferring a distribution function given a finite set of samples from
+this distribution function and the related problem of finding clusters
+and/or overdensities in the distribution is a problem of significant
+general interest
+\citep[\eg,][]{McLachlan1988,Rabiner1993,1998AJ....115.2384D,1999Natur.402...53H,1999MNRAS.308..731S,2005ApJ...629..268H}.
+Performing this inference given only a noisy set of measurements is a
+problem commonly encountered in many of the sciences (see examples in
+\citealt{Carroll06a}). In many cases of interest, the noise
+properties of the observations are different from one measurement to
+the next (\ie, they are heteroskedastic), even though the
+uncertainties are well characterized for each observation. This is,
+for example, often the case in astronomy, where in many cases the
+dominant source of uncertainty is due to well-characterized
+photon-counting statistics, while spatial and temporal variations in
+the atmosphere cause the uncertainties to significantly vary even for
+sources of the same apparent brightness observed with the same
+telescope.
+
+
+The description you are interested in as a scientist is \emph{not} the
+observed distribution, what you really want is the description of the
+distribution that you would have if you had good data, \ie, data with
+vanishingly small uncertainties and with all of the dimensions
+measured. In the low signal-to-noise regime the data never have these
+two properties such that the underlying, true distribution cannot be
+found without taking the noise properties of the data into account. If
+you want know the underlying distribution, in order to compare your
+model with the data, you need to convolve the model with the data
+uncertainties, not deconvolve the data. When the given set of data has
+heterogeneous noise properties, that is, when the uncertatinty
+convolution is different for each data point, each data point is a
+sample of a different distribution, \ie, the distribution obtained
+from convolving the true, underlying distribution with the noise of
+that particular observation. Incomplete data poses a similar problem
+when the part of the data that is missing is different for different
+data points. 
+
+Most existing approaches to density estimation only apply in the high
+signal-to-noise regime
+\citep[\eg,][]{McLachlan1988,Silverman86a,diebolt94a},
+and most approaches to density estimation from noisy samples are
+nonparametric techniques that assume that the noise is homoskedastic
+\citep[\eg][]{Stefanski90a,Zhang90a}. The case of heteroskedastic
+uncertainties has only recently attracted attention
+\citep[\eg][]{Delaigle08a,Staudenmayer08a}, and all of the approaches
+that have been developed so far are nonparametric. None of these
+approaches can be used when only incomplete data are available,
+although parametric techniques that properly account for incomplete,
+but noiseless, data have been developed
+\citep{Ghahramani1994,Ghahramani1994b}.
+
+In this paper we show that the frequently used Gaussian-mixture-model
+approach to density estimation can be generalized in the presence of
+noisy, heterogeneous, and incomplete data. The likelihood of the model
+for each data point is given by the model convolved with the (unique)
+uncertainty distribution of that data point; the objective function is
+obtained by simply multiplying these individual likelihoods together
+for the various data points. Optimizing this objective function one
+obtains a maximum likelihood estimate of the distribution (more
+specifically, of its parameters).
+
+While optimization of this objective function can, in principle, be
+performed by a generic optimizer, we develop an
+Expectation-Maximization (EM) algorithm that optimizes the objective
+function. This algorithm works in much the same way as the normal EM
+algorithm for mixture-of-Gaussians density estimation, except that an
+additional degree of incompleteness is given by the actual values of
+the observables, since we only have access to noisy projections of
+these; in the expectation step these actual values are estimated based
+on the noisy and incomplete measured values and the current estimate
+of the distribution function. In the limit in which the noise is
+absent but the data are lower dimensional projections of the
+quantities of interest, this algorithm reduces to the algorithm
+described in \citet{Ghahramani1994,Ghahramani1994b}.
+
+We also show how prior distributions for a Bayesian version of the
+calculation reporting a MAP estimate can be naturally included in this
+algorithm as well as how a split-and-merge procedure that
+heuristically searches parameter space for better approximations to
+the global maximum can also be incorporated in this approach. These
+priors and the split-and-merge procedure can be important when
+applying the EM algorithm developed here in situations with real data
+where the likelihood surface can have a very complicated structure. We
+also briefly discuss the practical issues having to do with model
+selection in the mixture model approach.
+
+An application to a real data set is given in Section
+\ref{sec:hipparcos}, where we fit the distribution of stellar
+velocities near the Sun. The observed velocities of stars that we use
+for this purpose have all of the properties that the approach
+developed in this paper handles correctly: The velocity measurements
+are noisy, and since we only use observations of the velocity
+components in the plane of the sky, the data are incomplete, and this
+incompleteness is different for each velocity measurement, which cover
+the full sky. Nevertheless, we are able to obtain good agreement with
+other fits of the velocity distribution based on complete data.
+
+
+The technique we describe below has many applications besides
+returning a maximum likelihood fit to the error-deconvolved
+distribution function of a data sample. For instance, when an estimate
+of the uncertainty in the estimated parameters or distribution
+function is desired or when a full Bayesian analysis of the mixture
+model preferred, the outcome of the maximum likelihood technique
+developed here can be used as a seed for Markov Chain Monte Carlo
+(MCMC) methods for finite mixture modeling
+\citep[\eg,][]{diebolt94a,Richardson97a}.
+
+
+\section{Likelihood of a mixture of Gaussian distributions given a set of heterogeneous, noisy samples}\label{sec:objective}
+
+Our goal is to fit a model for the distribution of a $d$-dimensional
+quantity $\vv$ using a set of $N$ observational data points
+$\wwi$. Therefore, we need to write down the probability of the data
+under the model for the distribution. The observations are assumed to
+be noisy projections of the true values $\vvi$
+\begin{equation}\label{eq:obs}
+\wwi = \RRi \vvi + \mbox{noise}\, ,
+\end{equation}
+where the noise is drawn from a Gaussian with zero mean and known
+covariance matrix $\SSi$. The case in which there is missing data
+occurs when the projection matrix $\RRi$ is
+rank-deficient. Alternatively, we can handle the missing data case by
+describing the missing data as directions of the covariance matrix
+that have a formally infinite eigenvalue; In practice we use very
+large eigenvalues in the noise-matrix. When the data has only a small
+degree of incompleteness, \ie, when each data point has only a small
+number of unmeasured dimensions, this latter approach is often the
+best choice, since one often has some idea about the unmeasured
+values. For example, in the example given below of inferring the
+velocity distribution of stars near the Sun we know that the stars are
+moving at velocities that do not exceed the speed of light, which is
+not very helpful, but also that none of the velocities exceed the
+local Galactic escape speed, since we can safely assume that all the
+stars are bound to the Galaxy. However, in situations in which each
+data point has observations of a dimensionality $\ll$ $d$ using the
+projections matrices will greatly reduce the computational cost,
+since, as will become clear below, the most computationally expensive
+operations all take place in the lower dimensional space of the
+observations.
+
+We will model the probability density $p(\vv)$ of the true values $\vv$ as a
+mixture of $K$ Gaussians:
+\begin{equation}
+p(\vv) = \sum_{j=1}^K \alphaj \normal(\vv|\mmj,\VVj)\, ,
+\end{equation}
+where the amplitudes $\alphaj$ sum to unity and the function
+$\normal(\vv|\mm,\VV)$ is the Gaussian probability density function
+with mean $\mm$ and variance matrix $\VV$:
+\begin{equation}
+\normal(\vv|\mm,\VV) = (2\pi)^{-d/2} \det(\VV)^{-1/2} \exp\left[-\frac{1}{2}(\vv-\mm)\T\VV^{-1}(\vv-\mm)\right]\, .
+\end{equation}
+
+For a given observation $\wwi$ the likelihood of the model parameters
+$\theta=(\alphaj,\mmj,\VVj)$ given that observation and the noise
+covariance $\SSi$, which we will write as $p(\wwi|\theta)$, can be
+written as:
+\begin{eqnarray}\displaystyle
+p(\wwi|\theta) \equiv p(\wwi|\RRi,\SSi,\theta) &=&\sum_j\int_\vv \mathrm{d}\vv\, p(\wwi,\vv,j|\theta)\nonumber\\
+&=& \sum_j\int_\vv \mathrm{d}\vv\, p(\wwi|\vv) p(\vv|j,\theta)p(j|\theta)\, ,
+\end{eqnarray}
+where
+\begin{eqnarray}\displaystyle
+p(\wwi|\vv) &=& \normal(\wwi|\RRi\vv,\SSi)\nonumber\\
+p(\vv|j,\theta) &=& \normal(\vv|\mmj,\VVj)\nonumber\\
+p(j|\theta) &=& \alphaj\, .
+\end{eqnarray}
+This likelihood works out to be itself a mixture of
+Gaussians
+\begin{equation}
+p(\wwi|\theta) = \sum_j \alphaj \normal(\wwi|\RRi\,\mmj,\TTij)\, ,
+\end{equation}
+where
+\begin{equation}
+\TTij = \RRi\,\VVj\,\RRi\T + \SSi\, .
+\end{equation}
+
+The free parameters of this model can now be chosen such as to
+maximize an explicit, justified, scalar objective function $\phi$,
+given here by the logarithm (log) likelihood of the model given the
+data, \ie,
+\begin{equation}\label{eq:totallike}
+\phi = \sum_i \ln p(\wwi|\theta) = \sum_i \ln \sum_{j=1}^K \alphaj \normal(\wwi|\RRi\,\mmj,\TTij)\, .
+\end{equation}
+This function can be optimized in several ways, one of which is to use
+a generic optimizer to increase the likelihood until it reaches a
+maximum. This approach is complicated by parameter constraints (\eg,
+the amplitudes $\alphaj$ must all be non-negative and add up to one,
+the variance matrices must be positive definite and symmetric) and
+multimodality of the likelihood surface. In what follows we will
+describe a different approach that is natural in this setting: An EM
+algorithm that iteratively and monotonically maximizes the likelihood,
+while naturally respecting the restrictions on the parameters.
+
+
+
+\section{Fitting Mixtures with heterogeneous, noisy data using an EM algorithm}
+
+To optimize the likelihood in \eqnnumber~(\ref{eq:totallike}) we can
+extend the standard EM approach to Gaussian mixture estimation. In the
+case of complete and precise observations the problem is framed as a
+tractable missing-data problem by positing that the labels or
+indicator variables $\qij$ indicating which Gaussian $j$ a data point
+$i$ was drawn from are missing \citep{Dempster1977}. We extend this
+approach by including the true values $\vvi$ as extra missing
+data. This is a well-known approach for handling measurement
+uncertainty in latent variable or random effects models
+\citep[\eg][]{Schafer93a,Schafer96a}.
+
+We write down the ``full data'' log likelihood---the likelihood we
+would write down if we had the true values $\vvi$ and the labels
+$\qij$
+\begin{equation}\label{eq:incompletefulllike}
+\Phi = \sum_i \sum_j \qij \ln \alpha_j \normal(\vvi|\mmj,\VVj) \ .
+\end{equation}
+We will now show how we can use the EM methodology to find
+straightforward update steps that maximize the full data likelihood of
+the model. In Appendix \ref{sec:convergenceproof} we prove that these
+updates also maximize the likelihood of the model given the noisy
+observations.
+
+The E-step consists as usual of taking the expectation of the
+full data likelihood with respect to the current model parameters
+$\theta$. Writing out the full data log likelihood from \eqnnumber\
+(\ref{eq:incompletefulllike}) we find 
+\begin{equation}
+\Phi = \sum_i \sum_j \qij \left[ \ln \alpha_j -\frac{d}{2} \ln (2 \pi) - \frac{1}{2} \ln \det \VVj -\frac{1}{2} (\vv_i - \mmj)\T \VVj^{-1} (\vv_i - \mmj) \right]\ ,
+\end{equation}
+which shows that in addition to the expectation of the indicator
+variables $\qij$ for each component we also need the expectation of
+the $\qij\vvi$ terms and the expectation of the $\qij\vvi\vvi\T$ terms
+given the data, the current model estimate and the component $j$. The
+expectation of the $\qij$ is equal to the posterior probability that a
+data point $\wwi$ was drawn from the component $j$. The expectation of
+the $\vvi$ and the $\vvi\vvi\T$ can be found as follows: Consider the
+joint distribution for the true and observed velocities, denoted by
+the expanded vector $\matrixleft\vvi\T \,\wwi\T\matrixright\T$, given
+the model estimate and the component $j$. From the description of the
+problem we can see that this vector is distributed normally with mean
+\begin{equation}\label{eq:combinedmean}
+\mm' = \matrixleft \begin{array}{c} \mmj \\ \RRi\mmj \end{array}\matrixright
+\end{equation}
+and covariance matrix
+\begin{equation}\label{eq:combinedcovar}
+\VV' = \matrixleft\begin{array}{cc} \VVj & \VVj\RRi\T \\ \RRi\VVj & \TTij \end{array} \matrixright \ .
+\end{equation}
+The conditional distribution of the $\vvi$ given the data $\wwi$ is
+normal with mean
+\begin{equation}\label{eq:bbij}
+\bbij \equiv \mmj + \VVj \RRi\T \TTij^{-1} (\wwi - \RRi\,\mmj)
+\end{equation}
+and covariance matrix
+\begin{equation}\label{eq:BBij}
+\BBij \equiv \VVj - \VVj\RRi\T \TTij^{-1} \RRi\,\VVj \ .
+\end{equation}
+Thus we see that the expectation of $\vvi$ given the data $\wwi$, the
+model estimate, and the component $j$ is given by $\bbij$, whereas the
+expectation of the $\vvi\vvi\T$ given the same is given by
+$\BBij + \bbij\bbij\T$.
+
+Given this the expectation of the full data log likelihood is given by
+\begin{eqnarray}\textstyle\label{eq:incompletefulldataloglike}
+\EPhi &=&  \sum_{i,j} \qij \bigg[ \ln \alpha_j -\frac{d}{2} 
+\ln (2 \pi) - \frac{1}{2} \trace \big[\ln\VVj\\
+&\phantom{=}& \qquad \qquad  + (\BBij + (\mmj - \bbij)(\mmj - \bbij)\T) \VVj^{-1} \big]\bigg]\ .\nonumber
+\end{eqnarray}
+Straightforward optimization of this with respect to the model
+parameters gives the following algorithm
+\begin{eqnarray}\displaystyle\label{eq:updateEMincomplete}
+\mbox{\textbf{E-step:}}\;\;\;
+\qij &\leftarrow& \frac{\alpha_j \normal(\wwi|\RRi\,\mmj,\TTij)}{\sum_k \alpha_k \normal(\wwi|\RRi\,\mmk,\TTik)}\nonumber\\[3pt]
+\bbij &\leftarrow& \mmj + \VVj \RRi\T \TTij^{-1} (\wwi - \RRi\,\mmj)\nonumber\\[3pt]
+\BBij &\leftarrow& \VVj - \VVj \RRi\T \TTij^{-1} \RRi \VVj \nonumber\\
+\mbox{\textbf{M~step:}}\;\;\;
+\alphaj &\leftarrow& \frac{1}{N}\,\sum_i \qij\nonumber \\
+   \mmj &\leftarrow& \frac{1}{\qqj}\,\sum_i \qij\,\bbij\nonumber \\
+   \VVj &\leftarrow& \frac{1}{\qqj}\,\sum_i \qij
+                     \left[(\mmj-\bbij)\,(\mmj-\bbij)\T + \BBij\right]\, ,
+\end{eqnarray}
+where $\qqj=\sum_i \qij$.
+
+In Appendix~\ref{sec:convergenceproof} we prove that this procedure
+for maximizing the full data likelihood also monotonically increases
+the likelihood of the data $\wwi$ given the model, as is the case for
+the EM algorithm for noiseless and complete measurements
+\citep{Dempster1977,Wu1983}.
+
+
+\section{Extensions to the basic algorithm}
+
+Singularities and local maxima are two problems that can severely
+limit the generalization capabilities of the computed density
+estimates for inferring the densities of unknown data points. These
+are commonly encountered when using the EM algorithm to iteratively
+compute the maximum likelihood estimates of Gaussian mixtures:
+Singularities arise when the covariance in
+\eqnnumber~(\ref{eq:updateEMincomplete}) becomes singular; the EM
+updates might get stuck in a local maximum because of the monotonic
+increase in likelihood ensured by the EM algorithm. The latter can be
+avoided through the use of a stochastic EM procedure
+\citep{Broniatowksi83,Celeux85a,Celeux86b} or through the split and
+merge procedure described below.
+
+\subsection{Bayesian-inspired regularization}
+
+The problem of singular covariances can be mitigated through the use
+of priors on the model parameters in a Bayesian setting
+\citep{Ormoneit1995}. It should be emphasized here that this
+calculation is only Bayesian in the sense of producing a maximum a
+posteriori (MAP) point estimate rather than a maximum likelihood
+estimate, and that this is no different than penalized maximum
+likelihood. We briefly show here that this procedure can be applied
+here as well.
+
+The regularization scheme of \citet {Ormoneit1995} introduces
+conjugate priors on the Gaussian mixtures parameters space $\theta =
+(\alphaj, \mmj,\VVj)$ as penalty terms. These conjugate priors are: A
+normal density $\normal(\mmj|\hat\mm,\eta^{-1}\VVj)$ for the mean of
+each Gaussian, a Wishart density $\wishart(\VVj^{-1}|\omega,\WW)$
+\citep{Gelman00a}
+\begin{equation}
+\wishart(\VVj^{-1}|\omega,\WW) = c(\omega,\WW)|\VVj^{-1}|^{\omega-(d+1)/2}\exp\left[-\trace\left[\WW\VVj^{-1}\right]\right]\, ,
+\end{equation}
+with $c(\omega,\WW)$ a normalization constant, for the covariance of each Gaussian, and a Dirichlet density
+$\dirichlet(\alpha|\gamma)$, given by
+\begin{equation}
+\dirichlet(\alpha|\gamma) = b \prod_j \alphaj^{\gamma_j-1}\, ,
+\end{equation}
+where $b$ is a normalizing factor, for the amplitudes
+$\{\alphaj\}$. Optimizing the posterior distribution for the model
+parameters replaces the M-step of \eqnnumber~(\ref{eq:updateEMincomplete}) with
+\begin{align}\label{updateBayes}
+&\\
+\alphaj &\leftarrow \frac{\sum_i \qij+\gamma_j-1}{N+\sum_k \gamma_k - K}\,\nonumber\\
+   \mmj &\leftarrow \frac{\sum_i \qij\,\bij + \eta \hat{\mm}}{\qqj + \eta}\nonumber \\
+   \VVj &\leftarrow \nonumber\\
+&\frac{\sum_i \qij
+                     \left[(\mmj-\bij)\,(\mmj-\bij)\T+\BBij\right] +\eta(\mmj-\hat{\mm})(\mmj-\hat{\mm})\T + 2\WW}{
+     \qqj+1+2(\omega-(d+1)/2)}\, .\nonumber
+\end{align}
+Hyperparameters can be set by leave-one-out
+cross-validation. Vague priors on the amplitude and the means
+are obtained by setting
+\begin{equation}
+\gamma_j = 1 \ \ \forall j \, , \ \ \omega = (d+1)/2 \, , \ \ \eta = 0 \, .
+\end{equation}
+Since we are only interested in the MAP estimate, propriety of the
+resulting posterior is not an issue with the improper prior resulting
+from this choice.
+
+The label-switching problem in Bayesian mixtures \citep{Jasra05a} is
+not an issue for the maximization of the posterior distribution here.
+
+\subsection{Avoiding local maxima}
+
+The split and merge algorithm starts from the basic EM algorithm, with
+or without the Bayesian regularization of the variances, and jumps
+into action after the EM algorithm has reached a maximum, which more
+often than not will only be a local maximum. At this point three of
+the Gaussians in the mixture are singled out and two of these
+Gaussians are merged while the third Gaussian is split into two
+Gaussians \citep{Naonori1998}. An alternative, but similar, approach
+to local maxima avoidance is given by the birth and death moves in
+reversible jump MCMC \citep{Richardson97a} or variational approaches
+\citep{Ghahramani00variationalinference,Beal03} to mixture
+modeling. These moves do not conserve the number of mixture components
+and are therefore less suited for our fixed-$K$ approach to mixture
+modeling.
+
+Full details of the split and merge algorithm are given in
+Appendix~\ref{sec:splitmergeappendix}.
+
+
+\subsection{Setting the remaining free parameters}\label{sec:Kw}
+
+No real world application of Gaussian mixture density estimation is
+complete without a well-specified methodology for setting the number
+of Gaussian components $K$ and any hyperparameters introduced in the
+Bayesian regularization described above, the covariance regularization
+$\WW$. If we further assume that $\WW = w\II$, then this covariance
+regularization parameter basically sets the square of the smallest
+scale of the distribution function on which we can reliable infer
+small-scale features. Therefore, this scale could be set by hand to
+the smallest scale we believe we have access to based on the
+properties of the data set.
+
+In order to get the best results the parameters $K$ and $w$ should be
+set by some objective procedure.  As mentioned above, leave-one-out
+cross validation \citep{stone74a} could be used to set the
+regularization parameter $w$, and the number of Gaussians could be set
+by this procedure as well. Other techniques include methods based on
+Bayesian model selection \citep{roberts98a} as well as approaches
+based on minimum encoding inference
+\citep{wallace68a,Oliver96a,rissanen78a,Schwartz78a}, although these
+methods have difficulty dealing with significant overlap between
+components (such as the overlap we see in the example in Figure
+\ref{fig:4veldist}), but there are methods to deal with these
+situations \citep{baxter95a}. Alternatively, when a separate, external
+data set is available, we can use this as a test data set to validate
+the obtained distribution function.  All of these methods are explored
+in an accompanying paper on the velocity distribution of stars in the
+Solar neighborhood from measurements from the \Hipparcos\ satellite
+\citep[see below;][]{Bovy09b}.
+
+A rather different approach to the model selection problem is to avoid
+it altogether. That is, by introducing priors over the hyperparameters
+and including them as part of the model it is often possible to infer,
+or fully marginalize over, them simultaneously with the parameters of
+the components of the mixture. These methods also address uncertainty
+quantification throughout the model. Such approaches include
+reversible jump MCMC methods \citep{Richardson97a}, mixtures
+consisting of an infinite number of components based on the Dirichlet
+process \citep{rasmussen00infinite}, or approximate, variational
+algorithms \citep{Ghahramani00variationalinference,Beal03}. Extending
+these approaches to deal with noisy, heterogeneous, and incomplete
+data is beyond the scope of this paper, but it is clear that this
+extension is, in principle, straightforward: the MCMC methods
+mentioned above can include the true values of the observations
+$\vvi$---known in the Bayesian MCMC literature as data
+augmentation---and these can be Gibbs sampled given the current model
+and the observed values $\wwi$ in an MCMC sweep from the Gaussian with
+mean given in \eqnnumber~(\ref{eq:bbij}) and variance given in
+\eqnnumber~(\ref{eq:BBij}).
+
+
+
+\section{The velocity distribution from \Hipparcos\ data}\label{sec:hipparcos}
+
+
+We have applied the technique developed in this paper to the problem
+of inferring the velocity distribution of stars in the Solar
+neighborhood from transverse angular data from the \Hipparcos\
+satellite and we present in this Section some results of this study to
+demonstrate the performance of the algorithm on a real data set. A
+more detailed and complete account of this study is presented
+elsewhere \citep{Bovy09b}.
+
+The local velocity distribution is interesting because we can learn
+about the structure and evolution of the Galactic disk from deviations
+from the smooth, close to Gaussian velocity distribution expected in
+simple, axisymmetric models of the disk. It has been shown that the
+dynamical effects of a bar-shaped distribution of stars in the central
+region of our Galaxy can resonate in the outer parts of the disk and
+give rise to structure in the velocity distribution
+\citep[\eg,][]{Dehnen00a,Bovy10b}. Similarly, steady-state or
+transient spiral structure can effect the velocities of stars in a
+coherent way, such that we can see this effect locally
+\citep[\eg,][]{2005AJ....130..576Q,2004MNRAS.350..627D}. Inferring the
+local velocity distribution from observational data is therefore
+necessary to assess whether these dynamical signatures are observed.
+
+Velocities of stars are not directly observable. Rather, they need to
+be patched together from observations of the stars' directions on the
+sky at different times---the branch of astronomy known as
+astrometry---and spectroscopic observations to determine the velocity
+along the line-of-sight. The annual motion of the Earth around the Sun
+gives rise to an apparent displacement of a star relative to
+background objects that is inversely proportional to the distance to
+the star. Measurements of this apparent shift, or parallax, can thus
+be used to determine the distance to stars. Parallaxes are
+traditionally reported in units of arcseconds; a star with a parallax
+of 1 arcsecond is defined to be at a distance of 1 parsec (pc), which
+equals $3\times 10^{16}$ m. The intrinsic motion of a star also gives
+rise to a systematic shift in its position relative to background
+sources, such that its angular motion---known as its proper
+motion---can be measured. Combining the distance and angular velocity
+gives the components of the space velocity of a star that are
+perpendicular to the line of sight.
+
+The astrometric ESA space mission \Hipparcos, which collected data
+over a 3.2 year period around 1990, provided for the first time an
+all-sky catalogue of absolute parallaxes and proper motions, with
+typical uncertainties in these quantities on the order of
+milli-arcseconds \citep{ESA97a}. From this catalogue of
+$\sim\!100,000$ stars, kinematically unbiased samples of stars with
+accurate positions and velocities can be extracted
+\citep{1998MNRAS.298..387D}. Since this was a purely astrometric
+mission, and the only components of a star's velocity that can be
+measured astrometrically are the components perpendicular to the line
+of sight, the line-of-sight velocities of the stars in the \Hipparcos\
+sample were not obtained during the mission.
+
+Distances in astronomy are notoriously hard to measure precisely, and
+at the accuracy level of the \Hipparcos\ mission distances can only be
+reliably obtained for stars near the Sun (out to $\sim\!100$ pc; the
+diameter of the Galactic disk is about 30,000 pc). In addition to
+this, since distances are measured as inverse distances (parallaxes)
+only distances that are measured relatively precise will have
+approximately Gaussian uncertainties associated with them. Balancing
+the size of the sample with the accuracy of the distance measurement
+leaves us with distance uncertainties that are typically
+$\sim\!10$-percent, such that the velocities perpendicular to the line
+of sight that are obtained from the proper motions and the distances
+have low signal-to-noise. Since the dominant source of noise is due to
+simple photon-counting statistics \citep{2007ASSL..250.....V}, the
+uncertainties are well characterized and can be assumed to be known,
+as is necessary for the technique developed in this paper to
+apply. Star--to--star correlations are negligible and can be ignored
+\citep{2007ASSL..250.....V}.
+
+Of course, if we want to describe the distribution of the velocities
+of the stars in this sample, we need to express the velocities in a
+common reference frame, which for kinematical studies of stars around
+the Sun is generally chosen to be the Galactic coordinate system, in
+which the $x$-axis points towards the Galactic center, the $y$-axis
+points in the direction of Galactic rotation, and the $z$-axis points
+towards the North Galactic Pole
+\citep{1960MNRAS.121..123B,1998gaas.book.....B}. The measured
+velocities perpendicular to the line of sight are then projections of
+the three-dimensional velocity of a star with respect to the Sun in
+the two-dimensional plane perpendicular to the line-of-sight to the
+star. Therefore, this projection is different for each individual
+star.
+
+Observations of celestial objects are expressed in the equatorial
+coordinate system, in which the Earth's geographic poles and equator
+are projected onto the celestial sphere. The components of the
+three-dimensional velocities $\vv$ of the stars in the Galactic
+coordinate system in terms of the observed quantities in the
+equatorial coordinate frame---angular position on the sky (\ra,\dec),
+inverse distance (\parallax), angular motion on the sky
+(\pmra,\pmdec), and line-of-sight velocity (\vrr)---is given by
+\begin{equation}\label{eq:vrpmrapmdectoUVW2}
+\vv \equiv \matrixleft \begin{array}{c} \vx \\ \vy \\ \vz \end{array} \matrixright =
+\TT \, \AAA \, \matrixleft \begin{array}{c} \vrr  \\ \frac{k}{\parallax}\,\pmra\,\cos\dec\\\frac{k}{\parallax}\pmdec\end{array} \matrixright\, ,
+\end{equation}
+where $k = 4.74047$, [\vrr] = km s$^{-1}$,
+[\parallax] = \arcsecs, [\pmra]=[\pmdec]= \arcsecs\ yr$^{-1}$. The
+matrix $\TT$ transforms the velocities from the equatorial reference
+frame in which the observations are made to the Galactic coordinate
+frame; it depends on a few parameters defining this coordinate
+transformation and is given by
+\begin{align}\label{eq:radectolbT}
+\TT &= \matrixleft \begin{array}{ccc} \cos \theta & \sin \theta & 0\\\sin \theta & -\cos \theta & 0\\0&0&1 \end{array} \matrixright
+\matrixleft \begin{array}{ccc} -\sin \decngp & 0 & \cos \decngp\\ 0 & 1 & 0 \\ \cos \decngp & 0 & \sin \decngp\end{array} \matrixright\\
+&\phantom{=} \times \matrixleft \begin{array}{ccc} \cos \rangp &\sin\rangp&0\\ -\sin\rangp & \cos\rangp&0\\ 0&0&1\end{array} \matrixright\, ,
+\end{align}
+The matrix $\TT$ depends on the epoch that the reduced data are
+referrred to (1991.25 for \Hipparcos) through the values of \rangp,
+\decngp, and $\theta$ (the position in equatorial coordinates of the
+north Galactic pole, and the Galactic longitude of the north Celestial
+pole, respectively). These quantities were defined for the epoch
+1950.0 as follows: \citep{1960MNRAS.121..123B}: $\rangp =
+12^{\textnormal{h}}49^{\textnormal{m}}$, $\decngp = 27\degree.4$, and
+$\theta = 123\degree$.
+
+The matrix $\AAA$ depends on the position of the source on the sky
+\begin{equation}
+\AAA = \matrixleft \begin{array}{ccc} \cos \ra & -\sin \ra & 0 \\ \sin \ra & \cos \ra & 0 \\ 0 & 0& 1 \end{array} \matrixright
+\matrixleft \begin{array}{ccc} \cos \dec & 0 & -\sin \dec\\ 0 & 1 & 0 \\ \sin \dec  & 0 & \cos\dec\end{array} \matrixright\, ,
+\end{equation}
+In the context of the deconvolution technique described above, the
+observations are $\ww \equiv \matrixleft\begin{array}{ccc} \vrr\ , &
+\frac{k}{\parallax}\,\pmra\,\cos\dec\ ,&\frac{k}{\parallax}\pmdec\end{array}
+\matrixright\T$ and the projection matrix is $\RR^{-1} \equiv
+\TT\,\AAA$. Since we do not use the radial velocities of the stars, we
+set $\vrr$ to zero in $\ww$ and use a large uncertainty-variance for
+this component of the uncertainty variance $\SSi$; equivalently, we
+could remove $\vrr$ from $\ww$ and restrict $\RR$ to the projection on
+the sky.
+
+We have studied the velocity distribution of a sample of main sequence
+stars selected to have accurate distance measurements (parallax
+uncertainties $\sigma_\pi/\pi < 0.1$) and to be kinematically unbiased
+(in that the sample of stars faithfully represents the kinematics of
+similar stars). In detail, we use the sample of 11,865 stars from
+\citet{1998MNRAS.298..387D}, but we use the new reduction of the
+\Hipparcos\ raw data, which has improved the accuracy of the
+astrometric quantities
+\citep{2007A&A...474..653V,2007ASSL..250.....V}. A particular
+reconstruction of the underlying velocity distribution of the stars is
+shown in Figure \ref{fig:4veldist}, in which 10 Gaussians are used, a
+prior on the variances was used (the prior was restricted to $\WW=
+w\,\II$), and this regularization parameter $w$ is set to 4 km$^2$
+s$^{-2}$.
+
+These values for the hyperparameters were set using an external data
+set rather than any of the other methods described in
+Section~\ref{sec:Kw}. For this we use a set of 7,682 stars from the
+Geneva-Copenhagen Survey
+\citep{2004A&A...418..989N,2008arXiv0811.3982H} for which the
+line-of-sight velocity (perpendicular to the plane of the sky) has
+been measured spectroscopically. This is a separate data set from the
+one considered above. It partially overlaps with the previous data set
+and it is also kinematically unbiased. We then fit the velocity
+distribution for different choices of the hyperparameters and evaluate
+the probability of the line-of-sight velocities for the best-fit
+velocity distribution based on tangential velocities. The values of
+the hyperparameters that maximizes this probability is $K = 10$ and
+$w= $4 km$^2$ s$^{-2}$.
+
+The recovered distribution compares favorably with other
+reconstructions of the velocity distribution of stars in the Solar
+neighborhood, based on the same sample of stars \citep[using a maximum
+penalized likelihood density estimation
+technique,][]{1998AJ....115.2384D}, as well as with those based on
+other samples of stars for which three-dimensional velocities are
+available
+\citep{1999MNRAS.308..731S,2004A&A...418..989N,2005A&A...430..165F,2008A&A...490..135A}. In
+particular, this means that the main shape of the velocity
+distribution agrees with that found in previous studies and that the
+number and location of the peaks in the distribution, all real and
+known features, is consistent with those found before. This includes
+the very sparsely populated feature at $v_y \approx -100$ km s$^{-1}$,
+which is known as the Arcturus moving group. Therefore, we conclude
+that the method developed in this paper performs very well on this
+complicated data set. In contrast to previous determinations of the
+velocity distributions, our method allows us to study the structures
+found quantitatively, since it turns out that individual structures in
+the velocity distribution are well represented by individual
+components in the mixture model. Thus, we were able to conclude that
+these structures are not the remnants of a large group of stars that
+formed together in a cluster, but rather that they are probably caused
+by dynamical effects related the bar at the central of the Milky Way
+or spiral structure \citep{Bovy10a}.
+
+The convergence of the algorithm is shown in Figure
+\ref{fig:convergence}. Only split-and-merge steps that improved the
+likelihood are shown in this plot, therefore, the actual number of
+iterations is much higher than the number given on the $x$-axis. It is
+clear that all of the split-and-merge steps only slightly improve the
+initial estimate from the first EM procedure, but since what is shown
+is the likelihood per data point, the improvement of the total
+likelihood is more significant. 
+
+
+\section{Implementation and code availability}
+
+The algorithm presented in this paper was implemented in the C
+programming language, depending only on the standard C library and the
+GNU Scientific
+Library\footnote{\url{http://www.gnu.org/software/gsl/}}. The code is
+available at \url{http://code.google.com/p/extreme-deconvolution/};
+Instructions for its installation and use are given there. The code
+can be compiled into a shared object library, which can then be
+incorporated into other projects or accessed through
+IDL\footnote{\url{http://www.ittvis.com/ProductServices/IDL.aspx}} or
+Python\footnote{\url{http://www.python.org/}} wrapper functions
+supplied with the C code.
+
+The code can do everything described above. The convergence of a
+single run is quick, but when including split-and-merge iterations the
+convergence is rather slow because of the large number of
+split-and-merge steps that can be taken by the algorithm (the
+split-and-merge aspect of the algorithm, however, can easily be turned
+off or restricted by setting the parameter specifying the number of
+steps to go down the split-and-merge hierarchy).
+
+
+\section{Conclusions and Future Work}
+
+We have generalized the mixture of Gaussians approach to density
+estimation such that it can be applied to noisy, heterogeneous, and
+incomplete data. The objective function is obtained by integrating
+over the unknown true values of the quantities for which we only have
+noisy and/or incomplete observations. In order to optimize the
+objective function resulting from this marginalization we have derived
+an EM algorithm that monotonically increases the model likelihood;
+this EM algorithm, in which the E step involves finding the expected
+value of the first and second moments of the true values of the
+observables given the current model and the noisy observations,
+reduces to the basic EM algorithm for Gaussian mixture modeling in the
+limit of noiseless data. We have shown that the model can incorporate
+conjugate priors on all of the model parameters without losing any of
+its analytical attractiveness and that the algorithm can accommodate
+the split-and-merge algorithm to deal with the presence of local
+maxima, which this EM algorithm, as many other EM algorithms, suffers
+from.
+
+The work presented here can be extended to be incorporated in various
+more nonparametric approaches to density modeling, \eg, in mixture
+models with an infinite number of components based on the Dirichlet
+Process \citep[\eg,][]{rasmussen00infinite}. In this way current
+advances in nonparametric modeling can be applied to the low
+signal-to-noise sciences where the situation of complete and
+noise-free data is more often than not an untenable and unattainable
+approximation.
+
+
+\appendix
+
+\section{Proof that the proposed algorithm maximizes the likelihood}\label{sec:convergenceproof}
+
+We use Jensen's inequality in the continuous case for a
+concave function $f$ and a non-negative integrable function $q$, where
+we have assumed that $q$ is normalized, \ie, $q$ is a probability
+distribution. For each observation $\ww$ we can then introduce a
+function $q(\vv,j)$ such that
+\begin{eqnarray}\displaystyle
+\ln p(\ww|\theta) &=& \ln \sum_j \int_{\vv} \mathrm{d}\vv \,
+    p(\ww,\vv,j|\theta)\nonumber \\
+    &\geq& \sum_j
+    \int_{\vv}\mathrm{d}\vv \, q(\vv,j)\,\ln \frac{p(\ww,\vv,j|\theta)}{q(\vv,j)} =
+    F(\ww|q,\theta)\nonumber \\
+    \ln
+    p(\ww|\theta) &\geq& F(\ww|q,\theta) = \left\langle \ln
+    p(\ww,\vv,j|\theta) \right\rangle_{q} + {\cal H}(q) \, ,
+\end{eqnarray}
+where ${\cal H}$ is the entropy of the distribution $q(\vv,j)$. This
+inequality becomes an equality when we take
+\begin{equation}
+q(\vv,j) =  p(\vv,j|\ww,\theta) \, .
+\end{equation}
+
+The above holds for each data point, and we can write
+\begin{equation}
+p(\vv,j|\wwi,\theta) = p(\vv|\wwi,\theta,j) \, p(j|\wwi,\theta) \, .
+\end{equation}
+The last factor reduces to calculating the posterior probabilities
+$\qij=p(j|\wwi,\theta)$ and we can write the $F$ function as (we drop
+the entropy term here, since it plays no role in the optimization, as
+it does not depend on the model parameters)
+\begin{eqnarray*}\displaystyle
+F &=& \sum_{i,j} \qij  \int_{\vv}\mathrm{d}\vv \, p(\vv|\wwi,\theta,j) \,\ln p(\wwi,\vv,j|\theta)\\
+&=& \sum_{i,j} \qij  \Bigg[ \ln \alpha_j + \int_{\vv}\mathrm{d}\vv \, p(\vv|\wwi,\theta,j) \\
+&& \qquad \qquad \qquad \qquad \times \left[ -\frac{1}{2}  \ln \det \VV_j -\frac{1}{2} (\vv-\mmj)\T\VVj^{-1}(\vv-\mmj)\right]\Bigg]\, .\nonumber
+\end{eqnarray*}
+This shows that this reduces exactly to
+the procedure described above, \ie, to taking the expectation of the
+$\vvi$ and $\vvi\vvi\T$ terms with respect to the distribution of the
+$\vvi$ given the data $\wwi$, the current parameter estimate, and the
+component $j$. We conclude that the E-step as described above ensures
+that the expectation of the full data log likelihood becomes equal to
+the log likelihood of the model given the observed data. Optimizing
+this log likelihood in the M-step then also increases the log
+likelihood of the model given the observations. Therefore the EM
+algorithm we described will increase the likelihood of the model in
+every iteration, and the algorithm will approach local maxima of the
+likelihood. Convergence is identified, as usual, as extremely small
+incremental improvement in the log likelihood per iteration.
+
+
+\section{Split and merge algorithm}\label{sec:splitmergeappendix}
+
+Let us denote the indices of the three selected Gaussians as $j_1,
+j_2,$ and $j_3$, where the former two are to be merged while $j_3$
+will be split. The Gaussians corresponding to the indices $j_1$ and
+$j_2$ will be merged as follows: the model parameters of the merged
+Gaussian $j_1'$ are
+\begin{eqnarray}\displaystyle\label{merged}
+\alpha_{j_1'} &=& \alpha_{j_1} + \alpha_{j_2}\nonumber\\ \theta_{j_1'}
+&=& \frac{\theta_{j_1}q_{j_1} + \theta_{j_2}q_{j_2}}{q_{j_1} + q_{j_2}}\, ,
+\end{eqnarray}
+where $\theta_j$ stands for $\mmj$ and $\VVj$. Thus, the mean and the
+variance of the new Gaussian is a weighted average of the means and variances of the two
+merging Gaussians.
+
+
+The Gaussian corresponding to $j_3$ is split as follows:
+\begin{eqnarray}\displaystyle\label{split}
+\alpha_{j_2'} &=& \alpha_{j_3'}\ = \alpha_{j_3}/2\nonumber\\
+\VV_{j_2'}&=&\VV_{j_3'} = \det(\VV_{j_3})^{1/d}\,\II\, .
+\end{eqnarray}
+Thus, the Gaussian $j_3$ is split into equally contributing Gaussians
+with each new Gaussian having a covariance matrix that has the same
+volume as $\VV_{j_3}$. The means $\mm_{j_2'}$ and $\mm_{j_3'}$ can be
+initialized by adding a random perturbation vector $\epsilon_{j_m}$ to
+$\mm_{j_3}$, \eg,
+\begin{equation}\label{split2}
+\mm_{j_m'} = \mm_{j_3} + \epsilon_{j_m}\, ,
+\end{equation}
+where $\norm\epsilon_{j_m}\norm^2 \ll \det(\VV_{j_3})^{1/d}$ and
+$m=1,2$.
+
+After this split and merge initialization the parameters of the three
+affected Gaussians need to be re-optimized in a model in which the
+parameters of the unaffected Gaussians are held fixed. This can be
+done by using the M step in \eqnnumber\ (\ref{eq:updateEMincomplete})
+for the parameters of the three affected Gaussians, while keeping the
+parameters of the other Gaussians fixed, including the
+amplitudes. This ensures that the sum of the amplitudes of the three
+affected Gaussians remains fixed. This procedure is called the {\it
+partial EM procedure}. After convergence this is then followed by the
+full EM algorithm on the resulting model parameters. Finally the
+resulting parameters are accepted if the total log likelihood of this
+model is greater than the log likelihood before the split and merge
+step. If the likelihood doesn't increase the same split and merge
+procedure is performed on the next triplet of split and merge
+candidates.
+
+The question that remains to be answered is how to choose the 2
+Gaussians that should be merged and the Gaussian that should be
+split. In general there are $K(K-1)(K-2)/2$ possible triplets like
+this which quickly reaches a large number when the number of Gaussians
+$K$ gets larger. In order to rank these triplets one can define a
+\emph{merge criterion} and a \emph{split criterion}.
+
+The merge criterion is constructed based on the observation that if
+many data points have equal posterior probabilities for two Gaussians,
+these Gaussians are good candidates to be merged. Therefore one can
+define the merge criterion:
+\begin{equation}
+J_{\mbox{merge}}(j,k|\theta) = \PP_j(\theta)\T \PP_k(\theta)\, ,
+\end{equation}
+where $\PP_j(\theta)=(q_{i1},\ldots,q_{iN})\T$ is the $N$-dimensional
+vector of posterior probabilities for the $j$th Gaussian. Pairs of
+Gaussians with larger $J_{\mbox{merge}}$ are good candidates for a
+merger.
+
+We can define a split criterion based on the Kullback-Leibler distance
+between the local data density around the $l$th Gaussian, which can be
+written in the case of complete data as $p_l(\ww) = 1/q_l\sum_i
+q_{il}\delta(\ww-\wwi)$, and the $l$th Gaussian density specified by
+the current model estimates $\mm_l$ and $\VV_l$. The Kullback-Leibler
+divergence between two distributions $p(x)$ and $q(x)$ is given by
+\citep{Mackay2003}:
+\begin{equation}
+D_{\textnormal{KL}}(P||Q) = \int\dd x\,p(x)\ln\frac{p(x)}{q(x)}\, .
+\end{equation}
+Since the local data density is only non-zero at a finite number of
+values, we can write this as
+\begin{equation}
+J_{\mbox{split}}(l|\theta) = \frac{1}{q_l}\sum_i q_{il}
+\left[\ln\left( \frac{q_{il}}{q_l}\right) - \ln
+\normal(\wwi|\mm_l,\VV_l)\right]\, .
+\end{equation}
+The larger the distance between the local density and the Gaussian
+representing it, the larger $J_{\mbox{split}}$ and the better
+candidate this Gaussian is to be split.
+
+When dealing with incomplete data determining the local data density
+is more problematic. One possible way to estimate how well a
+particular Gaussian describes the local data density is to calculate
+the Kullback-Leibler divergence between the model Gaussian under
+consideration and each individual data point perpendicular to the
+unobserved directions for that data point. Thus, we can write
+\begin{equation}
+J_{\mbox{split}}(l|\theta) = \frac{1}{q_l}\sum_i q_{il}
+\left[\ln\left( \frac{q_{il}}{q_l}\right) - \ln
+\normal(\wwi|\RRi\mm_l,\RRi\VV_l\RRi\T)\right]\, .
+\end{equation}
+
+Candidates for merging and splitting are then ranked as follows: first
+the merge criterion $J_{\mbox{merge}}(j,k|\theta)$ is calculated for
+all pairs $j,k$ and the pairs are ranked by decreasing
+$J_{\mbox{merge}}(j,k|\theta)$. For each pair in this ranking the
+remaining Gaussians are then ranked by decreasing
+$J_{\mbox{split}}(l|\theta)$.
+
+
+To summarize the full algorithm we briefly list all the steps
+involved:
+\begin{enumerate}
+\item Run the EM algorithm as specified in \eqnnumber s
+(\ref{eq:updateEMincomplete}) and (\ref{updateBayes}). Store the
+resulting model parameters $\theta^*$ and the corresponding model log
+likelihood $\phi^*$.
+\item Compute the merge criterion $J_{\mbox{merge}}(j,k|\theta^*)$ for
+all pairs $j,k$ and the split criterion $J_{\mbox{split}}(l|\theta^*)$
+for all $l$. Sort the split and merge candidates based on these
+criteria as detailed above.
+\item For the first triplet $(j,k,l)$ in this sorted list set the
+initial parameters of the merged Gaussian using \eqnnumber\ (\ref{merged}) and the
+parameters of the two Gaussian resulting from splitting the third
+Gaussian using \eqnnumber s (\ref{split})-(\ref{split2}). Then run the
+partial EM procedure on the parameters of the three affected
+Gaussians, \ie, run EM while keeping the parameters of the unaffected
+Gaussians fixed, and follow this up by running the full EM procedure
+on all the Gaussians. If after convergence the new log likelihood
+$\phi$ is greater than $\phi^*$, accept the new parameter values
+$\theta^* \leftarrow \theta$ and return to step two. If $\phi <
+\phi^*$ return to the beginning of this step and use the next triplet
+$(j,k,l)$ in the list.
+\item Halt this procedure when none of the split and merge candidates
+improve the log likelihood or, if this list is too long, if none of
+the first $C$ lead to an improvement.
+\end{enumerate}
+
+Deciding when to stop going down the split-and-merge hierarchy will be
+dictated in any individual application of this technique by
+computational constraints. This is an essential feature of any
+search-based approach to finding global maxima of (likelihood)
+functions.
+
+
+
+\section*{Acknowledgments}
+It is a pleasure to thank Fr{\'e}d{\'e}ric Arenou and Phil Marshall
+for comments and assistance and the anonymous referee and Associate
+Editor for valuable criticism.
+
+
+\begin{thebibliography}{54}
+
+\bibitem[\protect\citeauthoryear{{Antoja} {\it
+  et~al.}}{2008}]{2008A&A...490..135A}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Antoja}},~\bfnm{T.}\binits{T.}},
+  \bauthor{\bsnm{{Figueras}},~\bfnm{F.}\binits{F.}},
+  \bauthor{\bsnm{{Fern{\'a}ndez}},~\bfnm{D.}\binits{D.}} \AND
+  \bauthor{\bsnm{{Torra}},~\bfnm{J.}\binits{J.}}
+(\byear{2008}).
+\btitle{{Origin and Evolution of Moving Groups. I. Characterization in the
+  Observational Kinematic-age-metallicity Space}}.
+\bjournal{Astron. \& Astrophys.}
+\bvolume{490}
+\bpages{135}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Baxter}}{1995}]{baxter95a}
+\begin{btechreport}[author]
+\bauthor{\bsnm{{Baxter}},~\bfnm{R.~A.}\binits{R.~A.}}
+(\byear{1995}).
+\btitle{{Finding Overlapping Distributions with MML}}
+\btype{Technical Report} No. \bnumber{{Tech. report 244}},
+\binstitution{{Dept. of Computer Science, Monash University}},
+  \baddress{Clayton, Vic. 3168, Australia}.
+\end{btechreport}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Beal}}{2003}]{Beal03}
+\begin{bphdthesis}[author]
+\bauthor{\bsnm{{Beal}},~\bfnm{M.~J.}\binits{M.~J.}}
+(\byear{2003}).
+\btitle{{Variational Algorithms for Approximate Bayesian Inference}}
+\btype{PhD thesis}, \bschool{{Gatsby Computational Neuroscience Unit,
+  University College London}}.
+\end{bphdthesis}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Binney} and
+  {Merrifield}}{1998}]{1998gaas.book.....B}
+\begin{bbook}[author]
+\bauthor{\bsnm{{Binney}},~\bfnm{J.}\binits{J.}} \AND
+  \bauthor{\bsnm{{Merrifield}},~\bfnm{M.}\binits{M.}}
+(\byear{1998}).
+\btitle{{Galactic Astronomy}}.
+\bpublisher{Princeton University Press}.
+\end{bbook}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Blaauw} {\it
+  et~al.}}{1960}]{1960MNRAS.121..123B}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Blaauw}},~\bfnm{A.}\binits{A.}},
+  \bauthor{\bsnm{{Gum}},~\bfnm{C.~S.}\binits{C.~S.}},
+  \bauthor{\bsnm{{Pawsey}},~\bfnm{J.~L.}\binits{J.~L.}} \AND
+  \bauthor{\bsnm{{Westerhout}},~\bfnm{G.}\binits{G.}}
+(\byear{1960}).
+\btitle{{The New I.~A.~U. System of Galactic Coordinates (1958 Revision)}}.
+\bjournal{Mon.~Not.~R.~Astron.~Soc.}
+\bvolume{121}
+\bpages{123}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Bovy}}{2010}]{Bovy10b}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Bovy}},~\bfnm{J.}\binits{J.}}
+(\byear{2010}).
+\btitle{{Tracing the Hercules stream around the Galaxy}}.
+\bjournal{Astrophys.~J., in press}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Bovy}, {Hogg} and {Roweis}}{2009}]{Bovy09b}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Bovy}},~\bfnm{J.}\binits{J.}},
+  \bauthor{\bsnm{{Hogg}},~\bfnm{D.~W.}\binits{D.~W.}} \AND
+  \bauthor{\bsnm{{Roweis}},~\bfnm{S.~T.}\binits{S.~T.}}
+(\byear{2009}).
+\btitle{{The Velocity Distribution of Nearby stars from Hipparcos Data I. The
+  Significance of the Moving Groups}}.
+\bjournal{Astrophys.~J.}
+\bvolume{700}
+\bpages{1794}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Bovy} and {Hogg}}{2010}]{Bovy10a}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Bovy}},~\bfnm{J.}\binits{J.}} \AND
+  \bauthor{\bsnm{{Hogg}},~\bfnm{D.~W.}\binits{D.~W.}}
+(\byear{2010}).
+\btitle{{The velocity distribution of nearby stars from Hipparcos data II. The
+  nature of the low-velocity moving groups}}.
+\bjournal{Astrophys.~J.}
+\bvolume{717}
+\bpages{617}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Broniatowski}, {Celeux} and
+  {Diebolt}}{1983}]{Broniatowksi83}
+\begin{bincollection}[author]
+\bauthor{\bsnm{{Broniatowski}},~\bfnm{M.}\binits{M.}},
+  \bauthor{\bsnm{{Celeux}},~\bfnm{G.}\binits{G.}} \AND
+  \bauthor{\bsnm{{Diebolt}},~\bfnm{J.}\binits{J.}}
+(\byear{1983}).
+\btitle{{Reconaissance de Densit{\'e}s par un Algorithme d'Apprentissage
+  Probabiliste}}.
+In \bbooktitle{{Data Analysis and Informatics Vol.~3}}
+\bpages{359}.
+\bpublisher{North-Holland}, \baddress{Amsterdam}.
+\end{bincollection}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Carroll} {\it et~al.}}{2006}]{Carroll06a}
+\begin{bbook}[author]
+\bauthor{\bsnm{{Carroll}},~\bfnm{R.~J.}\binits{R.~J.}},
+  \bauthor{\bsnm{{Ruppert}},~\bfnm{D.}\binits{D.}},
+  \bauthor{\bsnm{{Stefanski}},~\bfnm{L.~A.}\binits{L.~A.}} \AND
+  \bauthor{\bsnm{{Crainiceanu}},~\bfnm{C.~M.}\binits{C.~M.}}
+(\byear{2006}).
+\btitle{Measurement Error in Nonlinear Models: A Modern Perspective},
+  \bedition{2nd} ed.
+\bpublisher{{Chapman \& Hall/CRC}}, \baddress{Boca Raton, FL}.
+\end{bbook}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Celeux} and {Diebolt}}{1985}]{Celeux85a}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Celeux}},~\bfnm{G.}\binits{G.}} \AND
+  \bauthor{\bsnm{{Diebolt}},~\bfnm{J.}\binits{J.}}
+(\byear{1985}).
+\btitle{{The {SEM} Algorithm: a Probabilistic Teacher Algorithm Derived from
+  the {EM} Algorithm for the Mixture Problem}}.
+\bjournal{{Comp.~Stat.~Quart}}
+\bvolume{2}
+\bpages{73}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Celeux} and {Diebolt}}{1986}]{Celeux86b}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Celeux}},~\bfnm{G.}\binits{G.}} \AND
+  \bauthor{\bsnm{{Diebolt}},~\bfnm{J.}\binits{J.}}
+(\byear{1986}).
+\btitle{{L'Algorithme {SEM}: un Algorithme d'Apprentissage Probabiliste pour la
+  Reconnaisance de M{\'e}langes de Densit{\'e}s}}.
+\bjournal{{Rev.~de Stat.~Appl.}}
+\bvolume{34}
+\bpages{35}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{De Simone}, {Wu} and
+  {Tremaine}}{2004}]{2004MNRAS.350..627D}
+\begin{barticle}[author]
+\bauthor{\bsnm{{De Simone}},~\bfnm{R.}\binits{R.}},
+  \bauthor{\bsnm{{Wu}},~\bfnm{X.}\binits{X.}} \AND
+  \bauthor{\bsnm{{Tremaine}},~\bfnm{S.}\binits{S.}}
+(\byear{2004}).
+\btitle{{The stellar velocity distribution in the solar neighbourhood}}.
+\bjournal{Mon.~Not.~R.~Astron.~Soc.}
+\bvolume{350}
+\bpages{627}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Dehnen}}{1998}]{1998AJ....115.2384D}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Dehnen}},~\bfnm{W.}\binits{W.}}
+(\byear{1998}).
+\btitle{{The Distribution of Nearby Stars in Velocity Space Inferred from
+  HIPPARCOS Data}}.
+\bjournal{Astron.~J.}
+\bvolume{115}
+\bpages{2384}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Dehnen}}{2000}]{Dehnen00a}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Dehnen}},~\bfnm{W.}\binits{W.}}
+(\byear{2000}).
+\btitle{{The Effect of the Outer Lindblad Resonance of the Galactic Bar on the
+  Local Stellar Velocity Distribution}}.
+\bjournal{Astron.~J.}
+\bvolume{119}
+\bpages{800}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Dehnen} and
+  {Binney}}{1998}]{1998MNRAS.298..387D}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Dehnen}},~\bfnm{W.}\binits{W.}} \AND
+  \bauthor{\bsnm{{Binney}},~\bfnm{J.~J.}\binits{J.~J.}}
+(\byear{1998}).
+\btitle{{Local Stellar Kinematics from HIPPARCOS Data}}.
+\bjournal{Mon.~Not.~R.~Astron.~Soc.}
+\bvolume{298}
+\bpages{387}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Delaigle} and {Meister}}{2008}]{Delaigle08a}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Delaigle}},~\bfnm{A.}\binits{A.}} \AND
+  \bauthor{\bsnm{{Meister}},~\bfnm{A.}\binits{A.}}
+(\byear{2008}).
+\btitle{Density estimation with heteroscedastic error}.
+\bjournal{Bernoulli}
+\bvolume{14}
+\bpages{562}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Dempster}, {Laird} and
+  {Rubin}}{1977}]{Dempster1977}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Dempster}},~\bfnm{A.~P.}\binits{A.~P.}},
+  \bauthor{\bsnm{{Laird}},~\bfnm{N.~M.}\binits{N.~M.}} \AND
+  \bauthor{\bsnm{{Rubin}},~\bfnm{D.~B}\binits{D.~B.}}
+(\byear{1977}).
+\btitle{{Maximum Likelihood from Incomplete Data via the EM algorithm}}.
+\bjournal{Journal of the Royal Statistical Society. Series B (Methodological)}
+\bvolume{39}
+\bpages{1}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Diebolt} and {Robert}}{1994}]{diebolt94a}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Diebolt}},~\bfnm{J.}\binits{J.}} \AND
+  \bauthor{\bsnm{{Robert}},~\bfnm{C.~P.}\binits{C.~P.}}
+(\byear{1994}).
+\btitle{{Estimation of Finite Mixture Distributions through Bayesian
+  Sampling}}.
+\bjournal{Journal of the Royal Statistical Society. Series B (Methodological)}
+\bvolume{56}
+\bpages{363}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{ESA}}{1997}]{ESA97a}
+\begin{bbook}[author]
+\bauthor{\bsnm{{ESA}},~}
+(\byear{1997}).
+\btitle{{The \emph{Hipparcos} and Tycho Catalogues}}.
+\bpublisher{{ESA SP-1200}}, \baddress{Noordwijk: ESA}.
+\end{bbook}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Famaey} {\it
+  et~al.}}{2005}]{2005A&A...430..165F}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Famaey}},~\bfnm{B.}\binits{B.}},
+  \bauthor{\bsnm{{Jorissen}},~\bfnm{A.}\binits{A.}},
+  \bauthor{\bsnm{{Luri}},~\bfnm{X.}\binits{X.}},
+  \bauthor{\bsnm{{Mayor}},~\bfnm{M.}\binits{M.}},
+  \bauthor{\bsnm{{Udry}},~\bfnm{S.}\binits{S.}},
+  \bauthor{\bsnm{{Dejonghe}},~\bfnm{H.}\binits{H.}} \AND
+  \bauthor{\bsnm{{Turon}},~\bfnm{C.}\binits{C.}}
+(\byear{2005}).
+\btitle{{Local Kinematics of K and M Giants from CORAVEL/Hipparcos/Tycho-2
+  Data. Revisiting the Concept of Superclusters}}.
+\bjournal{Astron. \& Astrophys.}
+\bvolume{430}
+\bpages{165}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Gelman} {\it et~al.}}{2000}]{Gelman00a}
+\begin{bbook}[author]
+\bauthor{\bsnm{{Gelman}},~\bfnm{A.}\binits{A.}},
+  \bauthor{\bsnm{{Carlin}},~\bfnm{J.~B.}\binits{J.~B.}},
+  \bauthor{\bsnm{{Stern}},~\bfnm{H.~S.}\binits{H.~S.}} \AND
+  \bauthor{\bsnm{{Rubin}},~\bfnm{D.~B.}\binits{D.~B.}}
+(\byear{2000}).
+\btitle{{Bayesian Data Analysis}}.
+\bpublisher{{Chapman \& Hall/CRC}}.
+\end{bbook}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Ghahramani} and
+  {Beal}}{2000}]{Ghahramani00variationalinference}
+\begin{binproceedings}[author]
+\bauthor{\bsnm{{Ghahramani}},~\bfnm{Z.}\binits{Z.}} \AND
+  \bauthor{\bsnm{{Beal}},~\bfnm{M.~J.}\binits{M.~J.}}
+(\byear{2000}).
+\btitle{{Variational Inference for Bayesian Mixtures of Factor Analysers}}.
+In \bbooktitle{Advances in Neural Information Processing Systems 12}
+(\beditor{\bfnm{S.~A.}\binits{S.~A.}~\bsnm{{Solla}}},
+  \beditor{\bfnm{T.~K.}\binits{T.~K.}~\bsnm{{Leen}}} \AND
+  \beditor{\bfnm{K.~R.}\binits{K.~R.}~\bsnm{{Muller}}}, eds.)
+\bpages{449}.
+\bpublisher{MIT Press}.
+\end{binproceedings}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Ghahramani} and
+  {Jordan}}{1994a}]{Ghahramani1994b}
+\begin{btechreport}[author]
+\bauthor{\bsnm{{Ghahramani}},~\bfnm{Z.}\binits{Z.}} \AND
+  \bauthor{\bsnm{{Jordan}},~\bfnm{M.~I.}\binits{M.~I.}}
+(\byear{1994}a).
+\btitle{{Learning from Incomplete Data}}
+\btype{Technical Report},
+\binstitution{{CBCL Technical Report {$\#$} 108. Center for Biological and
+  Computational Learning. MIT}}.
+\end{btechreport}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Ghahramani} and
+  {Jordan}}{1994b}]{Ghahramani1994}
+\begin{binproceedings}[author]
+\bauthor{\bsnm{{Ghahramani}},~\bfnm{Z.}\binits{Z.}} \AND
+  \bauthor{\bsnm{{Jordan}},~\bfnm{M.~I.}\binits{M.~I.}}
+(\byear{1994}b).
+\btitle{{Supervised Learning from Incomplete Data via an EM approach}}.
+In \bbooktitle{{Advances in Neural Information Processing Systems 6}}
+(\beditor{\bfnm{J.~D.}\binits{J.~D.}~\bsnm{{Cowan}}},
+  \beditor{\bfnm{G.}\binits{G.}~\bsnm{{Tesauro}}} \AND
+  \beditor{\bfnm{J.}\binits{J.}~\bsnm{{Alspector}}}, eds.).
+\bpublisher{{Morgan Kaufman Publishers}}, \baddress{San Francisco}.
+\end{binproceedings}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Helmi} {\it
+  et~al.}}{1999}]{1999Natur.402...53H}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Helmi}},~\bfnm{A.}\binits{A.}},
+  \bauthor{\bsnm{{White}},~\bfnm{S.~D.~M.}\binits{S.~D.~M.}},
+  \bauthor{\bsnm{{de Zeeuw}},~\bfnm{P.~T.}\binits{P.~T.}} \AND
+  \bauthor{\bsnm{{Zhao}},~\bfnm{H.}\binits{H.}}
+(\byear{1999}).
+\btitle{{Debris Streams in the Solar Neighbourhood as Relicts from the
+  Formation of the Milky Way}}.
+\bjournal{Nature}
+\bvolume{402}
+\bpages{53-55}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Hogg} {\it
+  et~al.}}{2005}]{2005ApJ...629..268H}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Hogg}},~\bfnm{D.~W.}\binits{D.~W.}},
+  \bauthor{\bsnm{{Blanton}},~\bfnm{M.~R.}\binits{M.~R.}},
+  \bauthor{\bsnm{{Roweis}},~\bfnm{S.~T.}\binits{S.~T.}} \AND
+  \bauthor{\bsnm{{Johnston}},~\bfnm{K.~V.}\binits{K.~V.}}
+(\byear{2005}).
+\btitle{{Modeling Complete Distributions with Incomplete Observations: The
+  Velocity Ellipsoid from Hipparcos Data}}.
+\bjournal{Astrophys.~J.}
+\bvolume{629}
+\bpages{268}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Holmberg}, {Nordstr{\"o}m} and
+  {Andersen}}{2009}]{2008arXiv0811.3982H}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Holmberg}},~\bfnm{J.}\binits{J.}},
+  \bauthor{\bsnm{{Nordstr{\"o}m}},~\bfnm{B.}\binits{B.}} \AND
+  \bauthor{\bsnm{{Andersen}},~\bfnm{J.}\binits{J.}}
+(\byear{2009}).
+\btitle{{The Geneva-Copenhagen Survey of the Solar neighbourhood III. Improved
+  distances, ages, and kinematics}}.
+\bjournal{Astron. \& Astrophys.}
+\bvolume{501}
+\bpages{941}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Jasra}, {Holmes} and
+  {Stephens}}{2005}]{Jasra05a}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Jasra}},~\bfnm{A.}\binits{A.}},
+  \bauthor{\bsnm{{Holmes}},~\bfnm{C.~C.}\binits{C.~C.}} \AND
+  \bauthor{\bsnm{{Stephens}},~\bfnm{D.~A.}\binits{D.~A.}}
+(\byear{2005}).
+\btitle{{{M}arkov {C}hain {M}onte {C}arlo methods and the label switching
+  problem in {B}ayesian mixture modeling}}.
+\bjournal{Statist.~Sci.}
+\bvolume{20}
+\bpages{50}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{MacKay}}{2003}]{Mackay2003}
+\begin{bbook}[author]
+\bauthor{\bsnm{{MacKay}},~\bfnm{D.~J.~C.}\binits{D.~J.~C.}}
+(\byear{2003}).
+\btitle{{Information Theory, Inference, and Learning Algorithms}}.
+\bpublisher{{Cambridge University Press}}.
+\end{bbook}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{McLachlan} and
+  {Basford}}{1988}]{McLachlan1988}
+\begin{bbook}[author]
+\bauthor{\bsnm{{McLachlan}},~\bfnm{G.~J.}\binits{G.~J.}} \AND
+  \bauthor{\bsnm{{Basford}},~\bfnm{K.}\binits{K.}}
+(\byear{1988}).
+\btitle{{Mixture Models: Inference and Application to Clustering}}.
+\bpublisher{Marcel Dekker}.
+\end{bbook}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Nordstr{\"o}m} {\it
+  et~al.}}{2004}]{2004A&A...418..989N}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Nordstr{\"o}m}},~\bfnm{B.}\binits{B.}},
+  \bauthor{\bsnm{{Mayor}},~\bfnm{M.}\binits{M.}},
+  \bauthor{\bsnm{{Andersen}},~\bfnm{J.}\binits{J.}},
+  \bauthor{\bsnm{{Holmberg}},~\bfnm{J.}\binits{J.}},
+  \bauthor{\bsnm{{Pont}},~\bfnm{F.}\binits{F.}},
+  \bauthor{\bsnm{{J{\o}rgensen}},~\bfnm{B.~R.}\binits{B.~R.}},
+  \bauthor{\bsnm{{Olsen}},~\bfnm{E.~H.}\binits{E.~H.}},
+  \bauthor{\bsnm{{Udry}},~\bfnm{S.}\binits{S.}} \AND
+  \bauthor{\bsnm{{Mowlavi}},~\bfnm{N.}\binits{N.}}
+(\byear{2004}).
+\btitle{{The Geneva-Copenhagen Survey of the Solar Neighbourhood. Ages,
+  Metallicities, and Kinematic Properties of {$\sim\!$}14 000 F and G Dwarfs}}.
+\bjournal{Astron. \& Astrophys.}
+\bvolume{418}
+\bpages{989}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Oliver}, {Baxter} and
+  {Wallace}}{1996}]{Oliver96a}
+\begin{binproceedings}[author]
+\bauthor{\bsnm{{Oliver}},~\bfnm{J.~J.}\binits{J.~J.}},
+  \bauthor{\bsnm{{Baxter}},~\bfnm{R.~A.}\binits{R.~A.}} \AND
+  \bauthor{\bsnm{{Wallace}},~\bfnm{C.~S.}\binits{C.~S.}}
+(\byear{1996}).
+\btitle{{Unsupervised Learning Using MML}}.
+In \bbooktitle{In Machine Learning: Proceedings of the Thirteenth International
+  Conference (ICML 96}
+\bpages{364}.
+\bpublisher{Morgan Kaufmann Publishers}.
+\end{binproceedings}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Ormoneit} and {Tresp}}{1996}]{Ormoneit1995}
+\begin{binproceedings}[author]
+\bauthor{\bsnm{{Ormoneit}},~\bfnm{D.}\binits{D.}} \AND
+  \bauthor{\bsnm{{Tresp}},~\bfnm{V.}\binits{V.}}
+(\byear{1996}).
+\btitle{{Improved Gaussian Mixture Density Estimates Using Bayesian Penalty
+  Terms and Network Averaging}}.
+In \bbooktitle{{Advances in Neural Information Processing Systems 8, NIPS,
+  Denver,CO, November 27-30, 1995}}
+(\beditor{\bfnm{D.~S.}\binits{D.~S.}~\bsnm{{Touretzky}}},
+  \beditor{\bfnm{M.}\binits{M.}~\bsnm{{Mozer}}} \AND
+  \beditor{\bfnm{M.~E.}\binits{M.~E.}~\bsnm{{Hasselmo}}}, eds.).
+\bpublisher{MIT Press}.
+\end{binproceedings}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Quillen} and
+  {Minchev}}{2005}]{2005AJ....130..576Q}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Quillen}},~\bfnm{A.~C.}\binits{A.~C.}} \AND
+  \bauthor{\bsnm{{Minchev}},~\bfnm{I.}\binits{I.}}
+(\byear{2005}).
+\btitle{{The Effect of Spiral Structure on the Stellar Velocity Distribution in
+  the Solar Neighborhood}}.
+\bjournal{Astron.~J.}
+\bvolume{130}
+\bpages{576}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Rabiner} and
+  {Biing-Hwang}}{1993}]{Rabiner1993}
+\begin{bbook}[author]
+\bauthor{\bsnm{{Rabiner}},~\bfnm{L.}\binits{L.}} \AND
+  \bauthor{\bsnm{{Biing-Hwang}},~\bfnm{J.}\binits{J.}}
+(\byear{1993}).
+\btitle{{Fundamentals of Speech Recognition}}.
+\bpublisher{{PTR Prentice-Hall}}.
+\end{bbook}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Rasmussen}{2000}]{rasmussen00infinite}
+\begin{binproceedings}[author]
+\bauthor{\bsnm{Rasmussen},~\bfnm{C.}\binits{C.}}
+(\byear{2000}).
+\btitle{{The Infinite Gaussian Mixture Model}}.
+In \bbooktitle{{Advances in Neural Information Processing Systems 12}}
+(\beditor{\bfnm{S.~A.}\binits{S.~A.}~\bsnm{{Solla}}},
+  \beditor{\bfnm{T.~K.}\binits{T.~K.}~\bsnm{{Leen}}} \AND
+  \beditor{\bfnm{K.~R.}\binits{K.~R.}~\bsnm{{Muller}}}, eds.)
+\bpages{554}.
+\bpublisher{{MIT Press}}.
+\end{binproceedings}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Richardson} and
+  {Green}}{1997}]{Richardson97a}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Richardson}},~\bfnm{S.}\binits{S.}} \AND
+  \bauthor{\bsnm{{Green}},~\bfnm{P.~J.}\binits{P.~J.}}
+(\byear{1997}).
+\btitle{{On Bayesian Analysis of Mixtures with an Unknown Number of
+  Components}}.
+\bjournal{Journal of the Royal Statistical Society. Series B (Methodological)}
+\bvolume{59}
+\bpages{731}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Rissanen}}{1978}]{rissanen78a}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Rissanen}},~\bfnm{J.}\binits{J.}}
+(\byear{1978}).
+\btitle{{Modeling by Shortest Data Description}}.
+\bjournal{{Automatica}}
+\bvolume{14}
+\bpages{465}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Roberts} {\it et~al.}}{1998}]{roberts98a}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Roberts}},~\bfnm{S.~J.}\binits{S.~J.}},
+  \bauthor{\bsnm{{Husmeier}},~\bfnm{D.}\binits{D.}},
+  \bauthor{\bsnm{{Rezek}},~\bfnm{I.}\binits{I.}} \AND
+  \bauthor{\bsnm{{Penny}},~\bfnm{W.}\binits{W.}}
+(\byear{1998}).
+\btitle{{Bayesian Approaches to Gaussian Mixture Modeling}}.
+\bjournal{IEEE Transactions on Pattern Analysis and Machine Intelligence}
+\bvolume{20}
+\bpages{1133}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Schafer}}{1993}]{Schafer93a}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Schafer}},~\bfnm{D.~W.}\binits{D.~W.}}
+(\byear{1993}).
+\btitle{Likelihood analysis for probit regression with measurement errors}.
+\bjournal{Biometrika}
+\bvolume{80}
+\bpages{899}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Schafer} and {Purdy}}{1996}]{Schafer96a}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Schafer}},~\bfnm{D.~W.}\binits{D.~W.}} \AND
+  \bauthor{\bsnm{{Purdy}},~\bfnm{K.~G.}\binits{K.~G.}}
+(\byear{1996}).
+\btitle{Likelihood analysis for errors-in-variables regression with replicate
+  measurements}.
+\bjournal{Biometrika}
+\bvolume{83}
+\bpages{813}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Schwartz}}{1978}]{Schwartz78a}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Schwartz}},~\bfnm{G.}\binits{G.}}
+(\byear{1978}).
+\btitle{{Estimating the Dimension of a Model}}.
+\bjournal{{The Annals of Statistics}}
+\bvolume{{6}}
+\bpages{461}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Silverman}}{1986}]{Silverman86a}
+\begin{bbook}[author]
+\bauthor{\bsnm{{Silverman}},~\bfnm{B.~W.}\binits{B.~W.}}
+(\byear{1986}).
+\btitle{{Density Estimation for Statistics and Data Analysis}}.
+\bpublisher{{Chapman and Hall}}.
+\end{bbook}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Skuljan}, {Hearnshaw} and
+  {Cottrell}}{1999}]{1999MNRAS.308..731S}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Skuljan}},~\bfnm{J.}\binits{J.}},
+  \bauthor{\bsnm{{Hearnshaw}},~\bfnm{J.~B.}\binits{J.~B.}} \AND
+  \bauthor{\bsnm{{Cottrell}},~\bfnm{P.~L.}\binits{P.~L.}}
+(\byear{1999}).
+\btitle{{Velocity Distribution of Stars in the Solar Neighbourhood}}.
+\bjournal{Mon.~Not.~R.~Astron.~Soc.}
+\bvolume{308}
+\bpages{731}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Staudenmayer}, {Ruppert} and
+  {Buonaccorsi}}{2008}]{Staudenmayer08a}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Staudenmayer}},~\bfnm{J.}\binits{J.}},
+  \bauthor{\bsnm{{Ruppert}},~\bfnm{D.}\binits{D.}} \AND
+  \bauthor{\bsnm{{Buonaccorsi}},~\bfnm{J.}\binits{J.}}
+(\byear{2008}).
+\btitle{Density Estimation in the Presence of Heteroscedastic Measurement
+  Error}.
+\bjournal{J.~Am.~Stat.~Assoc.}
+\bvolume{103}
+\bpages{726}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Stefanski} and
+  {Carroll}}{1990}]{Stefanski90a}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Stefanski}},~\bfnm{L.~A.}\binits{L.~A.}} \AND
+  \bauthor{\bsnm{{Carroll}},~\bfnm{R.~J.}\binits{R.~J.}}
+(\byear{1990}).
+\btitle{{Deconvoluting kernel density estimators}}.
+\bjournal{Statistics}
+\bvolume{21}
+\bpages{169}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Stone}}{1974}]{stone74a}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Stone}},~\bfnm{M.}\binits{M.}}
+(\byear{1974}).
+\btitle{{Cross-validation Choice and Assessment of Statistical Predictions}}.
+\bjournal{Journal of the Royal Statistical Society. Series B (Methodological)}
+\bvolume{36}
+\bpages{111}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Ueda} {\it et~al.}}{1998}]{Naonori1998}
+\begin{binproceedings}[author]
+\bauthor{\bsnm{{Ueda}},~\bfnm{N.}\binits{N.}},
+  \bauthor{\bsnm{{Nakano}},~\bfnm{R.}\binits{R.}},
+  \bauthor{\bsnm{{Ghahramani}},~\bfnm{Z.}\binits{Z.}} \AND
+  \bauthor{\bsnm{{Hinton}},~\bfnm{G.~E.}\binits{G.~E.}}
+(\byear{1998}).
+\btitle{{Split and Merge EM Algorithm for Improving Gaussian Mixture Density
+  Estimates}}.
+In \bbooktitle{{Neural Networks for Signal Processing VIII, 1998. Proceedings
+  of the 1998 IEEE Signal Processing Society Workshop}}
+\bpages{274}.
+\end{binproceedings}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{van Leeuwen}}{2007a}]{2007ASSL..250.....V}
+\begin{bbook}[author]
+\bauthor{\bsnm{{van Leeuwen}},~\bfnm{F.}\binits{F.}}
+(\byear{2007}a).
+\btitle{{Hipparcos, the New Reduction of the Raw Data}}.
+\bseries{Astrophysics and Space Science Library}
+\bvolume{250}.
+\bpublisher{{Springer}}.
+\end{bbook}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{van Leeuwen}}{2007b}]{2007A&A...474..653V}
+\begin{barticle}[author]
+\bauthor{\bsnm{{van Leeuwen}},~\bfnm{F.}\binits{F.}}
+(\byear{2007}b).
+\btitle{{Validation of the New Hipparcos Reduction}}.
+\bjournal{Astron. \& Astrophys.}
+\bvolume{474}
+\bpages{653}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Wallace} and {Boulton}}{1968}]{wallace68a}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Wallace}},~\bfnm{C.~S.}\binits{C.~S.}} \AND
+  \bauthor{\bsnm{{Boulton}},~\bfnm{D.~M.}\binits{D.~M.}}
+(\byear{1968}).
+\btitle{{An Information Measure for Classification}}.
+\bjournal{{Computer Journal}}
+\bvolume{11}
+\bpages{185}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Wu}}{1983}]{Wu1983}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Wu}},~\bfnm{C.~F.~J}\binits{C.~F.~J.}}
+(\byear{1983}).
+\btitle{{On the Convergence Properties of the EM Algorithm}}.
+\bjournal{Ann. Statist.}
+\bvolume{11}
+\bpages{95}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{Zhang}}{1990}]{Zhang90a}
+\begin{barticle}[author]
+\bauthor{\bsnm{{Zhang}},~\bfnm{C.~H.}\binits{C.~H.}}
+(\byear{1990}).
+\btitle{Fourier methods for estimating mixing densities and distributions}.
+\bjournal{Ann. Statist.}
+\bvolume{18}
+\bpages{806}.
+\end{barticle}
+\endbibitem
+
+\end{thebibliography}
+
+\clearpage
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{4veldist1.ps}\\
+\includegraphics[width=\textwidth]{4veldist2.ps}
+\caption{Two-dimensional projections of the three-dimensional velocity
+distribution of \Hipparcos\ stars using 10 Gaussians and $w = 4$
+km$^2$ s$^{-2}$. The top right plot shows 1-sigma covariance ellipses
+around each individual Gaussian in the $v_x$--$v_y$ plane; the
+thickness of each covariance ellipse is proportional to the natural
+logarithm of its amplitude $\alpha_j$. In the other three panels the
+density grayscale is linear and contours contain, from the inside
+outward, 2, 6, 12, 21, 33, 50, 68, 80, 90, 95, 99, and 99.9 percent of
+the distribution. 50 percent of the distribution is contained within
+the innermost dark contour. The feature at $v_y \approx -100$ km
+s$^{-1}$ is real and corresponds to a known feature in the velocity
+distribution: the Arcturus moving group; Indeed, all the features that
+appear in these projections are real and correspond to known
+features.}\label{fig:4veldist}
+\end{figure}
+
+\clearpage
+\begin{figure}
+\centering
+\includegraphics{conv_10_4.ps}
+\caption{Convergence of the full algorithm: total log likelihood at
+  each iteration step. Shown are only split-and-merge steps that
+  improve the likelihood; each vertical gray line corresponds to a
+  point at which a successful split and merge is performed. For
+  clarity's sake, we show in black only the parts of the
+  split-and-merge steps at which the likelihood is larger than the
+  likelihood right before that split-and-merge procedure; the log
+  likelihoods of the steps in a split-and-merge procedure in which the
+  likelihood is still climbing back up to the previous maximum in
+  likelihood have been replaced by horizontal gray segments. The
+  $y$-axis has been cut off for display purposes: The log likelihood
+  of the initial condition was -2.39E5.}\label{fig:convergence}%Actual start -238612.49
+\end{figure}
+
+
+\end{document}

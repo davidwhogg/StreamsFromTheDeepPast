@@ -1,0 +1,29 @@
+Dear Editor,
+
+Please find attached the updated version of our paper after the
+Associate Editor's comments for the submission "Extreme deconvolution:
+Inferring complete distribution functions from noisy, heterogeneous,
+and incomplete observations" by myself and others (submission #
+AOAS0910-008).
+
+We have revised the paper according to the Associate Editor's
+suggestions. We have made all of the Associate Editor's proposed
+changes. Other than that, we have not made any changes.
+
+Please contact me by the information given below with any questions
+regarding this re-submission.
+
+With kind regards,
+
+Jo Bovy
+
+-
+Jo Bovy
+Ctr. for Cosmology & Particle Physics, 
+Dept. of Physics
+New York University
+4 Washington Place
+New York, NY 10003
+jb2777@nyu.edu
+
+

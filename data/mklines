@@ -1,0 +1,63 @@
+#!/usr/bin/perl
+
+$pi=3.14159265358979;
+$d2r=$pi/180.;
+$mas2r=$pi/(180.*3600.*1000.);
+$py2kms=3.086e+13/(365.25*24.*3600.);
+
+# read in data
+open(fp,"<for_kvj.txt");
+$nstars=0;
+while(<fp>) {
+	if(!/^#/) {
+		 chop;
+		 split;
+		 $ra[$nstars]=$d2r*$_[1]; # in radians
+		 $dec[$nstars]=$d2r*$_[2]; # in radians
+		 $parallax[$nstars]=1000./$_[3]; # in parsecs
+		 $pmra[$nstars]=$mas2r*$_[4]; # in radians
+		 $pmdec[$nstars]=$mas2r*$_[5]; # in radians
+		 $nstars++;
+	 }
+}
+close(fp);
+
+for($i=0;$i<$nstars;$i++) {
+	# convert to x y z 
+	$x[$i]=cos($dec[$i])*cos($ra[$i]);
+	$pos[$i*3+0]=$parallax[$i]*$x[$i];
+	$y[$i]=cos($dec[$i])*sin($ra[$i]);
+	$pos[$i*3+1]=$parallax[$i]*$y[$i];
+	$z[$i]=sin($dec[$i]);
+	$pos[$i*3+2]=$parallax[$i]*$z[$i];
+
+	# get alpha unit vector
+	$alphanorm=sqrt($x[$i]*$x[$i]+$y[$i]*$y[$i]);
+	$alphahat[0]=$y[$i]/$alphanorm;
+	$alphahat[1]=-$x[$i]/$alphanorm;
+	$alphahat[2]=0.;
+
+	# get delta unit vector
+	$deltahat[0]=-$x[$i]*$z[$i]/$alphanorm;
+	$deltahat[1]=-$y[$i]*$z[$i]/$alphanorm;
+	$deltahat[2]=$alphanorm;
+
+	# velocity (with radial velocity equal to zero) in kms
+	for($j=0;$j<3;$j++) {
+		$vel[$i*3+$j]=$parallax[$i]*$pmra[$i]*cos($dec[$i])*$alphahat[$j]
+			+$parallax[$i]*$pmdec[$i]*$deltahat[$j];
+		$vel[$i*3+$j]*=$py2kms;
+	}
+}
+
+$nflts=$nstars*3;
+$whole=pack("f$nflts",@pos);
+open(thelist,">hippos.pts");
+syswrite(thelist,$whole,4*$nflts);
+close(thelist);
+
+$nflts=$nstars*3;
+$whole=pack("f$nflts",@vel);
+open(thelist,">hipvel.pts");
+syswrite(thelist,$whole,4*$nflts);
+close(thelist);

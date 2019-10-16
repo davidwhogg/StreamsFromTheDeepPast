@@ -1,0 +1,242 @@
+Dear Editor,
+
+Please find below the response to the referees' comments for the
+submission "The Velocity Distribution of Nearby Stars from Hipparcos
+Data II.  The Nature of the Low-Velocity Moving Groups" by myself and
+David Hogg (submission #ApJ/341194/ART/207748).
+
+We would like to thank the referee for a constructive report that
+improved the paper.
+
+Please contact me by the information given below with any questions
+regarding this re-submission.
+
+With kind regards,
+
+Jo Bovy
+
+-
+Jo Bovy
+Ctr. for Cosmology & Particle Physics,
+Dept. of Physics
+New York University
+4 Washington Place
+New York, NY 10003
+jb2777@nyu.edu
+
+=================================================================
+
+List of changes:
+
+We have made a number of changes following the referee's report. A
+detailed response to all of the referee's comments is included
+below. We made some additional changes:
+
+- In the discussion section (section 9), we added a paragraph
+  discussing the possible influence of radial mixing on our results
+  for the metallicity distributions of the moving groups.
+
+- In fitting the local metallicity distribution from GCS
+  metallicities, we now take the uncertainty in the GCS [Fe/H] values
+  into account (but only a typical value as the GCS data do not
+  include individual uncertainties). This has not changed any
+  conclusions.
+
+- We expanded the discussion in section 8 and added a figure in
+  response to a recent paper by Sellwood, in which he argues that the
+  Hyades moving group corresponds to a resonant-scattering
+  feature. The figure shows that the Hyades members do indeed seem to
+  form a feature similar to that expected from scattering at the inner
+  Lindblad resonance in this model. This is slightly at odds with the
+  slight metallicity preference found in section 7 for the Hyades
+  moving group, which we discuss in the text. 
+
+
+In what follows the referee's comments are indented.
+
+==================================================================
+
+	Ref: ApJ/341194/ART/207748
+	
+	
+	+++++++++++++++++++++++++++++++++++++++++++++++
+	The text of the review is included below, after the double line.
+	===============================================
+
+
+	This paper addresses the question of the nature of the
+	low-velocitymoving groups in the Solar neighbourhood. In my
+	opinion, it deservespublication although some major
+	clarifications would be needed,especially regarding some too
+	speculative conclusions (see below).
+
+	Aftera long historical introduction, the authors use the
+	reconstruction ofthe local velocity distribution from Bovy et
+	al. (2009 ApJ 700 1794) toassign moving group probabilities to
+	stars. They then use the method ofFamaey, Siebert & Jorissen
+	(2008 A&A 483 453), by comparing theobserved parallax with the
+	one the stars would have had if they were onthe associated
+	cluster isochrone (Fig. 4). The contribution of eachstar to
+	the histogram is weighted by its probability to belong to
+	themoving group calculated in Bovy et al. They conclude that
+	the movinggroups are not associated with their related open
+	cluster. They then goon testing the more general hypothesis
+	that the moving groups areassociated with a single-burst
+	stellar population. For this, theyassign a set of photometric
+	parallaxes to stars assumed to belong tothe background disk,
+	by assigning them a probability of having a givenabsolute
+	magnitude knowing their color, and a set of
+	photometricparallaxes corresponding to the hypothesis that
+	these stars belong to acoeval population of homogeneous
+	metallicity. They then estimate thebest-fit background
+	contamination and the best-fit age and metallicityof a single
+	burst event for each of the moving groups. The fact thatthe
+	best fit contamination is close to 100 percent in all cases,
+	andalways larger than the expected contamination from the
+	background ifall moving group stars did belong to a coeval
+	single burst population,confirms that these moving groups have
+	a different origin than theevaporation of a single open
+	cluster. This is summarized in Table 1,and is the core result
+	of this paper, at the end of Section 6. Asdetailed below, I am
+	not convinced that the digressions of Section 7have the same
+	scientific value.
+
+	Major comments:
+	--------------
+	
+	1)What makes this result of Section 6 very interesting is that
+	thebest-fit age and metallicity for a single burst population
+	are verysimilar to those of the associated cluster, in
+	particular in the caseof the Hyades moving group. This means
+	that the authors have made anestimate of the number of stars
+	in the Hyades moving group originatingfrom the evaporation of
+	the Hyades cluster. If the expected backgroundcontamination is
+	58%, and the actual proportion of stars compatiblewith being
+	foreground stars evaporated from the Hyades cluster is 14%,it
+	means that one third of the moving group stars could originate
+	fromthe Hyades cluster. I think the authors should expand on
+	thatparticular result, especially in the abstract, and compare
+	it with theone of Famaey et al. (2007 A&A 461 957), where the
+	analysis of themass function of the Hyades moving group was
+	shown to be compatiblewith a proportion of about 40 percent
+	(for stars of ~1.5 solar masses)to 15 percent (for stars of
+	~0.8 solar masses) of moving group starsactually being past
+	members of the Hyades cluster. Interestingly, thisproportion
+	was found by Famaey et al. to decrease with the stellar
+	mass(or with increasing B-V on the main sequence), a trend
+	which theauthors should also test here to make their analysis
+	more complete.
+
+
+This is a very good point and indeed merits further examination.
+
+To properly assess the significance of the result that there is a
+non-zero foreground, especially for the Hyades moving group, we need
+to be sure that actual open-cluster members are excluded from our
+analysis. In our sample selection, we did not remove open-cluster
+members, and 28 of the stars in the sample are actually members of the
+Hyades moving group by the criteria we used to select a robust sample
+of Hyades members from the Perryman et al. (1998) paper (because of
+the very stringent membership criterium used to select these stars,
+this should be considered a lower limit). These 28 stars are all
+high-probability members of the Hyades moving group. This explains 28
+out of the 261 expected Hyades-moving-group members, or 11
+percent. Thus, our results are actually in mild disagreement with the
+Famaey et al. results.
+
+We have added this clarification at the end of Section 6.
+
+	2)Section 7 is very speculative. Using the Geneva-Copenhagen
+	Survey totest whether the moving groups are best-fitted by a
+	higher-than-averageor lower-than-average metallicity is
+	interesting, especially showingthat the Hyades moving group is
+	the only one showing a preference formetallicities different
+	(in that case slightly higher) than thebackground. This should
+	definitely be kept in the paper. However, thespeculations on
+	the consequences of this with respect to the
+	differentdynamical scenarios is not clear at all. It should
+	either be greatlyclarified, by adding appropriate calculations
+	and/or references, ordeleted. The authors merely indicate
+	that, in the case of a movinggroup associated with the OLR of
+	the bar or the ILR of the spiral, theyshould have either a
+	higher-than-average or lower-than-averagemetallicity, but they
+	do not give any numbers. The question is: howlarge this
+	metallicity difference should be, and is it then
+	reallytestable with the Stromgren metallicities from the
+	GCS. For instance,Fux (2001 A&A 373 511) showed that, close to
+	the OLR of the bar inconfiguration space, chaotic regions are
+	more heavily crowded in theregion of the Hercules moving group
+	in velocity space, therebyexplaining the presence of the
+	Hercules overdensity in velocity space.It is not (a priori)
+	clear at all that a higher or lower than averagemetallicity is
+	expected for these chaotic orbits. To make such a strongcase,
+	the authors should have serious arguments and references to
+	atleast estimate what the metallicity difference between the
+	movinggroups (and especially Hercules, for which they draw the
+	strongestconclusion) and the background should be.  This
+	estimate should be basedon a dynamical model and a reasonable
+	metallicity gradient inside thedisk. Without this quantitative
+	study, and as the paper stands, thestatements, especially
+	regarding the Hercules moving group, should be,at the very
+	least, tempered. On the other hand, the small analysis
+	ofSection 8 and Fig. 17 is interesting indeed, and can be kept
+	as it is.
+
+The fourth and fifth paragraphs of section 7 explain in detail the
+orbits of stars making up the resonances in the bar and steady-state
+spirals scenarios tested in section 7. This discussion, we hope, makes
+it clear that some moving groups are associated with orbits in the
+inner Galaxy and some with orbits in the outer Galaxy. Basically, the
+situation is like this: Moving groups whose mean velocity is lagging
+circular motion are near their apogalacticons and are therefore from
+the inner Galaxy; the opposite is true for moving groups ahead of
+circular motion. We have added this extra explanation to the paper,
+hopefully clarifying this.
+
+It is quite true that we did not provide a quantitative estimate of
+the metallicity-difference effect or a discussion of whether it would
+be observable. Both of these have now been provided. We have given a
+simple estimate of the magnitude of the effect in Section 7 by
+estimating the mean radius of stars in the moving group and using a
+metallicity gradient in [Fe/H] of -0.1 dex/kpc to derive the expected
+metallicity differences. These are typically a few hundreds of a dex
+and go up to a tenth of a dex for the Hercules moving group (both
+these as well as the mean radii are given in table 3). We also
+estimated the expected spread around this mean value. In all cases
+(except for the NGC 1901 group) the expected spread around the mean is
+smaller than the offset from the average metallicity. Therefore, we
+expect the metallicity distributions of the moving groups to be
+contained in either the lower half of the full metallicity
+distribution or the upper half of the metallicity distribution, and
+our test to see whether this is borne out in the data should be able
+to detect this.
+
+We understand that this is still a very qualitative test and we admit
+and discuss this in the discussion of this test.
+
+
+	Minor comments:
+	--------------
+
+	1)At the end of the introduction, it would be good to
+	summarize what isgoing to be done in the other sections of
+	this long paper, in order forthe occasional reader to have a
+	guide through the paper.
+
+We added a sentence at the end of the introduction with pointers to
+the main parts of the paper.
+
+	2) Inthe historical introduction, the oldest reference given
+	concerning theHercules moving group is Raboud et al. The
+	authors should alsodefinitely cite Blaauw (1970): proceedings
+	of IAU symp. 38, The spiralstructure of our Galaxy, p. 199
+
+We did not know about this reference, but it is certainly relevant. We
+added it in the introduction.
+
+	3) Please provide axis labels on Fig. 7
+
+Figure 7 is an illustration of the model selection context in an
+abstract way, so the axes do not really have much significance, but to
+make clear that the y-axis is a probability over the x-axis, we have
+added some axis-labels.

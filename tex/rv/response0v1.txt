@@ -1,0 +1,61 @@
+Dear Editor,
+
+Please find attached the response to the referees' and Associate
+Editor's comments for the submission "Extreme deconvolution: Inferring
+complete distribution functions from noisy, heterogeneous, and
+incomplete observations" by myself and others (submission #
+AOAS0910-008).
+
+We have revised the paper according to the referee's, Associate
+Editor's, and your suggestions. We have reversed the emphasis of the
+paper. We have overhauled the introduction to provide a more detailed
+scientific motivation for the proposed method (this includes moving
+much of the motivating material that was previously buried in the
+"Applications" section to the introduction) and to place it in the
+context of similar work. 
+
+We have deleted most of the technical development of the algorithm,
+focusing now only on where it differs from the regular EM algorithm
+for mixtures of Gaussians. We also relegated the proof that the
+algorithm increases the likelihood at every step to a (short)
+appendix. We deleted the description of the regular EM algorithm for
+mixtures of Gaussians that used to form a long appendix.
+
+We have kept the section on "Extensions", but we have also shortened
+it significantly. We have also moved the details of the
+split-and-merge extension to an appendix.
+
+We removed the application of fitting a straight line using our
+algorithm. We also expanded the discussion of our main (and now only)
+application, explaining carefully why this problem has all of the
+properties that make the model proposed in the paper apply and adding
+a discussion of the model-selection implementation that we used to
+arrive at the preferred number of 10 Gaussians for this dataset.
+
+The paper is now only 23 pages long (everything included). 
+
+Detailed responses to all of the referee's and Associate Editor's
+comments are included in this re-submission.
+
+After the initial submission of this paper, we suffered the loss of
+our third author, Sam Roweis, who died in January. Would it be
+necessary and appropriate to make a note of this in the paper and how
+would this best be done?
+
+Please contact me by the information given below with any questions
+regarding this re-submission.
+
+With kind regards,
+
+Jo Bovy
+
+-
+Jo Bovy
+Ctr. for Cosmology & Particle Physics, 
+Dept. of Physics
+New York University
+4 Washington Place
+New York, NY 10003
+jb2777@nyu.edu
+
+

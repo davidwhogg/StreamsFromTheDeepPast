@@ -1,0 +1,111 @@
+In what follows, the referee's comments are indented and our responses
+are not:
+
+	1. The application itself, in Section 6.3, is done in a
+	cursory manner. It is all words, with no precise description
+	of what Ri is, and no justication that Si is known. More
+	fairly, it is possible that these things are buried in the
+	wording, but they are not defined explicitly and a general
+	statistical reader would have no clue about either point. I
+	read it quickly, but did not find what the sample size is
+	even.
+
+We expanded the discussion of the application and have defined
+explicitly what the projection matrix is for each star and why the
+uncertainties for the velocities can be assumed to be known. Briefly,
+the main source of uncertainty is due to the finite number of photons
+used to perform the position measurements that form the basis of the
+distance and velocity measurements, and this source of uncertainty is
+very well understood, such that the uncertainties can be assumed to be
+known.
+
+	2. The derivations should be put into an appendix and cut
+	drastically. The EM- calculations are routine in the mixture
+	model context, and they should be dumped into an appendix. The
+	idea of having labels in the EM algorithm is old and routine:
+	just state what you did.
+
+We cut the derivations as suggested by the referee and the Associate
+Editor, such that only the essential points of the derivations
+remain. We focus now on where the derivation of our algorithm differs
+from the routine EM calculations and removed everything else. We did
+not move what remained to an appendix since the algorithm itself is a
+main point of the paper and the derivations could be useful for
+adapting the algorithm (for example, if one would like to sample
+rather than optimize).
+
+	3. The footnote on page 4 is a good indicator of one of the
+	problems with the paper. There is a one-line proof: mixtures
+	of normals plus a normal are mixtures of normals with
+	additional variance. This has been known for 20 years and no
+	argument is necessary.
+
+This footnote has been removed.
+
+	4. Gaussian mixture models can be a useful device, but they
+	are terrible at estimating quite skew distributions. For
+	example, a gamma distribution fit by a mixture of 10 normal
+	random variables will have bumps galore. Have the authors done
+	any preprocessing to get rid of means being related to
+	variances?
+
+This is a well-known problem and not specific to our model. We do not
+believe that this is an issue in the application we present, since all
+of the "bumps" are known, real structures.
+
+
+	5. The Bayesian calculations being done are an attempt to
+	maximize the posterior. Old, routine, not
+	interesting. Bayesian methods in this problem have a major
+	issue with the label-switching problem (which group does one
+	belong to), something that has a large literature, e.g.,
+	Roeder and Wasserman, Stephens, etc. It is best to avoid this
+	issue, since the Bayesian discussion is fairly naive.
+
+We believe that it is interesting to show that including priors still
+allows the algorithm to retain its simple form and we kept the update
+steps with priors such that the algorithm we use in the application is
+fully specified. We did, however, shorten this discussion and added a
+reference to the label-switching problem.
+
+	6. I have no idea why in Section 6.2 the authors decide to
+	digress to fitting simple linear regression. All of this was
+	covered long ago by Wayne Fuller, in Measurement Error Models,
+	1987, Wiley. The discussion is naive, wrong (total least
+	squares is really, really silly in this context), and does not
+	go anywhere. There is even a paper by Carroll and Ruppert
+	(1996, American Statistician, 50, 1-6.), the grandfathers of
+	the eld, basically saying that the author's approach should
+	never be used. In linear regression, consistent estimates of
+	the slope are available by pretending the unknown is
+	Gaussian. All this material should be deleted. If it were
+	published, the authors would get a storm of letters to the
+	editor about how silly the work is.
+
+We removed this application. 
+
+	7. The authors discuss in the paper estimating the number of
+	mixtures, and in the example just arbitrarily choose 10. Is 10
+	a magic number in astronomy? The cross-validation criterion
+	discussed in the paper should be implemented.
+
+10 Gaussians is certainly not a "magic number" in astronomy. We
+arrived at this number by fitting various models with 1 to 25
+Gaussians and different values of the regularization parameter w, and
+validating the fits using an external data set, consisting of
+line-of-sight velocities of a large number of stars (as opposed to the
+transverse velocities we use to perform the fits). 10 Gaussians gave
+the best results on the validation set. We expanded the discussion of
+this in the paper.
+
+	8. In Section 6.3, the authors announce that their method
+	"compares favorably with other reconstructions". Well, that is
+	fine, but one sentence justifying this claim seems a bit
+	sparse for the Annals of Applied Statistics.
+
+We expanded somewhat on this claim, but it remains a qualitative
+statement referring to the overall shape of the reconstructed velocity
+distribution and the locations of the peaks. Because of the
+approximate methods used to reconstruct the velocity distribution
+before, those reconstructions are unlikely to be correct in detail, so
+quantifying the comparison more is problematic.

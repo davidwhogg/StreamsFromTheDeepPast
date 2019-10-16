@@ -1,0 +1,35 @@
+#!/usr/local/bin/perl
+
+#
+# Take qa3d.#####.pts files from projection_gauss_mixtures and create gif 
+# animation
+#
+
+sub mkgif {
+	$num=shift;
+	$num5=sprintf("%05d",$num);
+	open(infile,">qa3d.in");
+	print infile <<EOF;
+outfile qa3d.$num5.tiff
+linepositionfile qa3d.$num5.pts
+lineindexfile qa3d.$num5.indx
+scale 40.
+windowsize 700
+#     width   start x, y, z   end x, y, z   color r, g, b
+axis0 1.01    0.0 0.0 0.0     50. 0. 0.      1. 0. 0.
+axis1 1.01    0.0 0.0 0.0     0. 50. 0.      1. 1. 1.
+axis2 1.01    0.0 0.0 0.0     0. 0. 50.      0. 0. 1.
+center 0.000000e+00 0.000000e+00 0.000000e+00
+pos 1.618053e+02 1.600837e+02 4.979823e+02
+fvec -2.955160e-01 -2.923717e-01 -9.094994e-01
+uvec -9.034823e-02 9.563048e-01 -2.780618e-01
+EOF
+	system("points qa3d.in -geometry +100+100");
+	system("tifftopnm qa3d.$num5.tiff | pnmdepth 6 | ppmtogif > qa3d.$num5.gif");
+}
+
+for($i=0;$i<$ARGV[0];$i++) {
+	mkgif($i);
+}
+
+system("gifsicle --delay=20 --loop qa3d.?????.gif > qa3d.anim.gif");

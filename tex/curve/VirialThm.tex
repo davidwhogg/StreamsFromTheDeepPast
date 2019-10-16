@@ -1,0 +1,42 @@
+\documentclass{article}
+\usepackage{amssymb,amsmath}
+
+\begin{document}
+AJ
+\section{Virial Theorem For Logarithmic Potentials}
+
+
+The Virial is defined as:
+\begin{equation}
+G := \sum{\mathbf{p_i}\cdot{\mathbf{r_i}}
+\end{equation}
+
+
+By the Virial Theorem, for any time inverval of length $\tau$ in which one's momenta and positions are finite, one obtains the relation:
+
+\begin{equation}\label{vthm}
+\frac{1}{\tau}\int_{0}^{\tau}\frac{dG}{dt}dt = \overline{2T}+\overline{\sum{\mathbf{F}_i\cdot\mathbf{r}_i}} = \frac{1}{\tau}[G(\tau)-G(0)]
+\end{equation}
+
+provided that the momenta, positions, and potential are finite and $C^1$ over the time period.
+
+For a particle orbiting in a logarithmic potential given by:
+\begin{equation}
+V(r) = k \log(r)
+\end{equation}
+We see that
+\begin{equation}
+\mathbf{F}\cdot\mathbf{r} = -\nabla( k\log(r))\cdot\mathbf{r}=\frac{-k}{r^2}\mathbf{r}\cdot\mathbf{r}= -k.
+\end{equation}
+ 
+Thus by \eqref{vthm} we obtain the relation
+\begin{equation}
+\overline{2T}+\overline{\mathbf{F}\cdot\mathbf{r}} = 2\overline{T} - k = \frac{1}{\tau}[\mathbf{p}(\tau)\cdot\mathbf{r}(\tau)-\mathbf{p}(0)\cdot\mathbf{r}(0)].
+\end{equation}
+In particular, for closed orbits we obtain the relation:
+
+\begin{equation}
+\overline{T}=k/2
+\end{equation}
+
+\end{document}

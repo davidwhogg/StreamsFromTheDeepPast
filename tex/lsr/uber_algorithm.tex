@@ -1,0 +1,125 @@
+% this is a LaTeX file
+\documentclass{article}
+
+\begin{document}
+
+% \section{PCA is never the right algorithm}
+
+% Many have used principal components analysis (PCA) to measure or
+% describe the variance in a set of data [examples, examples].  Most
+% have interpreted the derived principal components as containing
+% information about the Universe.  Of course, the principal components
+% only measure variance, and do not distinguish variance created by the
+% measurement process from the variance that exists among the objects of
+% study, so in many cases this interpretation step is unjustified.
+
+% Straightforward interpretation of PCA output requires that two
+% conditions be simultaneously met:
+
+% (1)~All axes must have the same dimensions, and the same units,
+% otherwise a change of units on one axis will completely change your
+% result.  No, taking logarithms does \emph{not} help.
+
+% (2)~All errors in the space must either be tiny, or else be both
+% spherical and gaussian.  Otherwise the principal directions may be
+% tell you more about your errors than the Universe.
+
+% These two conditions have never been simultaneously met in the history
+% of astronomy.  In the case of the fundamental plane, the axes all have
+% different dimensions and different units and the errors are never
+% spherical nor minute [references].  In the case of spectral diversity,
+% the errors are not spherical because spectrograph sensitivity is a
+% strong function of wavelength [references].
+
+% What is desired by the investigator, in most applications of PCA or
+% similar algorithms, is the variance in the data \emph{not} due to
+% measurement noise.  In what follows, we present an algorithm which
+% finds this ``external'' variance, even in the presence of
+% non-negligible, non-trivial, and non-constant ``internal'' variance
+% (ie, measurement errors).
+
+% [Note that Connolly and Nichol tried but they got it wrong.]
+
+\section{A one-gaussian model in one-dimensional space}
+
+Consider the simplest case, a set of $N$ objects $i$ for which there
+are one-dimensional measurements $y_i$ of some quantity (eg, radial
+velocity) with measurement variances $V_i=\sigma^2_i$, not all the
+same.  For each measurement $y_i$ there is a \emph{true value} $x_i$
+that would have been measured if the measurement variance had been
+negligible.  If the measurement errors are normally distributed then
+\begin{equation}
+p(y_i|x_i)=\left(2\pi\,V_i\right)^{-1/2}\,\exp\left\{-\frac{(y_i-x_i)^2}{2\,V_i}\right\} \;.
+\end{equation}
+The case of non-gaussian errors is considered below.
+
+The true values $x_i$ are imagined to be drawn from a gaussian
+distribution with \emph{true mean} $m_\star$ and \emph{external
+variance} $V_\star$, where the word ``external'' is used to mean ``not
+due to measurement noise in the experiment''.
+\begin{equation}
+p(x_i|m_\star,V_\star)=\left(2\pi\,V_\star\right)^{-1/2}\,\exp\left\{-\frac{(x_i-m_\star)^2}{2\,V_\star}\right\}\;.
+\end{equation}
+A more sophisticated model for the distribution of the true $x_i$ is
+considered below.
+
+The probability of a particular choice of true mean $m_\star$ and
+external variance $V_\star$ is given by Bayes theorem,
+\begin{equation}
+p(y_i)\,p(m_\star,V_\star|y_i)=p(m_\star,V_\star)\,\int\mathrm{d}^N\!x_i\,p(y_i|x_i)\,p(x_i|m_\star,V_\star)\;,
+\end{equation}
+where $p(y_i)$ is a normalization factor and $p(m_\star,V_\star)$ is
+the prior probability of this choice.  It turns out that the prior on
+the true mean can be uninformative, but that the prior on the external
+variance $V_\star$ must be at least informative enough to require that
+the true variance be positive.  One simple choice for the prior is a
+gamma distribution,
+\begin{equation}
+p(m_\star,V_\star)\propto\left(\frac{V_\star}{2\,V_p}\right)\,\exp\left\{-\frac{V_\star}{2\,V_p}\right\}\;,
+\end{equation}
+where $V_p$ is the mean of this prior distribution.
+
+The maximum-likelihood values of the true mean and external variance
+are given by the equations
+\begin{eqnarray}\displaystyle
+0&=&\sum_i\,\frac{y_i-m_\star}{V_i+V_\star}\;,\cr
+0&=&\sum_i\,\left[\frac{(y_i-m_\star)^2}{(V_i+V_\star)^2}-\frac{1}{V_i+V_\star}\right]+\frac{2}{V_\star}-\frac{1}{V_p}\;.
+\end{eqnarray}
+
+\section{A one-gaussian model in multiple dimensions}
+
+Consider a set of $N$ objects $i$ for which there are $d$-dimensional
+measurements $\vec{y}_i$ of some set of $d$ quantities (eg, radial
+velocity, central surface brightness and radius) with $d\times d$
+measurement variance matrices $\mathbf{V}_i$, not all the same.  In
+general, these variance matrices $\mathbf{V}_i$ (a) will all be
+different ($\mathbf{V}_i\neq\mathbf{V}_j$), (b) will not be diagonal
+(there will be significant measurement covariances), and (c) will be
+highly anisotropic (the eigenvalues of each matrix will span a large
+range).
+
+The true mean $\vec{m}_\star$ will be a $d$-vector and the external
+variance $\mathbf{V}_\star$ will be a $d\times d$ symmetric variance
+matrix.
+
+The street-fighting estimate of the $d$-dimensional generalization of
+the 1-dimensional algorithm is (with vectors represented as column
+matrices),
+\begin{eqnarray}\displaystyle
+\vec{0}&=&\sum_i\,(\mathbf{V}_i+\mathbf{V}_\star)^{-1}\cdot(\vec{y}_i-\vec{m}_\star)\;,\cr
+\mathbf{0}&=&\sum_i\,\left\{\left[(\mathbf{V}_i+\mathbf{V}_\star)^{-1}\cdot(\vec{y}_i-\vec{m}_\star)\right]\cdot\left[(\mathbf{V}_i+\mathbf{V}_\star)^{-1}\cdot(\vec{y}_i-\vec{m}_\star)\right]^T-(\mathbf{V}_i+\mathbf{V}_\star)^{-1}\right\}\cr&&+2\,\mathbf{V}_\star^{-1}-\mathbf{V}_p^{-1}\;,
+\end{eqnarray}
+where the former equation is a vector equation for $\vec{m}_\star$ and
+the latter is a matrix equation for $\mathbf{V}_\star$.
+
+% \section{A multiple-gaussian model in multiple dimensions}
+
+% \section{Non-gaussian measurement errors}
+
+% \section{Selection effects}
+
+% \section{The fundamental plane of elliptical galaxies}
+
+% \section{The local stellar velocity distribution}
+
+\end{document}

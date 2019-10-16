@@ -1,0 +1,7 @@
+linepositionfile vline.vtx
+lineindexfile vline.indx
+pointcolor 1. 0. 1. 1. 
+windowsize 600
+zclip 0.01
+boundarysize 0.
+scale 100.

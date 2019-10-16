@@ -1,0 +1,53 @@
+\documentclass{article}
+\usepackage{amssymb, amsmath}
+
+\begin{document}
+
+\title{Parabolas in 6D}
+\author{Aukosh}
+\maketitle
+
+\section{The problem}
+The problem we hope to solve is how to succesfully interpolate two streams of stars in phase space. In order to solve this problem we must first solve a somewhat simpler problem: what is the equation for the parabola that we should fit two any three points on a given stream. This problem will be solved under various assumptions about the streams in question.
+
+\section{the parabola in 2D}
+Let us consider the ``toy case'' in 2D (obviously we will in the end try to reduce everything to this problem). Suppose we had three points in space and we want to find the parabola that goes through these points. Well the first problem is, of course, that there isnt just one. For this section, we will assume that, without loss of generality one can transform the coordinates such that one point will be at the origin, and that we are looking for the parabola whose directrix is parallel to the x-axis. this problem is then quite simple: it reduces to two linear equations for two varabables: Assume we have the points labeled $(x_1,y_1)=0$,$(x_2,y_2)$,$(x_3,y_3)$.Then, assuming
+\begin{equation}
+k = x2^2x_3-x3^2x2 \neq 0
+\end{equation}
+we get that the parabola is given by:
+\begin{equation}
+y = ax^2 +bx
+\end{equation}
+where a and b are given by:
+\begin{subequations}
+\begin{align}
+a &= \frac{x_3y_2-x_2y_3}{k}\\
+b &= \frac{-y_1x_3^2+y_3x_2^2}{k}\\
+\end{align}
+\end{subequations}
+As we will see, the difficulty in solving this problem will not be creating the parabola itself, but determining whether or not we have choses the correct parabola. 
+
+\section{the parabola in 6D}
+Suppose now we are dealing with three points, \textbf{$x_1$},\textbf{$x_2$},\textbf{$x_3$} in 6 dimensions. The first thing we must do is find the equation for the plane defined by these three points. This is equivalent to finding an \textbf{n} such that:
+
+\begin{equation}
+\mathbf{x_i}\cdot\mathbf{n} = c
+\end{equation}
+where c is an arbitrary nonzero constant. This is a system of 3 equations and 6 unknowns, however you have complete freedom in 3 of the unknowns. Thus problem can be reduced even further by assuming $n_i = 0$ for three indicies. Let i, j, and k be the other three indicies. We can the define the following matrix:
+\begin{equation}
+A = \left( 
+\begin{array}{ccc}
+x_{1,i} & x_{1,j} & x_{1,k} \\
+x_{2,i} & x_{2,j} & x_{2,k} \\
+x_{3,i} & x_{3,j} & x_{3,k} 
+\end{array}
+\right)
+\end{equation}
+
+The indicies should be chosen such that this matrix is non-singular. Assume without loss of generality that the indicies are 1 2 and 3. Then the vector defining the plane is given by:
+\begin{equation}
+\mathbf{n} = A^{-1}\left(\begin{array}{c} 1 \\ 1\\ 1\\ \end{array}\right)
+\end{equation}
+
+\end{document}

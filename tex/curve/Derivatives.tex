@@ -1,0 +1,117 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage{amsmath,amssymb,mathrsfs}
+
+\newcommand{\mvector}[1]{\boldsymbol{#1}}
+  \newcommand{\vr}{\mvector{r}}
+  \newcommand{\vv}{\mvector{v}}
+  \newcommand{\vx}{\mvector{x}}
+  \newcommand{\vz}{\mvector{z}}
+  \newcommand{\observable}{\mvector{w}}
+  \newcommand{\zero}{\mvector{0}}
+\newcommand{\vhat}[1]{\mvector{\hat{#1}}}
+  \newcommand{\rhat}{\vhat{r}}
+  \newcommand{\thetahat}{\vhat{\theta}}
+  \newcommand{\phihat}{\vhat{\phi}}
+  \newcommand{\zhat}{\vhat{z}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\Dec}{\mathrm{Dec}}
+\newcommand{\abs}[1]{|{#1}|}
+\newcommand{\cross}{\times}
+
+\begin{document}
+
+\paragraph{Definitions:}
+We will take the 6-dimensional phase-space vector to be made up of two
+3-dimensional position and velocity vectors $[\vx,\vv]$.  In the
+position space there are three orthogonal dimensionless unit vectors
+$\rhat$, $\thetahat$, and $\phihat$, pointing in the radial,
+polar-angle, and azimuthal-angle directions in spherical coordinates.
+We will take the observables to be the set of six quantities
+\begin{eqnarray}\displaystyle
+\observable &\equiv& [D,\theta,\phi,v_r,\mu_\theta,\mu_\phi]
+\quad ,
+\end{eqnarray}
+where $D$ is the distance (dimensions of length), $\theta, \phi$ are
+the angular coordinates on the sphere (dimensions of angle or
+dimensionless), $v_r$ is the radial velocity (dimensions of length per
+time), and $\mu_\theta, \mu_\phi$ are the angular velocities in the
+direction of increasing $\theta$ and $\phi$ (units of angle per time
+or just inverse time).
+
+Trivially, the distance and radial velocity are given by unit-vector
+dot products
+\begin{eqnarray}\displaystyle
+D &\equiv& \vx\cdot\rhat
+\nonumber\\
+v_r &\equiv& \vv\cdot\rhat
+\quad .\label{eq:radials}
+\end{eqnarray}
+The $\phi$-direction angular velocity has the pesky $\sin\theta$ (or
+$\cos\theta$, depending on definition of $\theta$ on the equator)
+factor divided out, so that the angular velocities are just given by
+\begin{eqnarray}\displaystyle
+\mu_{\theta} &\equiv& \frac{1}{D}\,\vv\cdot\thetahat
+\nonumber\\
+\mu_{\phi} &\equiv& \frac{1}{D}\,\vv\cdot\phihat
+\quad .\label{eq:pms}
+\end{eqnarray}
+
+If a star is observed to lie at position $\vx$, we will define for
+that star the unit vectors $\rhat$, $\thetahat$, and $\phihat$ such
+that
+\begin{eqnarray}\displaystyle
+0 &=& \vx\cdot\thetahat
+\nonumber\\
+0 &=& \vx\cdot\phihat
+\quad .\label{eq:alignment}
+\end{eqnarray}
+This will zero out some of the pesky terms in our derivatives.
+
+\paragraph{Derivatives:}
+We have aligned the unit vectors with the position according to
+equation~(\ref{eq:alignment}), but now we are going to take
+derivatives of the phase-space coordinates with respect to the
+observables, with the unit vectors $\rhat$, $\thetahat$, and $\phihat$
+\emph{held fixed}.  That is, there will be no derivatives of the unit
+vectors with respect to observables or phase-space position.
+
+The system is ``sparse'' in the sense that most of the observables
+touch only very well-defined linear combinations of the phase-space
+components.  For example, $\mu_{\theta}$ appears only in the
+projection $\vv\cdot\thetahat$.  The exception is the distance $D$,
+which is involved in all four of the angular quantities $[\theta,
+  \phi, \mu_{\theta}, \mu_{\phi}]$.  So the $D$ derivative of the
+phase-space coordinates is the most complicated.  It would be
+exceedingly complicated if it were not for the fact that we have
+aligned the unit vectors according to equation~(\ref{eq:alignment}),
+so that some of the cross terms (those including $\vx\cdot\thetahat$
+and $\vx\cdot\phihat$) will drop to zero.
+
+When I use my intuitive derivative-taking magic on this system I get:
+\begin{eqnarray}\displaystyle
+\frac{\dd}{\dd D}[\vx, \vv] &=& [\rhat, \mu_\theta\,\thetahat+\mu_\phi\,\phihat]
+\nonumber\\
+\frac{\dd}{\dd \theta}[\vx, \vv] &=& [D\,\thetahat, \zero]
+\nonumber\\
+\frac{1}{\sin\theta}\,\frac{\dd}{\dd \phi}[\vx, \vv] &=& [D\,\phihat, \zero]
+\nonumber\\
+\frac{\dd}{\dd v_r}[\vx, \vv] &=& [\zero, \rhat]
+\nonumber\\
+\frac{\dd}{\dd \mu_\theta}[\vx, \vv] &=& [\zero, D\,\thetahat]
+\nonumber\\
+\frac{\dd}{\dd \mu_\phi}[\vx, \vv] &=& [\zero, D\,\phihat]
+\quad ,\label{eq:derivatives}
+\end{eqnarray}
+where $\zero$ is the 3-dimensional zero vector, and the $1/\sin\theta$
+factor makes the $\dd /\dd\phi$ derivative isotropic on the sphere.
+If you want these expressions in terms of phase-space coordinates
+instead of observables, you can convert with the
+expressions~(\ref{eq:radials}) and (\ref{eq:pms}).
+
+These 6 rows (\ref{eq:derivatives}) of 6-vectors make up the full
+$6\times 6$ derivative matrix $\dd [\vx, \vv] / \dd\observable$; the
+opposite derivative matrix $\dd\observable / \dd [\vx,\vv]$ is
+obtained (except maybe at $D=0$ or maybe at the poles of the sphere)
+by taking the matrix inverse.
+
+\end{document}

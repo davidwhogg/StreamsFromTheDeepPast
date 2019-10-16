@@ -1,0 +1,39 @@
+Clearly articulate the specific research question and the goals of the project Limit: 1200 chars Curr: 1110
+
+When choosing between models of the galactic gravitational potential, one must be able to answer some very basic questions about the nature of the model itself: is it spherically symmetric or axisymmetric, which has been until recently the most common assumption, or is the potential much more complex? Tidal streams, streams of stars that are formed by tidal disruption of globular clusters, appear to be ideal for answering this question as they, essentially, map out the trajectory of a single, idealized particle. We seek to asses the extent to which one can use the phase space information of tidal streams to answer these question given that true data sets will have nonzero uncertainties. We seek to develop analytical techniques of comparing tidal streams and intend to use these techniques to analyze various families of galactic potentials so as to determine what phase space information and what maximum uncertainties are necessary in order to distinguish between physically realistic models. We seek to both demonstrate and explore these techniques using a simulation system that we have developed.
+
+Provide sufficient background to inform your reader as to why the question or problem is important. An educated, non-expert reader should be able to fully understand your topic. Include references.
+Limit 1800 chars Curr 1801
+
+Modeling the dynamics of astronomical bodies has been a central question of Astronomy since is inception. When developing such a model, one must be able to form a method of describing the gravitational interaction between the body and the galaxy. This gravitational interaction is best described in terms of a function called the gravitational potential. An important question then is how do you best model the gravitational potential of a given galaxy. In order to develop such a model, we must be able to devise reliable techniques to determine which of the models are physically realistic using observational data. Ideally, we would solve this problem by taking time-lapsed data of the motion of many bodies in the potential and decide which models of the potential produce reliable fits to our orbits. This, however, would not be feasible seeing as most stellar bodies move so slowly that it would take 10^8 years just to produce enough data. 
+Tidal streams seem to be a promising way to side step this problem. Tidal streams are streams of stars that are caused by disruption of globular clusters that are orbiting in the Milky Way halo. They effectively trace out the orbit of a single idealized particle. [Grillmair, C.J. et al. ApJ 2006. 647:L37-L39.] As such we can treat the data of the many stars in the stream as the time lapsed data that we wished for.  This kind of analysis has been performed on the GD-1 stream [Koposov, S.E. et al 2010. ApJ 712, 260.]The data for these streams, however, often have nonzero uncertainties and are often missing large portions of relevant data. The problem we seek to address is developing a general method of comparing orbits in model potentials to a given data set that will take in to account any information restrictions that the data set might have.
+
+Describe the methodological approach you will employ to carry out your proposed research.
+Limit 2400 chars Curr 850
+We are developing analytical techniques of comparing tidal streams and intend to use these techniques to analyze various families of galactic potentials so as to determine what phase space information and what maximum uncertainties are necessary in order to distinguish between physically realistic models. In order to explore, demonstrate, and compare the efficacy of these techniques, we have developed a simulation system that models tidal streams in various galactic potentials. Using this simulator, we treat the problem as one of sampling in the 6D parameter space of initial conditions and will be implementing various sampling techniques to find families of streams that are similar to any given stream under any given regime of comparison. We are currently experimenting with the Metropolis-Hastings algorithm to perform this sampling.
+
+
+Describe your timeline for completing this research, including the project?s start and end dates and estimated number of hours per week dedicated to the work.
+Limit 1000 chars Curr 899
+The project was started as an outgrowth of research we were conducting last year. We anticipate to have useful results by the end of the summer. I have been working 15+ hours a week on this project and plan on increasing this to 30-40+ hours per week during the summer. We have already developed our simulation system and we hope to have the experimental system that will generate the families of streams as well as present the analysis of these streams under our analytic regimes within the next two weeks. We will then begin developing and implementing various experiments to both explore and demonstrate the efficacy of our techniques. During the summer we will continue to develop and implement these experiments and hope to have good enough results to present in the form of a paper by the end of the summer. Presuming success, a refereed publication will be prepared and submitted in the Fall.
+
+Describe the significance of this research. Why is it important? What will it contribute to the field? How is it relevant to your academic interests and goals?
+Limit 1000 Curr 906
+One of the central questions of Astrophysics research is developing a realistic model of the galactic gravitational potential. In order to to so, however, one must develop a method of determining which models are physically realistic. Presently there is no established analytic method and as such different research groups are using various techniques, some of which may not be optimal. We hope to establish an analytic regime for researchers to use to make accurate distinctions between various models of the potential using observed data of tidal streams. As a person who is quite interested in applications of Mathematics to Physics, this project serves as an important introduction to the topics and ideas that are at the forefront of the field, as well as to provide a taste of that applied mathematics research is like. I hope to publish a paper regarding my research upon conclusion of this project.
+
+Describe your relationship with your project mentor, addressing the following points:
+How did you identify your project mentor?
+In what capacity did you work with your mentor in developing your research proposal, timeline, and budget request?
+How will you work with your faculty mentor on this project? How often will you meet?
+How will you receive mentoring during the course of the research?
+Limit 1000 cur 385
+Professor Hogg has been my research advisor for the past year. I approached him regarding a similar topic last year. This project developed out of our work on this related problem. We have been and will continue to meet twice weekly and during these meetings, as well as via email, I will receive mentoring. We have already established a rapport and some first results in this project.
+
+Please use the space below to itemize each anticipated expense associated with your project. Indicate specific costs and provide explanations and rationale.
+Limit 3000 curr 98
+
+$2000 as a stipend to take the place of what would have otherwise been a salary from a summer job.
+
+
+Attach up to four tables and figures, if applicable
+[should i add some of the plots that ive already created? DWH: Yes, add one picture of one simulation snapshot, and point them to the wiki page]

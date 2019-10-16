@@ -1,0 +1,69 @@
+\documentclass{article}
+\usepackage{amssymb, amsmath}
+
+\begin{document}
+
+\title{How similar are two cold streams?}
+\maketitle
+\section{Similarity Function}
+
+Our goal is to develop and implement a method of determining how similar two cold streams are, given complete phase space information (note: this requirement is not terribly necessary, the proposed method will generalize to n dimensions). Let us think of the streams as two curves in phase space that have been sampled at some (perhaps different) rate, let the two curves be labeled $X$ and $Y$, and let $\mathbf{x_i}$ and $\mathbf{y_i}$ be the vectorial representation of the phase space coordinates of the two curves. We can then define the following functional:
+
+\begin{equation}
+F(X,Y) := \inf_{J, I}\{\sum_{i=0}^{|X|} |x_i -y_{J(i)}|^2 + \sum_{j=0}^{|Y|} |y_j - x_{I(j)}|^2\}/2
+\end{equation}
+
+Where I(j) and J(i) are functions that return an index of $X$ and $Y$ respectively. This function will have the property that it is 0 when the two curves are identical.
+
+\section{Finding the infinimum}
+
+Our goal has now been reduced to finding this infinimum for any two streams. This is essentially a two fold integer programming exercise. One simple method of finding this infinimum is to slowly traverse the first stream, and for each point on the stream, find the closest point on the second, to find J(i), and to do the similarly for I(i). This algorithm is fairly efficient ($O(n^2)$ I think) and thus should be sufficient for cold streams as they are small data sets. 
+
+It was initially suggested that I and J should be strictly increasing functions. This is good for 1 dimension al streams that are `sampled' at the same rate, but does not readily generalize to n dimensions and different sampling rates. It is also more complicated to develop such an algorithm for these requirements.  
+
+\section{Metric}
+
+Our goal in this section is to determine a metric for phase space that allows us to accomidate for uncertainties when evaluating these norms. As we are essentially answering a fitting question, $\chi^2$ is a natural choice. The metric tensor would then be given by:
+
+\begin{equation}
+ g_{ij}(x_i) =\frac{1}{\sigma_i^2(x_i)} \delta_{ij}
+\end{equation}
+ where i = 1,2,...,6
+
+\subsection{An Example in Two Dimensions}
+
+To make things clearer let's consider the following example. Suppose we have radial and angle information with some corresponding position dependent uncertainties $\sigma_r(r)$ and $\sigma_\theta(\theta)$.Our metric tensor is then given by:
+
+\begin{equation}
+G = \left( \begin{array}{cc}
+\frac{1}{\sigma_r(r)} & 0 \\
+0 & \frac{1}{\sigma_\theta(\theta)} 
+\end{array}
+\right)
+\end{equation}
+
+or equivalently in cartesian coordinates:
+
+\begin{equation}
+G = \left( \begin{array}{cc}
+\frac{x^2}{(x^2+y^2)\sigma_r^2(x,y)} + \frac{y^2}{(x^2+y^2)^2\sigma_\theta^2(x,y)} & \frac{xy}{(x^2+y^2)\sigma^2_r(x,y)} -\frac{xy}{(x^2+y^2)^2\sigma_\theta^2(x,y)} \\
+\frac{xy}{(x^2+y^2)\sigma^2_r(x,y)} -\frac{xy}{(x^2+y^2)^2\sigma_\theta^2(x,y)} & \frac{y^2}{(x^2+y^2)\sigma_r^2(x,y)} + \frac{x^2}{(x^2+y^2)^2\sigma_\theta^2(x,y)}
+\end{array}
+\right)
+\end{equation}  
+
+Note that you cannot calculate the norm squared of an arbitrary vector in space because this would then be given by:
+\begin{subequations}
+\begin{align}
+||\mathbf{x}||^2 &= \mathbf{x}^TG\mathbf{x} \\
+                 &= \frac{r^2}{\sigma_r^2} + \frac{\theta^2}{\sigma_\theta^2}\\
+                 &= \frac{x^4+y^4}{(x^2+y^2)\sigma_r^2(x,y)} + \frac{2(xy)^2}{(x^2+y^2)^2\sigma_\theta^2(x,y)}+\frac{2(xy)^2}{(x^2+y^2)\sigma^2_r(x,y)} -\frac{2(xy)^2}{(x^2+y^2)^2\sigma_\theta^2(x,y)}\\
+                 &= \frac{x^4+y^4}{(x^2+y^2)\sigma_r^2(x,y)}+\frac{2(xy)^2}{(x^2+y^2)\sigma^2_r(x,y)}\\
+                 &= \frac{x^2+y^2}{\sigma^2_r(x,y)}
+\end{align}
+\end{subequations}
+
+Note that these equations are inconsistent as the last is missing a term in $\theta$. This shows that the real use of this metric is not to compute the norm of vectors in the space but rather the norm of differentials. In other words it is only consistent when one is calculating the norm of the difference between two vectors whose differece is very small with respect to the radial components of the vectors. This is reasonable for our purposes as the goal of the metric is to establish the similarity of two curves and as such, under the assumption that we are comparing reasonably similar curves the metric should be entirely consistent.
+
+
+\end{document}

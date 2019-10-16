@@ -1,0 +1,736 @@
+ % To-do
+% -----
+% - DSTN: read and edit, especially above the Experiments section
+% - AJ: Re-write inference section
+% - DWH: Search for all DWH in text and fix.
+%The Methods section needs to be drastically rewritten:
+%
+%We need to add more info about priors. Specifically, there is a new prior on Sigma. 
+%
+%the inference section needs to be completely rewritten since we're using a different sampler.
+%
+%What functional tests of our code should be mentioned?
+%
+%chain convergence test?
+%
+%discuss asymptotics/slices? (what shape they should have and show that they have it)
+%
+%Results section needs to be written. What do we want to put here?
+
+
+\documentclass[12pt,preprint]{aastex}
+\usepackage{amsmath,amssymb,graphicx,graphics,subfig,mathrsfs,bbm}
+\newcounter{address}
+
+% vector and tensor stuff
+\newcommand{\mtensor}[1]{\boldsymbol{#1}}
+  \newcommand{\mS}{\mtensor{S}}
+  \newcommand{\mSigma}{\mtensor{\Sigma}}
+\newcommand{\mvector}[1]{\mtensor{#1}}
+  \newcommand{\ve}{\mvector{e}}
+  \renewcommand{\vr}{\mvector{r}}
+  \newcommand{\vv}{\mvector{v}}
+  \newcommand{\vV}{\mvector{V}}
+  \newcommand{\vx}{\mvector{x}}
+  \newcommand{\vX}{\mvector{X}}
+  \newcommand{\vbeta}{\mvector{\beta}}
+  \newcommand{\vtheta}{\mvector{\theta}}
+  \newcommand{\vphi}{\mvector{\phi}}
+  \newcommand{\vomega}{\mvector{\omega}}
+\newcommand{\inverse}[1]{{#1}^{-1}}
+\newcommand{\transpose}[1]{{#1}^{\textsf{T}}}
+\renewcommand{\det}[1]{||{#1}||}
+\newcommand{\rhat}{\hat{\vr}}
+\newcommand{\thetahat}{\hat{\vtheta}}
+\newcommand{\phihat}{\hat{\vphi}}
+\newcommand{\vhat}{\hat{\vv}}
+
+% units
+\newcommand{\unit}[1]{\mathrm{#1}}
+  \newcommand{\kpc}{\unit{kpc}}
+  \newcommand{\Myr}{\unit{Myr}}
+  \newcommand{\kpcpMyr}{\kpc\,\Myr^{-1}}
+  \newcommand{\km}{\unit{km}}
+  \newcommand{\s}{\unit{s}}
+  \newcommand{\kmps}{\km\,\s^{-1}}
+  \newcommand{\rad}{\unit{rad}}
+  \newcommand{\radpMyr}{\rad\,\Myr^{-1}}
+  \renewcommand{\arcsec}{\unit{arcsec}}
+  \newcommand{\mas}{\unit{mas}}
+  \newcommand{\yr}{\unit{yr}}
+  \newcommand{\maspyr}{\mas\,\yr^{-1}}
+
+% other random symbols
+\renewcommand{\d}{\mathrm{d}}
+\newcommand{\like}{\mathscr{L}}
+\newcommand{\normal}{\mathscr{N}}
+\newcommand{\margchi}{{\chi_t}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\pbg}{p_{\mathrm{bg}}}
+\newcommand{\RA}{\mathrm{RA}}
+\newcommand{\Dec}{\mathrm{Dec}}
+\newcommand{\obs}{\mathrm{obs}}
+\newcommand{\vxobs}{\vx_{\mathrm{obs}}}
+\newcommand{\tmin}{t_{\mathrm{min}}}
+\newcommand{\tmax}{t_{\mathrm{max}}}
+
+% words
+\newcommand{\foreign}[1]{\textit{#1}}
+\newcommand{\documentname}{\textsl{Article}}
+\newcommand{\sectionname}{Section}
+\newcommand{\equationname}{equation}
+
+\begin{document}
+
+\title{Fitting streams of stars in phase space}
+\author{Aukosh Jagannath\altaffilmark{\ref{CCPP}},
+        David W. Hogg\altaffilmark{\ref{CCPP},\ref{MPIA},\ref{email}},
+	Daniel Forman-Mackey\altaffilmark{\ref{CCPP}}
+        Adrian Price-Whelan\altaffilmark{\ref{CCPP}},
+        Dustin Lang\altaffilmark{\ref{Princeton}}}
+\setcounter{address}{1}
+\altaffiltext{\theaddress}{\stepcounter{address}\label{CCPP} Center
+for Cosmology and Particle Physics, Department of Physics, New York
+University, 4 Washington Place, New York, NY 10003}
+\altaffiltext{\theaddress}{\stepcounter{address}\label{MPIA}
+Max-Planck-Institut f\"ur Astronomie, K\"onigstuhl 17,
+D-69117 Heidelberg, Germany}
+\altaffiltext{\theaddress}{\stepcounter{address}\label{email} To whom
+correspondence should be addressed: \texttt{david.hogg@nyu.edu}}
+\altaffiltext{\theaddress}{\stepcounter{address}\label{Princeton}
+Princeton University Observatory, Princeton, NJ 08544}
+
+\begin{abstract}
+Precise determination of the Milky Way potential by the modeling of
+tidally disrupted streams appears possible, especially in the era of
+\textsl{Gaia}.  A requirement for precise data analysis is a
+probabilistic model, that is, a quantitative calculation of the
+probability of the data given the model.  We propose such a model for
+streams of stars observed in phase-space, where the positional and
+kinematic stellar measurements are noisy, each star has different
+noise properties, and different subsets of phase-space coordinates are left
+unmeasured.  The model formalizes curve fitting in phase space,
+allowing for heteroscedastic observations, intrinsic stream scatter or
+width, and marginalization over unknown orbital phases.  We show on
+artificial data that this model can be used to perform useful
+probabilistic inference.
+\end{abstract}
+
+\keywords{
+    TBD ---
+    methods:~statistical ---
+    stars:~kinematics ---
+    TBD
+}
+
+\section{Introduction}
+
+The stars of the Milky Way do not form an angle-mixed population in an
+integrable potential.  That is, it is not possible to infer precisely
+the properties of the Galaxy by steady-state modeling---what's known
+as ``Schwartzschild'' modeling (cite Schw) or ??.  There is no steady
+state configuration, and even if there were, ongoing accretion and
+star formation ensures that the Galaxy won't reach it.
+
+For all these reasons, the attention of Galaxy modelers has shifted to
+informative phase-space structure: Long-lived features in phase space
+can in principle put strong constraints on the potential.  The best
+examples of such features at the present day are tidal streams, sets
+of stars that trace out curves in phase space because they have been
+liberated from a parent body on a well-defined (or slowly varying)
+orbit in the Galaxy.  In particular, recently the phase-space
+configuration of the (relatively kinematically hot) Sagittarius tidal
+stream and the (relatively cold) GD-1 stellar stream have both been
+used to constrain the asphericity of the Galaxy potential (cite Law,
+Koposov).
+
+There are two significant unresolved issues in this research
+direction: The first is that we do not expect tidal streams to
+exactly---or even nearly---trace out test-particle orbits in the
+Galaxy potential.  This is in part because the streams are made up of
+stars that were liberated at different orbital points (and therefore
+have different angular momenta and energies), but also because the
+stream members are on orbits in a non-trivial potential; the curve in
+phase space defined by the stream should not be thought of as a
+particle orbit, but rather as something different, heretofore not yet
+understood precisely (negatively cite some refs).  We will not address
+this issue in this \documentname; this is a dynamical issue, not an
+inference issue.  In what follows, we will assume that this can be
+solved in the sense that an investigator can be provided with a black
+box that generates realistic tidal streams in six-dimensional phase
+space for any reasonable gravitational potential.  In the short
+term---before this problem is solved---this means permitting gradients
+in relevant dynamical quantities (such as energy or angular momentum)
+along the stream.
+
+The second unresolved issue is that there is no established
+inferential procedure for comparing a hypothesized phase-space curve
+to an observed set of stars.  The methods employed in the literature
+so far (cite Law, Binney) have various \foreign{ad hoc} components,
+including by-eye adjustments to the data or models, inconsistent use
+of some data as exact constraints and others as probabilistic
+constraints, and use of unjustified goodness-of-fit scalars in the
+place of likelihoods.  The lack of a justified probabilistic
+methodology is not just a technical issue; it is already an important
+impediment to science, because complementary dynamical constraints
+from the Sagittarius stream and the GD-1 stream cannot be responsibly
+or precisely combined without it.  That is, it is impossible to judge
+whether these results are consistent and it is impossible to use them
+simultaneously to do an even better job.  We take the first step
+towards solving this problem here, providing a probabilistic
+generative model for a stream of stars, and therefore a justified
+likelihood function for use in inference. (DWH: we don't seem to have justified our likelihood function)
+
+\section{Generalities}\label{Sec:Generalities}
+
+
+
+Before developing the particulars of the theory we seek to present, it is helpful to view the problem of probabilistically modeling tidal streams in the most general context. From this viewpoint it will become clear that the problem of probabilistically modeling tidal streams is but one of the many applications of a powerful theoretical framework that has been developed and studied in the data analytic community.  It is the use of these tools that makes the following presentation novel compared to previous attempts at tidal stream modeling. 
+
+Suppose that we have N noisy data points, $\vx_i$, each of which is a vector in a $d$-dimensional euclidean space. Imagine that these points lie on a curve in this $d$-dimensional space but for noise, or
+\[ \vx_i = \vX(t_i) + \ve_i ,\]
+where $\vX(\cdot)$ is a smooth curve in this $d$-dimensional space that is parameterized by an affine parameter $t$,  and the $\ve_i$ are $d$-dimensional noise contributions. The function $\vX(\cdot)$ is assumed to have an underlying $k$-dimensional manifold of adjustable parameters, $\vomega$.
+
+Given the distribution from which the noise vectors $\ve_i$ are drawn, which will generically depend on the adjustable parameters $\vomega_i$ and the affine parameter at that point $t_i$, we can evaluate the likelihood of the data, given our model, at the particular data points,
+\begin{equation}\label{unmarginalized_like}
+\like = p(N) \prod_{i=1}^{N} p(\vx_i | t_i,\vomega_i),
+\end{equation}
+where for complete generality we have allowed N to be a random variable as well. Using this likelihood, one can then infer the underlying model parameters $\vomega$. 
+
+Often times there are nuisance parameters which are either not well measured, or irrelevant all together to the inference in question. In such scenarios, it is necessary to marginalize out these nuisance parameters. For example, the affine parameter may not be well measured, in which case the relevant quantity is not the likelihood described by \eqref{unmarginalized_like}, but rather
+\begin{equation}\label{marginalized_like}
+\like = p(N)\prod_{i=1}^{N} \int p(\vx_i | t, \vomega_i) p_i(t) dt_i,
+\end{equation}
+where $p(t)$ is the prior probability of observing a data point at time t. 
+
+It is also important to notice possible free parameters in one's model of the noise underlying the system in order to allow for intrinsic scatter in the system. The methodology one uses to handle this is necessarily dependent upon the noise model one assumes, and as such we will only be examining the regime relevant to the tidal stream modeling problem in this \documentname. 
+
+For the problem of tidal stream modeling, we imagine that the number of data points, henceforth stars, is not a random number, but rather fixed to be some number, N, and that the noise underlying our system is described by a multivariate normal distribution with variance tensor $\tilde{\mS_i}$ at the $i$th star. We make the assumption of Gaussian noise not because we believe it is entirely accurate, but rather because we believe it is the best available approximation to reality and is in-line with common assumptions in developments of this type. The variance tensor is best described in terms of its decomposition into two tensors. Firstly, at the $i$th data point, there is a fixed tensor $\mS_i$ which accounts for observational noise. Secondly, there is a tensor $\mSigma$, which takes into account intrinsic scatter associated with the fact that tidal streams are not infinitesimally small curves in phase space, but have physical extent, or ``thickness", which does not vary along the stream. The probability of any given data point, given the model, is then given by
+\begin{equation}\label{unmarginalized_prob}
+p(\vx_i | t_i, \vomega_i)  = \normal(\vx_i |\vX(t_i), \mS_i + \mSigma).
+\end{equation}
+where $\normal(\vx | \vX, \mS)$ is the multivariate normal distribution with mean $\vX$ and variance tensor $\mS$. 
+
+Notice that the authors have made no preconditions on the nature of $\mS_i$: it may vary wildly along the stream, allowing for severe correlations between positions and velocities, and may be such that certain eigenvalues of the corresponding inverse covariance matrix, $\inverse{\mS_i}$, are vanishingly small. Allowing for this scenario is necessary. Any thorough technique for analyzing data must be able to account for missing or incomplete data. Also notice that in introducing the second tensor, we have introduced many new parameters corresponding to the eigenvalues and eigendirections corresponding to this thickness tensor. We shall see that this requirement is not as severe as it may appear as great reductions can be made. 
+
+We set the affine parameter $t$ to be an orbital phase parameter. This parameter is often unmeasured, or very poorly measured, and is unnecessary for the problem of inferring the underlying galactic potential parameters. As such, in order to continue with this problem, it is necessary to introduce a prior probability on the affine parameter to allow for the marginalization of this parameter. The best uninformative prior on the affine variable is one that is flat in the angle variable conjugate to the action variable, i.e. one that is uniform in time, as this is simply the statement that the probability of observing a particular time $t_i$ is proportional to the amount of time spent at that point. To describe this probability, we need to allow for two further model variables, $t_{min}$ and $t_{max}$, though once again the reality of this situation is not so severe as a reduction can be made. In this scenario, the prior probability on the orbital phase a parameter is described by
+\begin{equation}
+p(t) = \frac{1}{t_{max} - t_{min}}\mathbbm{1}_{(t_{max},t_{min})}(t).
+\end{equation}
+It is important to note that the variables $t_{min}$ and $t_{max}$ are hierarchical model parameters, model parameters that are used only in defining a prior, and thus must be marginalized out as they have no true physical meaning.
+
+With this description, \eqref{unmarginalized_prob} should be marginalized, leaving it in the form
+\begin{equation}
+p(\vx_i | \vomega_i) = \int \normal(\vx_i|\vX(t), \vomega_i)\frac{1}{t_{max} - t_{min}}dt . 
+\end{equation}
+The likelihood function can the been written succinctly in the form 
+\begin{equation}
+\like = \prod_{i=0}^{N}p(\vx_i | \vomega_i).
+\end{equation}
+It is worthwhile to recall that in such situations, where the noise is assumed to be Gaussian, there is a natural relation between likelihoods of this form and the commonly used badness-of-fit statistic chi-squared. In particular, 
+\begin{equation}
+\chi^2 = -2 \ln(\like) + const. ,
+\end{equation}
+where the scalar constant is due to normalization of the probability distribution functions.
+
+\section{Experiments}
+
+Here we implement the general inference framework of the previous
+\sectionname\ with a numerical system working on realistic artificial
+astronomical data with realistic noise properties and demonstrate that
+it can be used to succesfully perform inference.  We set the experimental conditions of the
+experiments (uncertainty variances and Galaxy parameters) to be
+relevant for studies like that of the GD-1 stream (cite) to
+demonstrate the scientific value of the framework.
+
+\paragraph{Coordinates and units:}
+We specialize to $d=6$ dimensions of phase space, so the vectors
+$\vx_i$ become the observed stellar locations in position and velocity,
+which we imagine as column vectors
+\begin{equation}
+\transpose{\vx_i} = [x_i, y_i, z_i, v_{xi}, v_{yi}, v_{zi}]
+\quad,
+\end{equation}
+where $(x,y,z)$ make up the standard galactocentric cartesian coordinate system and
+$(v_x,v_y,v_z)$ are the corresponding velocities.  In what follows,
+the observer will be at phase-space position $\vxobs$.
+
+For definiteness, we choose a consistent unit system of $\kpc$ and
+$\Myr$, with the following conversions to other standard units:
+\begin{eqnarray}\displaystyle
+1~\kpcpMyr &=& 978~\kmps
+\nonumber \\
+1~\radpMyr &=& 206~\maspyr
+\quad .
+\end{eqnarray}
+In this coordinate system, a Sun-like observer's position in phase
+space could be
+\begin{equation}
+\transpose{\vxobs} = [(-10~\kpc), 0, 0, 0, (0.205~\kpcpMyr), 0]
+\quad.
+\end{equation}
+
+For any star $i$ at phase-space position $\vx_i$, there is a radial
+direction unit vector $\rhat_i$ pointing from the observer at $\vxobs$
+to the star at $\vx_i$
+\begin{eqnarray}\displaystyle
+\transpose{\rhat_i} &=& \frac{1}{D_i}\,[(x_i-x_\obs), (y_i-y_\obs), (z_i-z_\obs), 0, 0, 0]
+\nonumber\\
+D_i &\equiv& \sqrt{(x_i-x_\obs)^2+(y_i-y_\obs)^2+(z_i-z_\obs)^2}
+\quad,
+\end{eqnarray}
+and the corresponding radial velocity unit vector $\vhat_{\vr i}$
+\begin{eqnarray}\displaystyle
+\transpose{\vhat_{\vr i}} &=& \frac{1}{D_i}\,[0, 0, 0, (x_i-x_\obs), (y_i-y_\obs), (z_i-z_\obs)]
+\quad .
+\end{eqnarray}
+There are also transverse position unit vectors $\thetahat_i$ and
+$\phihat_i$ and transverse velocity unit vectors $\vhat_{\vtheta i}$
+and $\vhat_{\vphi i}$.  These are defined to form an orthonormal basis for this space.
+
+\paragraph{Variance tensors:}
+There are many nearby stars for which six-dimensional phase-space
+information is known, but these comes from a heterogeneous set of
+sources (maybe cite Hipparcos?). Angular positions ($\RA, \Dec$) tend
+to be known with great precision, whereas distances to stars far
+outside of the Solar Neighborhood (but still part of the Milky Way)
+are very poorly known. Distance measurements to such stars--which
+could lie in the Galactic Bulge or Disk, or in Tidal Streams--cannot
+be directly measured, and must instead be inferred by a variety of
+relatively inaccurate approaches (APW: Should I go into more detail?).
+Radial velocities can be measured very precisely with spectroscopic
+measurements, but transverse velocities require proper motion
+measurements which tend to be extremely imprecise in the Galactic halo.
+Furthermore, imprecise distance estimates lead to substantial
+position--velocity correlations, because the inferred transverse
+velocity is a product of the distance and the proper motion.
+
+For most realistic data sets, observational uncertainties live in the
+independent space of fractional distance uncertainty $(\delta D/D)$,
+angular ($\RA, \Dec$) uncertainty $(\delta\theta)$, radial velocity
+uncertainty $(\delta v)$, and proper motion uncertainty
+$(\delta\dot{\theta})$.  From these we can construct a linearized
+uncertainty variance tensor
+\begin{eqnarray}\displaystyle
+\mS_i &=&
+  \left(\frac{\delta D}{D}\right)^2
+    (D_i^2\,\rhat_i\cdot\transpose{\rhat_i} +
+      \vv_{\perp i}\cdot\transpose{\vv_{\perp i}})
+\nonumber\\
+&&+ (\delta\theta)^2\,D_i^2\,
+    (\thetahat_i\cdot\transpose{\thetahat_i}
+   + \phihat_i\cdot\transpose{\phihat_i})
+\nonumber\\
+&&+ (\delta v)^2\,\vhat_{\vr i}\cdot\transpose{\vhat_{\vr i}}
+\nonumber\\
+&&+ (\delta\dot{\theta})^2\,D_i^2\,
+    (\vhat_{\vtheta i}\cdot\transpose\vhat_{\vtheta i}
+   + \vhat_{\vphi i}\cdot\transpose\vhat_{\vphi i})
+\quad ,
+\end{eqnarray}
+where $D_i$ is the distance from the observer to star $i$, $\vv_{\perp
+  i}$ is the transverse (to the line of sight) velocity of star $i$
+relative to the observer, outer products like
+$\rhat\cdot\transpose{\rhat}$ return tensors not scalars, and the
+large covariance induced by the distance uncertainty is handled by the
+$\vv_{\perp i}$ term.  
+ (DWH: Do astronomers often construct these covariance matrices? If not it would be worthwhile to add in 
+an appendix this construction)
+This uncertainty description is approximate for
+two reasons: No observer knows the true distance $D_i$ or true
+transverse velocity $\vv_{\perp i}$, and the distance uncertainty is
+often large enough to make the overall uncertainty significantly
+non-Gaussian. However, this description is the best Gaussian
+approximation possible; it is tested below.  An example is shown in
+\figurename~\ref{fig:EllipseTest}.
+
+In addition to the observational uncertainty, there is also an
+intrinsic thickness to the stream, which we will model as an isotropic
+(in space and in velocity) scatter around the best-fit curve (DWH: Isn't this a disallowed phrase?).  This
+thickness can be described with a diagonal variance tensor $\mSigma$
+parameterized by a spatial variance $\Sigma_x$ and a velocity variance
+$\Sigma_v$
+\begin{equation}
+\mSigma =
+  \Sigma_x\,(\rhat\cdot\transpose{\rhat}
+            +\thetahat\cdot\transpose{\thetahat}
+            +\phihat\cdot\transpose{\phihat})
+ +\Sigma_v\,(\vhat_{\vr}\cdot\transpose{\vhat_{\vr}}
+            +\vhat_{\vtheta}\cdot\transpose{\vhat_{\vtheta}}
+            +\vhat_{\vphi}\cdot\transpose{\vhat_{\vphi}})
+\quad .
+\end{equation}
+In this experiment, we set $\Sigma_v=0$, not because we imagine that
+there will be no thickness in velocity space but because the
+observational uncertainties are much larger than any sensible
+thickness for a cold stellar stream like GD-1.
+
+\paragraph{Generating artificial data:}
+(ASJ: This entire section is poorly written.)
+In what follows, we both generate and model streams as tracing out a
+test-particle orbit in a logarithmic potential with z-axis flattening of the form
+\begin{equation}
+\Phi(x,y,z) = \frac{V_c^2}{2}\,\ln(x^2+y^2+(z/q)^2)
+\quad.
+\end{equation}
+As we have noted above and discuss below, this is probably not an excellent 
+approximation to reality.  However, for the purposes of these experiments, we need a
+specific stream model, and this suffices.  As our understanding of
+stellar streams improves, these models can be replaced by more accurate or  
+appropriate models. In principle, nothing about the inference framework changes 
+with this substitution,except possibly the total number of model parameters.
+
+
+In order to generate the data, we specify the circular velocity $V_c^2 = (224~\kmps)^2$ 
+and flattening parameter $q=0.87$ (similar to the parameters found in Kaposov 2009).
+We then randomly choose a fidicual point in phase space from which we integrate
+$N_f = 200$ steps forward and $N_b = 200$ steps backward using a leap-frog integrator
+with a 1 Myr timestep, leaving us with $401$ stars ($1$ for the fiducial point and
+$1$ for each timestep forward and backward). We choose the fidicual point subject 
+to a three criteria. Firstly,the curve must have noticiable curvature. This is 
+to both ensure realism and allow for a reasonable ability to distinguish between models.
+Secondly, the closest star in the stream to the observer mus tbe of order $10~\kpc$ away
+and must be neither of the end points of the stream. Thirdly,the projection of
+the angular momentum vector of the closest star onto the galactic z-axis must be 
+of magnitude roughly $.5~\kpc^2\Myr^{-1}$. These last two conditions are to ensure realism.
+The orbit this process resulted in creating is essentially two-thirds of a leaf of a 
+(not quite closed) trefoil. The exact initial conditions in terms of the parameters
+necessary to fully specify the model are provided in Table~number (ASJ: check these
+numbers).
+
+Tidal streams as noted above, are not 1-D curves that are regularly spaced. To
+account for the irregular spacing between stars we reduce to $M=20$ stars, where
+$20$ was chosen to be generic of such situations, using the following algorithm.
+Index the stars along the stream with integers. Place a uniform 
+distribution on the index set and randomly draw an index. Remove this star, and 
+repeat until $20$ stars remain. For an example of this ``zero-scatter" data, see 
+\figurename~\ref{fig:cleanStreamsPlot}. To account for the intrinsic scatter in 
+the stream, we add to each star a draw from a Gaussian with covariance tensor 
+$\mSigma$ where $\Sigma_x = (.001~\kpc)^2$ and $\Sigma_v = 0$.
+
+With these positions we compute the unit vectors $\rhat$ etc. and, using them, 
+the individual observational noise variance tensors $\mS_i$ with parameters:
+\begin{eqnarray}\displaystyle
+\frac{\delta D}{D} &=& 0.1
+\nonumber\\
+\delta\theta &=& 5e-7~\rad
+\nonumber\\
+\delta v &=& 10~\kmps
+\nonumber\\
+\delta\dot{\theta} &=& 2~\maspyr
+\quad.
+\end{eqnarray}
+We then add to each stellar position another Gaussian random draw, where this Gaussian 
+has the covariance tensor given by that position's observational noise variance 
+tensor $\mS_i$.  This makes the final observed phase-space positions $\vx_i$.  
+We then re-compute the unit vectors given these observed positions and recompute the
+observer's variance tensor $\mS_i$, which is slightly different from
+the tensor used to generate the errors because the observed position
+is shifted from the true position. For the aforementioned mock data with noise
+see \figurename~\ref{fig:noisyStreamsPlot} 
+
+\paragraph{Model curves:}
+A model curve is specified by a point in 10 dimensions of the form 
+\[ (M,\vX_0,q,V_c^2,\Sigma_x)\]
+where M is the total number of steps, $\vX_0$ is the fiducial phase space position,
+$q$ and $V_c^2$ are the potential parameters and $\Sigma_x$ is the position
+thickness eigenvalue. As we will discuss below, we require that M be even for computational ease. 
+These parameters suffice to fully specify the model curve. For this reason, the 
+experiments are unrealistically optimistic:
+truth is an elementary event in the domain of the employed model. As with the data,
+we integrate the model using a leap-frog integrator with a $1\Myr$ timestep. 
+
+\paragraph{Badness-of-fit scalar:}
+We compute the model curve---which will be a test-particle orbit---on
+a grid of $M$ affine parameter values $T_j$ in the range
+$\tmin<T_j<\tmax$ on a grid
+\begin{eqnarray}\displaystyle
+T_j &=& T_1 + [j-1]\,\Delta t
+\nonumber\\
+\Delta t &=& \frac{1}{M}\,[\tmax-\tmin]
+\nonumber\\
+T_1 &=& \tmin+\frac{1}{2}\,\Delta t
+\quad,
+\end{eqnarray}
+where the grid spacing and first point are defined to center the grid
+in the affine-parameter range.  The affine parameter will be a time
+coordinate, for which the prior probability distribution $p(t)$ is a
+constant, as in \equationname~(\ref{eq:margchi}).  The computation of
+the marginalized badness-of-fit scalar $\margchi^2$ requires
+integration over the affine parameter; this becomes a sum over
+discrete points in this implementation.  That is, we perform no
+interpolation, but sample the curve finely enough that a discrete sum
+is sufficient:
+\begin{eqnarray}\displaystyle
+\margchi^2 &\equiv& \sum_{i=1}^N \margchi_i^2
+\nonumber\\
+\margchi_i^2 &\approx& -2\,\ln\sum_{j=1}^M \exp(-\frac{1}{2}\,\chi_{ij}^2)\,\frac{\Delta t}{\tmax-\tmin}
+\nonumber\\
+\chi_{ij}^2 &\equiv& \ln\det{\mS_i + \mSigma}
+  + \transpose{\left[\vX(T_j) - \vx_i\right]}
+  \cdot\inverse{\left[\mS_i+\mSigma\right]}\cdot\left[\vX(T_j) - \vx_i\right]
+\quad,
+\end{eqnarray}
+where the integral in \equationname~(\ref{eq:margchi}) becomes a sum
+over discrete times $T_j$, and we have included the intrinsic stream
+thickness variance $\mSigma$.
+
+The quality of the sampling approximation to the integral varies with
+the time spacing $\Delta t$, asymptotically approaching the true
+marginalized value as $\Delta t\rightarrow 0$.  This is shown in
+\figurename~\ref{fig:samplerate_vs_similarity} for the case of one of our
+numerical experiments. 
+
+We also choose to allow the affine grid to be a parameter in the simulation so
+that the model can be longer or shorter depending on the length of the true
+stream. In practice, we have chosen to fix $\Delta t$ and vary $M$ (and thereby
+vary $t_{max} - t_{min}$).  Since the goal is to constrain the parameters of the gravitational potential, we 
+have allowed ourselves to also require that M is even for computational ease. We implement this by 
+assuming the distribution in M is constant between even numbers, i.e. it is the infinite sum of simple 
+functions of the form $p(m)\mathbf{1}_{[m,m+2)}$ where m is even. In practice this done by rounding M 
+to the nearest even integer less than M when generating the model. 
+
+\paragraph{Inference:}
+
+For the purposes of demonstration we choose to use the full machinery proposed
+in this \documentname~when performing the inference. We calculate the
+badness-of-fit using all of the above methods.
+
+In order to sample from the distribution of streams we used the affine-invariant sampler described in (cite 
+Goodman and Weare) where we used the badness-of-fit scalar under its 
+probabilistic interpretation, i.e $-2\ln\like$. Using this we calculated the
+posterior probability using the standard techniques where our prior on the data
+is 1, and our prior on the model is vanishing when $q \notin [.5,-1.5]$ and when $\Sigma_x \leq 10^{-12}$ 
+and vanishes like the inverse of the number of model points:
+\begin{equation}\displaystyle
+p(q) = \left\{ \begin{array}{cl}  1 & q \in [.5,1.5] \\
+				 10^{-20} & \text{otherwise,} 
+\end{array}
+\right.
+\end{equation}
+\begin{equation}\displaystyle
+p(\Sigma_x) = \left\{ \begin{array}{cl} 1 & \Sigma_x > 10^{-12} (kpc)^2 \\
+							10^{-20} &\text{otherwise,}
+\end{array}
+\right.
+\end{equation}
+and
+\begin{equation}\displaystyle
+p(M) = \frac{1}{M}.
+\end{equation}
+We describe the state of the system by the vector of parameters 
+\[
+\vx = [ M, \vX_{0,x}, \vX_{0,v}, q, V_c^2, \Sigma_x]. 
+\] 
+Once we have generated the data set, using the initial choice of
+parameters give above (and summarized in Table~number), we then use
+the Affine-Invariant sampler to sample our distribution over the space
+of possible model curves. 
+
+To do so, we set a = 2.0. This choice is arbitrary, and must be made heuristically
+on a case-by-case basis. We generate an ensemble of 100 
+walkers in the following manner. First we consider the vector
+$.9999\vx_{true}$, and add to it the vector obtained by multiplying
+element-wise the vector $0.0001\vx_{true}$ and a vector drawn from a
+multivariate normal distribution with zero mean and identity
+covariance matrix. (DWH/ASJ: this is \emph{incredibly} convoluted. This appears to be
+a remnant of old code. perhaps replace by the suggestion below) The method of
+generating the initial walkers is for the most part arbitrary. 
+(DWH: I'm not too comfortable with the following sentences, but they are true) 
+The only element of choice by the experimenters was the proximity of the
+ensemble to true. If the final model distribution is highly
+anisotropic, as in our case, it will take significantly longer to
+converge to the true value if the ensemble is chosen to greatly
+dispersed from the truth. As such it is recommended that the
+generation of the ensemble is done heuristically on a case-by- case
+basis. Any methodology to randomly generate an ensemble that is not contained in a
+hyperplane of dimension less than that of the model space, for
+this problem a hyperplane of dimension less than 10, is sufficient.
+For example, one could take an initial guess for the truth and add
+gaussian noise to it to generate the walkers. Upon generating the
+walkers, we sample the distribution until it has been decided that the
+chain has converged.
+
+Determining when the chain has converged to the region of the most
+likely family is also to be performed on a case by case basis and
+should be determined experimentally. We decided that for this kind of
+problem a good heuristic is as follows: examine the chosen value for
+the parameter as a function of time, divide this data in to even
+groups, calculate the 5th and 95th percentile for each group. When the
+5th and 95th percentiles remain essentially unchanged in every
+variable for a sufficiently long time, i.e. when the chain appears
+fairly confined to a certain region for sufficiently long, we decide
+that the chain has converged. As an example of this methodology see Fig.
+\ref{fig:mcmcPlotPos} \ref{fig:mcmcPlotPot} for the draws from the distribution
+of streams used for this experiment.\footnote{For an in-depth
+discussion of heuristic methods for determining when the chain has converged
+and how to step about in space see Salamon 2002}
+
+\paragraph{Results:}
+Using the techniques described in the previous section, we sampled from the distribution in model space 
+corresponding to the mock data described. We ran the Affine-invariant sampler for $n = 5000$ steps so 
+as to ensure that the sampler is mixed in every variable. This test took $8 hrs$ on Leo. The acceptance 
+fractions of each of the walkers is shown in Table ASJ. At the end of this sampling,  the sampler has met 
+the convergence criteria described above (see Fig.s \eqref{fig:mcmcPlotPos} \eqref{fig:mcmcPlotPot}). 
+Examining histogram plots of accepted values in each variable for the second half of the chain (we reject 
+the first half as a 'burn-in' phase as is standard practice), we see that the sampler has fully sampled the 
+distribution (see Fig.s \eqref{fig:mcmchistq} \eqref{fig:mcmchistVc} \eqref{fig:mcmchistSigmax}). The 
+histograms have the shapes one would expect from the distributions described above (eq's ...). 
+
+\section{Discussion}
+
+DWH: discuss: Streams don't trace orbits.
+
+DWH: discuss: mixing of the chains.
+
+The most important aspect of probabilistic inference that we have
+omitted here is the problem of stream membership.  No star is ever
+assigned to any stream with perfect confidence.  Every star has a
+finite membership probability, and that probability is a very strong
+function of the stream model parameters (because as the stream comes
+closer to a star or gets broader, membership probability rises).  In
+principle, membership probability is another nuisance parameter that
+must be considered and marginalized out in the inference.
+Fortunately, if each star $i$ can be taken independently, this
+marginalization is analytic and leaves something like
+\begin{equation}
+p(\vx_i|t_i,\vomega) = q\,\normal(\vx_i|\vX(t_i),\mS_i+\mSigma)
+  +[1-q]\,\pbg(\vx_i|\vbeta)
+\end{equation}
+for the likelihood contribution from star $i$, where $0<q<1$ is the
+\emph{prior} probability of any star in the sample being a stream
+member, and $\pbg(\vx_i|\mS_i,\vbeta)$ is a function describing the
+probability density for any non-stream star to have observed
+phase-space position $\vx_i$ given the observational noise and
+non-stream model parameters $\vbeta$.  This is a form of
+foreground--background modeling, where the stream in ``foreground''
+(the object of interest) and the rest of the Galaxy is ``background''
+(not of interest).  The prior probability $q$ and background
+parameters $\beta$ can all also be thought of as nuisance parameters
+and marginalized out.
+
+\acknowledgments It is a pleasure to thank Jo Bovy, Kathryn Johnston,
+and Hans-Walter Rix for helpful discussions and assistance.  Financial
+support for this project was provided by the National Aeronautics and
+Space Administration (grant NNX08AJ48G) and the National Science
+Foundation (grant AST-0908357). DWH held a research fellowship from
+the Alexander von Humboldt Foundation.
+
+\clearpage
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{plots/EllipseTest.png}
+\caption{The Ellipse generated by taking the covariance tensor of a star centered at (-10,20,0,0,.205,0), 
+measured by an observer at (-10,0,0,0,.205) and drawing from a normal distribution with said covariance 
+tensor}
+\label{fig:EllipseTest}
+\end{figure}
+
+\clearpage
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{plots/SampleRate_vs_Similarity.png}
+\caption{Similarity as a function of sample rate for a noise-free data set. 
+As we see the function drops sharply and then quickly asymptotes to 0}
+\label{fig:samplerate_vs_similarity}
+\end{figure}
+
+\clearpage
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{plots/cleanStreamsPlot.png}
+\caption{The clean version of the generated data}
+\label{fig:cleanStreamsPlot}
+\end{figure}
+
+\clearpage
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{plots/noisyStreamsPlot.png}
+\caption{The same data with noise added}
+\label{fig:noisyStreamsPlot}
+\end{figure}
+
+\clearpage
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{plots/mcmcPlotPos.png}
+\caption{The Results of the mcmc in pos space}
+\label{fig:mcmcPlotPos}
+\end{figure}
+
+\clearpage
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{plots/mcmcPlotPot.png}
+\caption{The Results of the mcmc in M, q, $V_c^2$, and $\Sigma_x$}
+\label{fig:mcmcPlotPot}
+\end{figure}
+
+\clearpage
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{plots/mcmc-hist-R-7.png}
+\caption{A histogram showing the samples of all of the walkers for the last half of the chain for various 
+values of the flattening parameter, q}
+\label{fig:mcmchistq}
+\end{figure}
+
+\clearpage
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{plots/mcmc-hist-R-8.png}
+\caption{A histogram showing the samples of all of the walkers for the last half of the chain for various 
+values of the squared circular velocity, $V_c^2$}
+\label{fig:mcmchistVc}
+\end{figure}
+
+\clearpage
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{plots/mcmc-hist-R-9.png}
+\caption{A histogram showing the samples of all of the walkers for the last half of the chain for various 
+values of the thickness eigenvalue $\Sigma_x$}
+\label{fig:mcmchistSigmax}
+\end{figure}
+
+% \clearpage
+% \begin{table}
+% \caption{Initial Conditions. True: Spherical Log. Model: Spherical Log.} 
+% \begin{tabular}{| l | c | c |}
+% \hline
+% Curve type & True & Model \\
+% \hline
+% $x_1$ (kpc) & $-25.2811$ & $-25.2811$ \\ \hline
+% $x_2$ (kpc) & $30.5581$ &  $31.2017$ \\ \hline
+%  $x_3$ (kpc) & $-19.4142$ & $-18.9193$ \\ \hline
+%  $x_4$ (kpc/myr) & $ .107725$ & $ .111431$ \\ \hline
+%  $x_5$ (kpc/myr) & $-.0230526 $ & $-.0264877$ \\ \hline
+%  $x_6$ (kpc/myr) & $.0695475$ & $.0671068$ \\ \hline
+% \multicolumn{3}{|r|}{$\chi_{noisy}^2$: 101.811, $\chi_{clean}^2$ = 15.369}\\
+% \hline
+% \end{tabular}
+% \end{table}
+
+\clearpage
+\begin{table}
+\centering
+\caption{Initial Conditions. True: Flattened Log.} 
+\begin{tabular}{| l | c | }
+\hline
+Curve type & True  \\
+\hline
+$x_1$ (kpc) & $-25.2811$  \\ \hline
+$x_2$ (kpc) & $30.5581$ \\ \hline
+$x_3$ (kpc) & $-19.4142$ \\ \hline
+$x_4$ (kpc/myr) & $ .107725$ \\ \hline
+$x_5$ (kpc/myr) & $-.0230526 $ \\ \hline
+$x_6$ (kpc/myr) & $.0695475$ \\ \hline
+$q$ & $.87$ \\ \hline
+$V_c^2$ $(kpc/myr)^2$ & $0.05248$ \\ \hline
+$\mathbf{\Sigma}_x^2 (kpc)^2$ & $.000001 $ \\
+\hline
+\end{tabular}
+\end{table}
+
+\end{document}

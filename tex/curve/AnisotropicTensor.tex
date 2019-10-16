@@ -1,0 +1,154 @@
+\documentclass[12pt,preprint]{aastex}
+\usepackage{amsmath,amssymb,graphicx,graphics,subfig,mathrsfs}
+
+
+
+% vector and tensor stuff
+\newcommand{\mtensor}[1]{\boldsymbol{#1}}
+  \newcommand{\mS}{\mtensor{S}}
+  \newcommand{\mSigma}{\mtensor{\Sigma}}
+\newcommand{\mvector}[1]{\mtensor{#1}}
+  \newcommand{\ve}{\mvector{e}}
+  \renewcommand{\vr}{\mvector{r}}
+  \newcommand{\vv}{\mvector{v}}
+  \newcommand{\vV}{\mvector{V}}
+  \newcommand{\vx}{\mvector{x}}
+  \newcommand{\vX}{\mvector{X}}
+  \newcommand{\vbeta}{\mvector{\beta}}
+  \newcommand{\vtheta}{\mvector{\theta}}
+  \newcommand{\vphi}{\mvector{\phi}}
+  \newcommand{\vomega}{\mvector{\omega}}
+\newcommand{\inverse}[1]{{#1}^{-1}}
+\newcommand{\transpose}[1]{{#1}^{\textsf{T}}}
+\renewcommand{\det}[1]{||{#1}||}
+\newcommand{\rhat}{\hat{\vr}}
+\newcommand{\thetahat}{\hat{\vtheta}}
+\newcommand{\phihat}{\hat{\vphi}}
+\newcommand{\vhat}{\hat{\vv}}
+
+% units
+\newcommand{\unit}[1]{\mathrm{#1}}
+  \newcommand{\kpc}{\unit{kpc}}
+  \newcommand{\Myr}{\unit{Myr}}
+  \newcommand{\kpcpMyr}{\kpc\,\Myr^{-1}}
+  \newcommand{\km}{\unit{km}}
+  \newcommand{\s}{\unit{s}}
+  \newcommand{\kmps}{\km\,\s^{-1}}
+  \newcommand{\rad}{\unit{rad}}
+  \newcommand{\radpMyr}{\rad\,\Myr^{-1}}
+  \renewcommand{\arcsec}{\unit{arcsec}}
+  \newcommand{\mas}{\unit{mas}}
+  \newcommand{\yr}{\unit{yr}}
+  \newcommand{\maspyr}{\mas\,\yr^{-1}}
+
+% other random symbols
+\renewcommand{\d}{\mathrm{d}}
+\newcommand{\like}{\mathscr{L}}
+\newcommand{\normal}{\mathscr{N}}
+\newcommand{\margchi}{{\chi_t}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\pbg}{p_{\mathrm{bg}}}
+\newcommand{\RA}{\mathrm{RA}}
+\newcommand{\Dec}{\mathrm{Dec}}
+\newcommand{\obs}{\mathrm{obs}}
+\newcommand{\vxobs}{\vx_{\mathrm{obs}}}
+\newcommand{\tmin}{t_{\mathrm{min}}}
+\newcommand{\tmax}{t_{\mathrm{max}}}
+
+% words
+\newcommand{\foreign}[1]{\textit{#1}}
+\newcommand{\documentname}{\textsl{Article}}
+\newcommand{\sectionname}{Section}
+\newcommand{\equationname}{equation}
+
+\author{Hogg Group}
+\title{Creating and using an Anisotropic Tensor for the MCMC code}
+\date{}
+
+
+
+
+\begin{document}
+
+\begin{abstract}
+In this document, we discuss how to deal with the issue of an Anisotropic covariance tensor for our data points. We also discuss how this is affected by the systematic error due to the translation in phase space made when boosting between the galactocentric rest-frame and the observers rest-frame. 
+\end{abstract}
+
+\maketitle
+
+\section{Theory}
+
+Suppose that we have data points taken in the observers frame, $\vX_i$, each with its own covariance tensor $\mS_i$. In theory, when we take our measurements, the problem of evaluating our goodness of fit scalar $\chi^2$ is trivial, as the basis of the data is the eigenbasis of the covariance matrix. For our particular problem, however, we are generating our data and our models in a different basis, namely, the cartesian, galactocentric basis. As a result, we have to make the following change. First, with our data, we must make the systematic change, that is a translation, that is caused by the fact that we are not at the center. Let the tilde frame be the cartesian, galactocentric frame and let $\tilde{\vx}$ be the position of the observer in this frame. Then the change we want is merely the translation
+
+\begin{equation}
+\vX_i = \tilde{\vX}_i - \vx.
+\end{equation}
+\noindent
+It is from here that we have to transform into the eigenbasis of the data set. 
+
+There are two ways to view the following transformation, and these two different ways will manifest themselves slightly differently code wise. One way to do this is to perform the "active" transformation. That is, we take each $\vX_i$ and make the coordinate transformation in to the eigenbasis. Alternatively, we can make the passive transformation. That is, we take $\mS_i$ and transform them into the basis of of the computed data.
+
+Computationally, I think that the passive transformation will be easier, as it requires quite a bit less computation.
+
+\section{Application}
+For the purposes of the code, we will assume all distances are measured in units kpc, all times are measured in units myr, and all angular relations are measured in radians (quantities with derived units, e.g. velocity will have the corresponding units), and that in the galactocentric coordinate system, the observer is at  $\tilde{\vx}_i = (10,0,0,0,0.205,0)$. Conversion factors between commonly used units and these units are provided in the appendix below. We will also assume that no data points lie on the x-axis
+
+Our code, generates the true points, which correspond to the $\tilde{\vX}$'s above,  as well as the model points in the tilde coordinate system.  For each data point, we will assume that in the eigenbasis of $\mS$, namely in the spherical polar coordinate system of the observer, we have a 0.2 error in the log of the radial distance measurement, an error of 10 km/s (.01 kpc/Myr) in our radial velocity measurement, a 0.1 arcsecond  ($5 \times 10^{-7}$ radians ) error in the angular measurement,  and a proper motion accuracy of 2 milliarcseconds/year (1 radian/Myr).  As we see, the basis of the data, and the eigenbasis of their correpsonding covariance tensors are different exactly in the way discussed above, as such we perform the coordinate change as above.
+
+In theory, we could try and turn the crank with the jacobians to determine the coordinate transformations, but there is in fact a much clear way to realize them. First notice that in the eigenbasis of the tensor, we can write the tensor in the form:
+
+\begin{equation}\label{firstattempt}
+\mS = (\delta r)^2 \mtensor{\hat{r}}\transpose{\mtensor{\hat{r}}} 
++ (\delta \hat{\theta} )^2 \mtensor{\hat{\theta}}\transpose{\mtensor{\hat{\theta}}} 
++ (\delta \hat{\phi})^2 \mtensor{\hat{\phi}}\transpose{\mtensor{\hat{\phi}}}
++(\delta \dot{r})^2 \mtensor{\dot{r}}\transpose{\mtensor{\dot{r}}} 
++(\delta \hat{\dot{\theta}})^2 \mtensor{ \hat{\dot{\theta}}}\transpose{\mtensor{ \hat{\dot{\theta}}}} 
++  (\delta\hat{\dot{\phi}})^2 \mtensor{\hat{\dot{\phi}}}\transpose{\mtensor{\hat{\dot{\phi}}}}
+\end{equation}
+
+where the above vectors have the standard meaning when taken as relating to the observers frame. Thus all we have to do to transform them to the data's frame is to determine the unit vectors. But this is simply done if one notes the following. Let a subscript of pos denote the spatial position (i.e. the first 3 elements of said vector) and a subscript of vel denote the velocity position (i.e. the last three elements of said vector). Then at any given data point, the above vectors are obtained by normalizing the following vectors
+
+\begin{subequations}
+\begin{align}
+\mtensor{r'} &= [ \tilde{\vX}_{pos}- \tilde{\vx}_{pos} \ 0 \ 0 \ 0]\\
+\mtensor{\theta'} &= [\mtensor{r'}_{pos}\times\tilde{\vx}_{pos}  \ 0 \ 0 \ 0] \\
+\mtensor{\phi'} &=  [\mtensor{r'}_{pos}\times\mtensor{\theta'}_{pos} \ 0 \ 0 \ 0]  \\
+\mtensor{v_{\parallel}'} &= [0 \ 0 \ 0 \ \tilde{\vX}_{pos}- \tilde{\vx}_{pos}]\\
+\mtensor{v_\theta'} &= [0 \ 0 \ 0 \ \mtensor{v_{\parallel}'}_{pos}\times\tilde{\vx}_{pos}] \\
+\mtensor{v_\phi'} &=  [0 \ 0 \ 0 \ \mtensor{v_{\parallel}'}_{pos}\times\mtensor{v_\theta'}_{pos}] 
+\end{align}
+\end{subequations} 
+
+Though \eqref{firstattempt} was a good first attempt, there are some lingering issues to resolve. Firstly, what is the form of the $\delta x_i$ terms? They can't all be simply the error in that term as stated earlier since they would have incorrect dimensions. Also, there should be some mixing in error terms due to the uncertainty in the proper motion.  To take these into account, it is helpful to write the tensor in the form
+
+\begin{eqnarray}\displaystyle
+\mS_i &=&
+  \left(\frac{\delta D}{D}\right)^2
+    (D_i^2\,\rhat_i\cdot\transpose{\rhat_i} +
+      \vv_{\perp i}\cdot\transpose{\vv_{\perp i}})
+\nonumber\\
+&&+ (\delta\theta)^2\,D_i^2\,
+    (\thetahat_i\cdot\transpose{\thetahat_i}
+   + \phihat_i\cdot\transpose{\phihat_i})
+\nonumber\\
+&&+ (\delta v)^2\,\vhat_{\vr i}\cdot\transpose{\vhat_{\vr i}}
+\nonumber\\
+&&+ (\delta\dot{\theta})^2\,D_i^2\,
+    (\vhat_{\vtheta i}\cdot\transpose\vhat_{\vtheta i}
+   + \vhat_{\vphi i}\cdot\transpose\vhat_{\vphi i})
+\quad ,
+\end{eqnarray}
+
+where $\vv_{\perp}$ is the proper motion considered as a 6-vector (i.e. the components of $\vv_{\perp}$, the 3-vector are the last three components of the 6-vector and the first three are 0)
+
+
+%% \begin{figure}[h]
+%% \centering
+%% \includegraphics[scale=0.3]{EllipseTest.png}
+%% \caption{The Ellipse generated by taking the covariance tensor of a star centered at (-10,20,0,0,.205,0), measured by an observer at (-10,0,0,0,.205) and drawing from a normal distribution with said covariance tensor}
+%% \end{figure}
+
+\section{Appendix}
+The following table contains the relevant conversion factors
+
+\end{document}

@@ -1,0 +1,5 @@
+pointfile hippos.pts
+windowsize 900
+scale 100.
+pointcolor 1. 1. 0.8 0.5
+pointsize 1

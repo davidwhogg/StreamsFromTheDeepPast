@@ -1,0 +1,30 @@
+#!/bin/bash
+###############################################################################
+# name:
+#   hipparcos_download
+# purpose:
+#   download (and uncompress) the HIPPARCOS (and related) data
+# bugs:
+#   Not complete on radial velocities.
+#   Doesn't rationally choose between CDS and ADC.
+#   Gunzips -- which is stupid -- but my stoopid IDL scripts need it!
+# revision history:
+#   2003-02-18  written - Hogg
+###############################################################################
+#
+# define commands
+WGET="wget --wait=1 --recursive --timestamping --no-host-directories --cut-dirs=10 --no-parent"
+GUNZIP="gunzip -vf"
+#
+# main catalog:
+${WGET} --directory-prefix="/global/data/hipparcos" ftp://cdsarc.u-strasbg.fr/cats/I/239/
+${GUNZIP} /global/data/hipparcos/hip_main.dat.gz
+#
+# radial velocities:
+${WGET} --directory-prefix="/global/data/hipparcos/vr/3_3190B" ftp://adc.gsfc.nasa.gov/pub/adc/archives/catalogs/3/3190B/
+${WGET} --directory-prefix="/global/data/hipparcos/vr/3_3213" ftp://adc.gsfc.nasa.gov/pub/adc/archives/catalogs/3/3213/
+${WGET} --directory-prefix="/global/data/hipparcos/vr/A+AS_110_177" ftp://adc.gsfc.nasa.gov/pub/adc/archives/journal_tables/A+AS/110/177/
+${WGET} --directory-prefix="/global/data/hipparcos/vr/A+AS_124_255" ftp://adc.gsfc.nasa.gov/pub/adc/archives/journal_tables/A+AS/124/255/
+${WGET} --directory-prefix="/global/data/hipparcos/vr/A+AS_135_503" ftp://adc.gsfc.nasa.gov/pub/adc/archives/journal_tables/A+AS/135/503/
+${WGET} --directory-prefix="/global/data/hipparcos/vr/A+AS_137_451" ftp://adc.gsfc.nasa.gov/pub/adc/archives/journal_tables/A+AS/137/451/
+${GUNZIP} /global/data/hipparcos/vr/*/*.gz

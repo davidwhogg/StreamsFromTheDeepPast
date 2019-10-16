@@ -1,0 +1,26 @@
+This directory contains the following:
+
+paper0: aka fitting_gaussians.tex
+	Method paper, make fitting_gaussians.pdf should make this
+
+paperI: aka ms.tex
+	radial velocity content paper, split up into different files
+	paperI.tex
+	several files with tables
+	paperI_figures.tex
+
+	make ms.pdf will make this paper for you, by first constructing
+	ms.tex from the files mentioned above and latexing that
+
+	DON'T edit ms.tex, edit paperI.tex to edit the main body of the text
+	edit paperI_figures.tex to edit the figures section
+	DON'T edit the table files (.txt), changes to the edits should be
+	made in the code that creates them (in streams/pro/rv)
+
+paperII: also known as ms2.tex for now
+	make ms2.pdf should make this
+
+shadowms.tex:
+	has some extra info about the transformations necessary to go from 
+	ra, dec, pmra, pmdec, and plx to l, b, pml, pmb, and distance
+	

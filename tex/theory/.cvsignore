@@ -1,0 +1,7 @@
+*.aux
+*.dvi
+*.eps
+*.log
+stream_direction.pdf
+stream_perturbation.pdf
+figs

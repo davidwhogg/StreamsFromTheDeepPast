@@ -1,0 +1,278 @@
+\documentclass[12pt,preprint]{aastex}
+
+\usepackage{amsmath}
+
+\newcounter{address}
+%\newcommand{\latin}[1]{\textit{#1}}
+%\newcommand{\cf}{\latin{cf.}}
+\newcommand{\eqnnumber}{Equation}
+\newcommand{\eg}{e.g.}
+\newcommand{\ie}{i.e.}
+\newcommand{\Ie}{I.e.}
+%\newcommand{\vs}{\latin{vs.}}
+\newcommand{\etal}{et~al.}
+\newcommand{\Hipparcos}{\textit{Hipparcos}}
+\newcommand{\Gaia}{\textit{Gaia}}
+\newcommand{\Tycho}{Tycho}
+\newcommand{\gcs}{\textit{Geneva-Copenhagen}}
+\newcommand{\normal}{{\cal N}}
+\newcommand{\wishart}{{\cal W}}
+\newcommand{\dirichlet}{{\cal D}}
+\renewcommand{\vec}[1]{\mathbf{#1}} % boldface for vectors
+\newcommand{\inv}{^{-1}}
+\newcommand{\bb}{\vec{b}}
+\newcommand{\cc}{\vec{c}}
+\newcommand{\ee}{\vec{\hat{e}}}
+\newcommand{\mm}{\vec{m}}
+\newcommand{\vv}{\vec{v}}
+\newcommand{\xx}{\vec{x}}
+\newcommand{\zz}{\vec{z}}
+\newcommand{\ww}{\vec{w}}
+\newcommand{\bij}{\bb_{ij}}
+\newcommand{\bbij}{\bij}
+%\newcommand{\cci}{\cc_i}
+%\newcommand{\eex}{\vec{\hat{x}}}
+%\newcommand{\eey}{\vec{\hat{y}}}
+%\newcommand{\eez}{\vec{\hat{z}}}
+%\newcommand{\eer}{\vec{\hat{r}}_i}
+%\newcommand{\eel}{\vec{\hat{l}}_i}
+%\newcommand{\eeb}{\vec{\hat{b}}_i}
+\newcommand{\mmj}{\mm_j}
+\newcommand{\mmk}{\mm_k}
+\newcommand{\vvi}{\vv_i}
+\newcommand{\vvj}{\vv_j}
+%\newcommand{\vvdisk}{\vv_\mathrm{disk}}
+%\newcommand{\Kdisk}{K_\mathrm{disk}}
+%\newcommand{\vvhalo}{\vv_\mathrm{halo}}
+%\newcommand{\vvlsr}{\vv_\mathrm{LSR}}
+%\newcommand{\vvsun}{\vv_\odot}
+\newcommand{\wwi}{\ww_i}
+\newcommand{\wwj}{\ww_j}
+\newcommand{\wwk}{\ww_k}
+\newcommand{\ten}[1]{\mathbf{#1}} % boldface for tensors
+\newcommand{\BB}{\ten{B}}
+\newcommand{\CC}{\ten{C}}
+\newcommand{\QQ}{\ten{Q}}
+\newcommand{\RR}{\ten{R}}
+\renewcommand{\SS}{\ten{S}}
+\newcommand{\TT}{\ten{T}}
+\newcommand{\VV}{\ten{V}}
+\newcommand{\PP}{\mbox{\bf P}}
+\newcommand{\WW}{\ten{W}}
+\newcommand{\II}{\ten{I}}
+\newcommand{\BBij}{\BB_{ij}}
+\newcommand{\CCi}{\CC_i}
+\newcommand{\QQi}{\QQ_i}
+\newcommand{\RRi}{\RR_i}
+\newcommand{\SSi}{\SS_i}
+\newcommand{\VVj}{\VV_{\!j}} % \! must be *inside* the subscript, not outside
+\newcommand{\VVk}{\VV_{\!k}} % \! must be *inside* the subscript, not outside
+%\newcommand{\VVdisk}{\VV_\mathrm{\!disk}}
+%\newcommand{\VVhalo}{\VV_\mathrm{\!halo}}
+\newcommand{\TTij}{\TT_{ij}}
+\newcommand{\TTik}{\TT_{ik}}
+\newcommand{\T}{^{\scriptscriptstyle \top}}   % transpose
+\newcommand{\iT}{^{\scriptscriptstyle -\top}} % inverse transpose
+\newcommand{\tr}{\mathrm{tr}}                 % trace
+\newcommand{\alphaj}{\alpha_j}
+\newcommand{\alphak}{\alpha_k}
+%\newcommand{\alphadisk}{\alpha_\mathrm{disk}}
+%\newcommand{\alphahalo}{\alpha_\mathrm{halo}}
+\newcommand{\qij}{q_{ij}}
+\newcommand{\pij}{p_{ij}}
+\newcommand{\pik}{p_{ik}}
+\newcommand{\qqj}{q_j}
+%\newcommand{\subsamplecolor}{ 0.654<(B-V)< 0.685}
+\newcommand{\trace}{\mathrm{Trace}}
+\newcommand{\norm}{|\!|}
+\newcommand{\MLE}{MLE}
+\newcommand{\EPhi}{\langle\Phi\rangle}
+
+\begin{document}
+
+\title{
+The velocity distribution of nearby stars from \Hipparcos\ data\\
+II. Moving groups
+}
+\author{
+Jo~Bovy\altaffilmark{\ref{NYU},\ref{email}}, 
+David~W.~Hogg\altaffilmark{\ref{NYU}}, 
+and Sam~T.~Roweis\altaffilmark{\ref{Toronto},\ref{Google}}} 
+\setcounter{address}{1}
+\altaffiltext{\theaddress}{\label{NYU}\stepcounter{address}
+Center for Cosmology and Particle Physics, Department of Physics, New York 
+University, 4 Washington Place, New York, NY 10003}
+\altaffiltext{\theaddress}{\stepcounter{address}\label{email}
+To whom correspondence should be addressed: \texttt{jo.bovy@nyu.edu}}
+\altaffiltext{\theaddress}{\label{Toronto}\stepcounter{address}
+Department of Computer Science, University of Toronto, 
+6 King's College Road, Toronto, Ontario, M5S 3G4 Canada}
+\altaffiltext{\theaddress}{\label{Google}\stepcounter{address}
+?}
+\date{\centering{\it Draft, \today}}
+
+\begin{abstract}
+We present a three-dimensional reconstruction of the velocity
+distribution of nearby stars ($\lesssim 100$ pc) using a maximum
+likelihood density estimation technique based on describing the
+distribution function as a mixture of Gaussian components. The density
+estimation technique is applied to the two-dimensional transverse
+velocity measurements from a kinematically unbiased sample of 11,865
+main sequence stars observed by the \Hipparcos\ satellite. The
+algorithm also accounts for the heterogeneous, covariant noise
+properties of the tangential velocity measurements; it returns the
+error-deconvolved density. We explore various methods for validating
+the complexity of the resulting velocity distribution function,
+including how accurately our reconstruction predicts the radial
+velocities of a sample of stars from the \gcs\ survey. Thus, we can
+quantify the information content of the radial velocity measurements,
+which is interesting in the light of the upcoming \Gaia\ mission. We
+find that the mean amount of new information gained from a radial
+velocity measurement of a single star is small and that most of the
+gross outliers are halo stars, the velocity distribution of which is
+not well constrained by our sample. We confirm the existence of
+``moving groups'' in the velocity distribution of the disk of the
+Galaxy, quantifying their statistical significance for the first
+time. We find that the color-magnitude diagrams of most of the moving
+groups are inconsistent with being trails of evaporating, young
+clusters, which favors their interpretation as being due to dynamical
+resonances or non-axisymmetry and time-dependence of the disk
+potential.  Interestingly, we find traces of various ``thick disk''
+and halo streams in this sample of mostly disk stars, although at very
+low significance. We also reconstruct the velocity distribution
+functions of stars in color-subsamples of our main sample as well as a
+sample of giants, and find very similar distributions for all but the
+bluest subsample of stars.
+\end{abstract}
+\keywords{Galaxy: fundamental parameters ---
+Galaxy: kinematics and dynamics ---
+Galaxy: structure ---
+stars: kinematics ---
+methods: statistical ---
+solar neighborhood
+}
+
+
+\section{Introduction}
+
+
+Generalities about the velocity distribution [historical, +
+theoretical]. Use it to predict radial velocities.
+
+Historical:
+\citep{schwarzschild07a,
+proctor69a,
+1890AN....125...65K,
+kapteyn05a,
+1906MNRAS..67...34E,
+boss08a,
+1965gast.conf..111E,
+1996AJ....112.1595E,
+1996AJ....111.1615E}
+
+Ways to determine the velocity distribution + moments: statistical
+deprojection, maximum penalized likelihood, full phase-space
+subsamples. Criticize kernel density estimates. Need for proper
+probabilistic inference to get to the bottom of this.
+
+
+Velocity distribution:
+\citep{1998A&A...340..384C,
+1999A&AS..135....5C,
+1998MNRAS.298..387D,
+1998AJ....115.2384D,
+2005A&A...430..165F,
+1999MNRAS.308..731S,
+2008A&A...490..135A,
+2005ApJ...629..268H}
+
+Methods:
+\citep{1990A&A...227..301S,Silverman86a,1996A&AS..117..405L}
+
+
+
+%1968MNRAS.139..231W, Woolley and Candy: Theoretical: dispersing star clusters get ripped apart by perturbations
+%1970AJ.....75..680I, Innanen and House: Theoretical: oscillations in U and W, stars come together periodically, assumed equal angular momentum for all members
+
+\Hipparcos\ didn't measure radial velocities. \Gaia\ doesn't have many
+radial velocities, important to characterize the information content
+of radial velocities. In general, data sets at the bleeding edge
+always have small signal-to-noise and missing data, need to design
+algorithm to deal with this.
+
+\citep{ESA97a}
+
+Biased radial: \citep{1997ESASP.402..473B}
+
+Radial velocity measurements:
+\citep{1999A&AS..137..451G,
+1999A&AS..135..503G,
+1997A&AS..124..255F,
+1995A&AS..114..269D,
+1995A&AS..110..177D,
+2006ARep...50..733B,
+2000A&AS..142..217B}
+
+
+Follow-up radial velocity measurements for Hipparcos were suggested
+\citep{1989Msngr..56...12G}.
+
+Train data set on known velocities, or validate, then use the
+distribution to infer missing data. 
+
+This paper.
+
+Next paper.
+
+
+
+
+
+
+
+\section{Data, model, and algorithm}
+
+
+\subsection{Objective function}
+
+\citep{1991PASP..103...95N,1993AJ....105.1455N}
+
+\subsection{Optimization}
+
+
+\subsection{\Hipparcos\ measurements}
+\Hipparcos:
+\citep{ESA97a,2007ASSL..250.....V,2007A&A...474..653V}
+
+\Tycho:
+\citep{ESA97a,2000A&A...355L..27H,2000A&A...357..367H}
+
+
+
+
+
+\section{Application to \Hipparcos\ data}
+
+
+\section{The Geneva-Copenhagen survey}
+GCS:
+\citep{2004A&A...418..989N,2007A&A...475..519H,2008arXiv0811.3982H}
+
+\section{The complexity of the model}
+
+
+\section{Information content of the predicted radial velocities}
+
+
+\section{Other radial velocity data sets}
+
+
+\bibliographystyle{apj}
+\bibliography{EM,bovy_streams}
+
+
+
+
+
+
+\end{document}

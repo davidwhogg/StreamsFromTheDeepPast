@@ -1,0 +1,265 @@
+%\documentclass[landscape,a0b,final,a4resizeable]{a0poster}
+%\documentclass[landscape,a0b,final]{a0poster}
+%\documentclass[portrait,a0b,final,a4resizeable]{a0poster}
+\documentclass[portrait,a0b,final]{a0poster}
+%%% Option "a4resizeable" makes it possible ot resize the
+%   poster by the command: psresize -pa4 poster.ps poster-a4.ps
+%   For final printing, please remove option "a4resizeable" !!
+\usepackage{amsmath}
+\usepackage{shadow}
+\usepackage{epsfig}
+\usepackage{pstricks,pst-grad}
+\usepackage{multicol}
+\usepackage{float}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Definition of some variables and colors
+%\renewcommand{\rho}{\varrho}
+%\renewcommand{\phi}{\varphi}
+\newcommand{\tvector}[1]{\boldsymbol{\vec{#1}}}
+\newcommand{\vx}{\tvector{x}}
+\newcommand{\vv}{\tvector{v}}
+\newcommand{\setofxv}{\{\vx_i,\vv_i\}}
+\newcommand{\mvector}[1]{\boldsymbol{{#1}}}
+\newcommand{\mvtheta}{\mvector{\theta}}
+\newcommand{\mvomega}{\alpha,\ln A}
+\newcommand{\dd}{\mathrm{d}}
+\setlength{\columnsep}{1cm}
+\setlength{\columnseprule}{1.5mm}
+\setlength{\parindent}{0.0cm}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%                Poster                        %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newenvironment{poster}{
+  \begin{center}
+  \begin{minipage}[c]{0.98\textwidth}
+}{
+  \end{minipage} 
+  \end{center}
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%                pcolumn                       %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newenvironment{pcolumn}[1]{
+  \begin{minipage}{#1\textwidth}
+  \begin{center}
+}{
+  \end{center}
+  \end{minipage}
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%                pbox                          %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newrgbcolor{lcolor}{0. 0. 0.80}
+\newrgbcolor{gcolor1}{1. 1. 1.}
+\newrgbcolor{gcolor2}{.80 .80 1.}
+
+\newcommand{\pbox}[4]{
+\psshadowbox[#3]{
+\begin{minipage}[t][#2][t]{#1}
+#4
+\end{minipage}
+}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%                myfig                         %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \myfig - replacement for \figure
+% necessary, since in multicol-environment 
+% \figure won't work
+
+\newcommand{\myfig}[3][0]{
+%\begin{center}
+%  \vspace{1.5cm}
+  \includegraphics[width=#3\hsize,angle=#1]{#2}
+%  \nobreak\medskip
+%\end{center}}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%                mycaption                     %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \mycaption - replacement for \caption
+% necessary, since in multicol-environment \figure and
+% therefore \caption won't work
+
+%\newcounter{figure}
+\setcounter{figure}{1}
+\newcommand{\mycaption}[1]{
+  \vspace{0.5cm}
+  \begin{quote}
+    {{\sc Figure} \arabic{figure}: #1}
+  \end{quote}
+  \vspace{1cm}
+  \stepcounter{figure}
+}
+
+
+\newrgbcolor{lightblue}{0. 0. 0.80}
+\newrgbcolor{white}{1. 1. 1.}
+\newrgbcolor{whiteblue}{.8 .8 1.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%               Background                     %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\background}[3]{
+  \psframe[fillstyle=gradient,gradbegin=white,gradend=white,gradmidpoint=1.](-5.,5.)(1.2\textwidth,-1.2\textheight)
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Begin of Document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\background{1. 1. 1.}{1.}{0.5}
+
+\vspace*{2cm}
+
+
+
+%\begin{poster}
+
+%%%%%%%%%%%%%%%%%%%%%
+%%% Header
+%%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+\begin{pcolumn}{0.98}
+
+\pbox{0.95\textwidth}{}{linewidth=2mm,framearc=0.3,linecolor=lightblue,fillstyle=gradient,gradangle=0,gradbegin=white,gradend=whiteblue,gradmidpoint=1.0,framesep=1em}{
+
+%%% Titel
+\begin{minipage}[c][9cm][c]{0.78\textwidth}
+  \begin{center}
+    {\sc \Huge The velocity distribution of nearby stars}\\[10mm]
+    {\sc \Huge from \emph{Hipparcos} data}\\[10mm]
+    {\Large Jo Bovy$^1$, David W.~Hogg$^{1,2}$, \& Sam Roweis$^{3,4}$}\\[2mm]
+    {\large \phantom{q}$^1$ New York University,
+      \phantom{q}$^2$ Max-Planck-Institut f\"{u}r Astronomie,
+      \phantom{q}$^3$ University of Toronto,
+      \phantom{q}$^4$ Google Inc.}
+  \end{center}
+\end{minipage}
+%%% Logo
+\begin{minipage}[c][9cm][c]{0.15\textwidth}
+  \begin{center}
+    \includegraphics[width=18cm,angle=0]{nyulogoblack.eps}
+  \end{center}
+\end{minipage}
+
+}
+\end{pcolumn}
+\end{center}
+
+
+\vspace*{2cm}
+
+
+
+%%% Begin of Multicols-Enviroment
+\begin{multicols}{2}
+%%% Introduction
+%\vspace{2cm}\begin{center}\pbox{0.4\columnwidth}{}{linewidth=2mm,framearc=0.1,linecolor=lightblue,fillstyle=gradient,gradangle=0,gradbegin=white,gradend=whiteblue,gradmidpoint=1.0,framesep=1em}{\begin{center}{\Huge Introduction}\end{center}}\end{center}\vspace{1.25cm}
+
+
+{\Large $\bullet$ Using a deconvolution approach we fit a
+three-dimensional model for the underlying velocity distribution to
+the observed tangential velocities and their uncertainties of a sample
+of 11,865 main sequence stars from \emph{Hipparcos}. This model
+consists of a mixture of $K$ Gaussian distributions, with a
+regularization prior $w$ on the variances of the Gaussians (a weak
+Inverse-Wishart prior). For different combinations of these two
+parameters we find the best fit velocity distribution:}
+%%% Figures:
+\begin{center}
+  % first argument: eps-file
+  % second argument: stretching-factor relative to Column-width (<1)
+  % optional argument: rotation angle (0-360), default=0
+  \myfig{veldensXY.ps}{1}\\[15pt]
+%  \mycaption{}
+\end{center}
+
+
+
+{\Large $\bullet$ For each ($K$,$w$) pair we predict the radial
+velocities of stars in the \emph{Geneva-Copenhagen} radial velocity
+survey (GCS) using our best-fit model and compare these to the
+observed radial velocities. An example for a few stars for $K$=10,
+$w$=4 km$^2$ s$^{-2}$:}
+\begin{center}
+  % first argument: eps-file
+  % second argument: stretching-factor relative to Column-width (<1)
+  % optional argument: rotation angle (0-360), default=0
+  \myfig{predict_gcs_rand.ps}{.9}%\\[2cm]
+%  \mycaption{}
+\end{center}
+Note: the black curve is the prediction for the radial velocity
+conditioned on the measured tangential velocity, while the gray curve
+is not. The black vertical line is the observed velocity and the gray
+vertical lines are 95\,percent confidence limits for the conditioned
+prediction.
+
+{\Large $\bullet$ The preferred underlying model is that which
+predicts the radial velocities best (lower right panel below). A
+number of \emph{internal} validation tests are presented here as well,
+most of which \emph{overestimate} the amount of structure as compared
+with the GCS validation.}
+\begin{center}
+  % first argument: eps-file
+  % second argument: stretching-factor relative to Column-width (<1)
+  % optional argument: rotation angle (0-360), default=0
+  \myfig{crossval.ps}{0.31}
+  \myfig{aic.ps}{0.31}
+  \myfig{mdl.ps}{0.31}\\[.7cm]
+  \myfig{mml.ps}{0.31}
+  \myfig{bayes.ps}{0.31}
+  \myfig{gcs_cross.ps}{0.31}\\[1cm]
+\end{center}
+Note: Shown are (1) leave-one-percent-out cross-validation; (2) entropy
+based Akaike's information criterion (AIC); Minimum coding inference
+based (3) minimum description length (MDL) and (4) minimum message
+length (MML); (5) The Bayesian evidence; (6) total probability of the
+predicted GCS radial velocities.\\[.5cm]
+
+
+
+{\Large $\bullet$ The resulting distribution contains all of the classical moving groups, but nothing beyond those:}
+\begin{center}
+  % first argument: eps-file
+  % second argument: stretching-factor relative to Column-width (<1)
+  % optional argument: rotation angle (0-360), default=0
+  \myfig{annotated_veldist.ps}{1}%\\[1cm]
+%  \mycaption{}
+\end{center}
+Note: Contours and grayscalesn are linear; 50\,percent of the
+distribution is contained within the innermost dark contour.\\[.2cm]
+
+{\large {\bf References:\\} 
+Jo Bovy, David W.~Hogg, \& Sam T.~Roweis, \emph{The velocity distribution of nearby stars from \emph{Hipparcos} data I. The significance of the moving groups}, ApJ, in press, arXiv:0905.2980 [astro-ph]\\
+Jo Bovy, David W.~Hogg, \& Sam T.~Roweis, \emph{Extreme deconvolution: inferring complete distribution functions from noisy, heterogeneous, and incomplete observations}, arXiv:0905.2979 [stat.ME]\\[1.5cm]
+}
+
+{\large {\bf Acknowledgments:} This research was partially supported by NASA (ADP grant NNX08AJ48G)}\\[1cm]
+
+\end{multicols}
+
+%\end{poster}
+
+\end{document}
+

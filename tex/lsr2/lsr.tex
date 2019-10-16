@@ -1,0 +1,115 @@
+\documentclass[12pt,preprint]{aastex}
+\usepackage{amssymb,amsmath}
+%\usepackage{color,hyperref}
+\newcounter{address}
+\setcounter{address}{1}
+% hypertex insanity
+%\definecolor{linkcolor}{rgb}{0,0,0.25}
+%\hypersetup{
+%  colorlinks=true,        % false: boxed links; true: colored links
+%  linkcolor=linkcolor,    % color of internal links
+%  citecolor=linkcolor,    % color of links to bibliography
+%  filecolor=linkcolor,    % color of file links
+%  urlcolor=linkcolor      % color of external links
+%}
+\newcommand{\eqnnumber}{equation}
+\newcommand{\eg}{e.g.}
+\newcommand{\ie}{i.e.}
+\newcommand{\Ie}{I.e.}
+\newcommand{\etal}{et~al.}
+\newcommand{\Hipparcos}{\textit{Hipparcos}}
+\newcommand{\Gaia}{\textit{Gaia}}
+\newcommand{\lsr}{LSR}
+\newcommand{\sgra}{Sgr A$^*$}
+\renewcommand{\vec}[1]{\mathbf{#1}} % boldface for vectors
+\newcommand{\aag}{\ensuremath{\vec{a}}}
+
+\begin{document}
+
+\title{On the Local Standard of Rest}
+\author{
+Jo~Bovy\altaffilmark{\ref{NYU},\ref{email}}, 
+David~W.~Hogg\altaffilmark{\ref{NYU},\ref{MPIA}}} 
+\altaffiltext{\theaddress}{\label{NYU}\stepcounter{address}
+Center for Cosmology and Particle Physics, Department of Physics, New York 
+University, 4 Washington Place, New York, NY 10003}
+\altaffiltext{\theaddress}{\stepcounter{address}\label{email}
+To whom correspondence should be addressed: \texttt{jo.bovy@nyu.edu}}
+\altaffiltext{\theaddress}{\label{MPIA}\refstepcounter{address}
+  Max-Planck-Institut f\"ur Astronomie,
+  K\"onigstuhl 17, D-69117 Heidelberg, Germany}
+
+\begin{abstract}
+We critically examine measurements of the Local Standard of Rest
+(\lsr) and of the Solar motion with respect to the \lsr\ and show that
+both are fraught by systematical uncertainties which dominate the
+uncertainty budget but are rarely accounted for. We argue that in most
+cases of interest the need for these two quantities can be bypassed by
+considering the motion of the Sun with respect to the Galactic center,
+which can be (BOVY: has been?) established at high precision and with
+minimal systematical uncertainty from the apparent motion of \sgra. In
+terms of dynamics, we find it more usefull to think of the local
+gravitational acceleration instead of the velocity of a hypothetical,
+presumably non-existent, circular orbit.
+\end{abstract}
+\keywords{
+Galaxy: fundamental parameters ---
+Galaxy: kinematics and dynamics ---
+Galaxy: structure ---
+methods: statistical ---
+Solar neighborhood ---
+stars: kinematics
+}
+
+\section{Introduction}
+
+The Local Standard of Rest is used a lot
+\citep{1998MNRAS.298..387D}. BOVY: CITE some papers that use this,
+\eg, the RAVE escape speed paper.
+
+
+\section{The Solar velocity with respect to the \lsr}
+
+In this section we follow a number of \emph{ad hoc} procedures to deal
+with the presence of the moving groups in the velocity
+distribution. These ad hoc choices show that the uncertainty in the
+Solar velocity with respect to the \lsr\ is dominated by these
+systematic modeling uncertainties, and not by statistical errors.
+
+
+
+\section{The velocity of the \lsr}
+
+Certainly Reid cannot be trusted. How have other people established
+the velocity of the \lsr. What is the underlying assumption of the
+Oort's constants method?
+
+
+
+\section{Bypassing the \lsr}
+
+By directly measuring the Solar motion with respect to \sgra, the only
+remaining uncertainty becomes the distance to \sgra. This is
+\emph{much better} and \emph{much simpler} than the two-step process
+Sun$\rightarrow$\lsr\ and \lsr$\rightarrow$\sgra.
+
+\section{The local gravitational acceleration}
+
+What we are really measuring is the local gravitational acceleration
+\aag\ and not the velocity of a, hypothetical and presumably
+non-existent, circular orbit with this acceleration. Thinking about
+the local gravitational acceleration instead of about the circular
+velocity makes it clear that we are making assumptions about the
+potential and the tracers we use to measure it. The local
+gravitational acceleration is also something that is always
+well-defined in a general gravitational potential, while circular
+orbits only exist for a very limited number of potentials, none of
+which is likely to describe our Galaxy.
+
+\section{Conclusion}
+
+\bibliographystyle{apj}
+\bibliography{../rv/EM,../rv/bovy_streams,../rv/MML}
+
+
+\end{document}

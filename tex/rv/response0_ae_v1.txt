@@ -1,0 +1,162 @@
+In what follows, the Associate Editor's comments are indented.
+
+	Firstly, the AE apologizes on behalf of AoAS and the referee
+	for delay in the report, due to inopportune timing with
+	respect to other obligations, first for the referee, and then
+	for the AE.  The sequential timing conflicts compounded modest
+	delays into a significant one, for which all parties are
+	sorry.
+
+	The reviewer found the general statistical problem posed in
+	this paper to be novel and challenging from a statistical
+	perspective, and its possible applications to be very well
+	suited to AoAS.  However, the paper has significant
+	defficiencies, the foremost being too-limited attention to the
+	applications, and the paper was judged unsuitable for AoAS in
+	its present form.  The reviewer encourages the authors to make
+	significant revisions and anticipates a revision could be "a
+	*terrific* paper."  The editors agree with this assessment and
+	very much hope a significant revision is pursued.  The report
+	is relatively brief but does offer specific suggestions for
+	the revision.  In these comments the editors would like to
+	expand on some of the reviewer's comments.
+
+	The most important point is that a revision should reverse the
+	emphasis of the submitted manuscript.  Most of the current
+	paper focuses on an abstract (and in places vague) discussion
+	of multivariate reduced-rank density estimation with
+	measurement error, with no clear and concrete motivating
+	problems, and with a closing section on applications that is
+	too short and that spends too much time on a simple special
+	case.  A revision should present concrete motivating problems
+	(including some discussion of the scientific motivation, i.e.,
+	the value to astronomy of having a good solution), discuss the
+	theory at a level appropriate to a statistics journal (albeit
+	one with a broad readership), and offer "meaty" applications
+	demonstrating the virtues of the new methodology (e.g., a more
+	extensive discussion of the Hipparcos example).
+
+We have reversed the emphasis of the paper. We now present a more
+detailed scientific motivation for the development of the method in
+the introduction (much of the material that used to be in the
+introduction to the "Applications" section) and we motivate why in the
+sciences, and astronomy in particular, one often knows the uncertainty
+properties of the data very well, while the uncertainties are
+heteroskedastic. We expanded the discussion of the Hipparcos example
+to provide a more detailed and self-contained description of the
+problem and its solution.
+
+
+	Regarding the level, as noted by the referee, some of the
+	lengthy expository material (a page-long footnote, and the
+	matrix algebra and EM algorithm appendices) covers material
+	that is mostly well known or straightforward.  Relevant
+	literature could be cited for some of this; if it is judged
+	that some of the known material would be particularly valuable
+	to some readers, it should be compiled in a separate online
+	technical supplement (this is a fairly common practice for
+	AoAS).  We suggest the same treatment for the "logsum"
+	material in App A; such computational tricks appear to us to
+	be widely known and not worthy of two pages (e.g., the
+	"add_lns" Matlab module or the "logsumexp" function in SciPy
+	address similar problems).  If the App A method is superior,
+	it should be compared to existing methods, but still moved to
+	an online supplement.
+
+We deleted most of the lengthy derivations, both in the main body of
+the text and in the appendices. In particular, we removed the appendix
+on the original EM algorithm, and the appendix on the matrix
+algebra. We also shortened the derivation of the algorithm in the main
+body of the text and shortened the proof that the algorithm works (we
+also moved this proof to an appendix). Our discussion of the
+extensions to the basic algorithm was also significantly shortened to
+just focus on the essentials, and we moved most of the details of the
+split-and-merge procedure to an appendix.
+
+As for the logsum material, we removed it from the paper, even though
+we still believe that it is in principle a better algorithm than the
+"logsumexp" and "add_lns" algorithms. We say in principle, because we
+cannot find a single practical instance where the difference
+matters! The only situations in which our algorithm is better is when
+one tries to sum large numbers (e.g., 10^308) of terms over a large
+dynamic range (e.g., >~ 10^308). These situations are unlikely to
+arise in practice.
+
+	The authors display significant mastery of the large and
+	complex literature on mixture models in the paper.  However,
+	the problems addressed involve densities (modeled by mixtures)
+	whose samples are measured *with measurement error*.  There is
+	significant literature on density estimation with measurement
+	error (even some in astronomy); none of this literature is
+	cited.  In fact, both the model and the approach are novel
+	when placed in the context of previous work.  But the context
+	is needed; in fact, it can be used to motivate some aspects of
+	the adopted approach.  The relevant literature in statistics
+	appears under terminology that may not be obvious: "density
+	deconvolution," "estimation of mixing densities," and
+	"demixing" are the most common key terms.  Within this
+	context, the novelty of this work is with respect to:
+	
+	* Multivariate observables with reduced rank vs. the estimands;
+	* Heteroskedasticity of the error distribution;
+	* Use of the mixture model (the best-studied methods are fully
+	  nonparametric methods based on Fourier deconvolution in the
+	    homoskedastic setting; this approach has significant limitations).
+
+We would like to thank the Associate Editor for pointing out this
+literature to us, since it has allowed us to put our method in a
+broader context. We do this now in the introduction and have cited the
+main relevant literature on these topics.
+
+	The reviewer's comment #6 (regarding the digression to linear
+	regression with measurement error in S 6.2) should be taken to
+	heart.  The digression is particularly disappointing in that
+	this problem is already well-treated in the astronomy
+	literature by Kelly (2007), a paper cited by the authors, and
+	notable for its attention to prior work in the statistics
+	literature.  This is the most-discussed application in the
+	paper, but it is the least interesting and least innovative.
+	If it is kept, a more thorough comparison with prior work in
+	astronomy and statistics is needed.  As the referee noted,
+	linear regression with measurement errors is a problem with
+	several spins, each with a significant existing literature.
+	It was strange to see the only references in this section to
+	be dated papers from physical science journals whose authors
+	developed useful methods, but with scant attention to existing
+	literature that treated such problems more carefully.
+	Relevant modern references include the Fuller book cited by
+	the referee, and:
+
+	Measurement error in nonlinear models By Raymond J. Carroll,
+	David Ruppert, Leonard A. Stefanski
+	http://books.google.com/books?id=FS-x3tPdXeMC&dq=carroll+ruppert+nonlinear+measurement+error&source=gbs_navlinks_s
+
+	Both books are well known and highly regarded.  They offer
+	extensive coverage of regression with measurement error, but
+	scant coverage of density estimation; work in that area has
+	yet to be the focus of a monograph (to our knowledge).
+
+We removed the application of fitting a line from the paper.
+
+	The referee noted the absence of discussion of the label
+	switching problem in regard to Bayesian treatment of mixture
+	models.  A standard reference reviewing work on this up to
+	2005 is:
+
+	Markov Chain Monte Carlo Methods and the Label Switching
+	Problem in Bayesian Mixture Modeling A. Jasra, C. C. Holmes,
+	and D. A. Stephens Statist. Sci. Volume 20, Number 1 (2005),
+	50-67.
+	http://projecteuclid.org/DPubS?service=UI&version=1.0&vrb=Display&handle=euclid.ss/1118065042
+
+	These authors do not treat measurement error models, but that
+	aspect of the problem does not affect the label switching
+	issue.  There are also some more recent developments.
+
+Thanks for pointing us to this reference. We added it to the
+discussion of the section in which we introduce the Bayesian priors.
+
+	We agree with the referee that the authors' work has the
+	makings of a "terrific" paper.  We hope a substantial revision
+	is undertaken so that such a paper may be published in AoAS in
+	the near future.

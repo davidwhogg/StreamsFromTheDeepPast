@@ -1,0 +1,37 @@
+Numbers for FAME:
+
+	launch 		- 2004
+	accuracy	-  50muas (mv<9)
+			  500muas (mv<15)
+			=>200muas (mv<12)?
+
+Assume we want to survey same volume (ie d < 100pc). How many more
+stars?
+
+	IMF 			dN/dM=M^-2.35
+	M/L relation		L \propto M^3 (?)
+	
+
+	m1-m2=delta mv
+	=> f1/f2=10**[-delta mv/2.5]
+
+	m2=15, m1=12.5 => factor of 10 in flux sensitivity
+		       => factor of 10 in luminosity probed
+		       => factor > 2 in mass (from M/L)
+
+	Hipparcos absolute mag limit at 100pc is 7.5
+			=> L = 1/10 Lsun
+			=> M = 1/2 Lsun
+
+	N_hipp \propto int_0.5^60 M^-2.35 \propto [-M^-1.35]_0.5^60
+	N_fame \propto int_0.25^60 M^-2.35 \propto [-M^-1.35]_0.25^60
+
+	N_fame/N_hipp=(1-(240)^-1.35)/(2^-1.35-(240)^-1.35) \sim 2.5
+
+	Note: this assumes we originally had NO stars with M>7.5 and hence
+	overestimates the improvement.
+
+
+Assume we go out to 200pc gain factor 8 in numbers.....Is this reasonable?
+	delta v \sim (200/8000)*200 km/s \sim 5 km/s
+

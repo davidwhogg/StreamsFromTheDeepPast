@@ -1,0 +1,298 @@
+\documentclass{article}
+
+\usepackage{nips00e,times}
+\usepackage{epsfig}
+%\graphicspath{{:figs:}}
+
+\def\beq#1\eeq{\begin{equation}#1\end{equation}}
+\def\beqa#1\eeqa{\begin{eqnarray}#1\end{eqnarray}}
+
+\newcommand{\bv}[1]{\mbox{\boldmath ${#1}$}} % boldface for vectors
+\newcommand{\T}{^{\scriptscriptstyle \top}}
+\newcommand{\iT}{^{\scriptscriptstyle -\top}}
+\newcommand{\inv}{^{-1}}
+\newcommand{\<}{\langle}
+\renewcommand{\>}{\rangle}
+
+\newcommand{\XX}{\bv{X}}
+\newcommand{\YY}{\bv{Y}}
+\newcommand{\cc}{\bv{c}}
+\newcommand{\oo}{\bv{1}}
+\newcommand{\pp}{\bv{p}}
+\newcommand{\qq}{\bv{q}}
+\newcommand{\vv}{\bv{v}}
+\newcommand{\zz}{\bv{z}}
+\newcommand{\xx}{\bv{x}}
+\newcommand{\yy}{\bv{y}}
+\newcommand{\yyi}{\bv{y}_i}
+\newcommand{\yyj}{\bv{y}_j}
+\newcommand{\yyk}{\bv{y}_k}
+\newcommand{\xxi}{\bv{x}_i}
+\newcommand{\xxj}{\bv{x}_j}
+\newcommand{\pij}{p_{ij}}
+\newcommand{\pji}{p_{ji}}
+\newcommand{\piz}{p_{i0}}
+\newcommand{\pjz}{p_{j0}}
+\newcommand{\qij}{q_{ij}}
+\newcommand{\qji}{q_{ji}}
+\newcommand{\qiz}{q_{i0}}
+\newcommand{\qjz}{q_{j0}}
+\newcommand{\dij}{d_{ij}}
+\newcommand{\dji}{d_{ji}}
+\newcommand{\dik}{d_{ik}}
+\newcommand{\Dij}{D_{ij}}
+\newcommand{\Dik}{D_{ik}}
+\newcommand{\qqj}{q_j}
+\newcommand{\TTij}{T_{ij}}
+\newcommand{\TTik}{T_{ik}}
+\newcommand{\xxn}{\bv{x}_{n}}
+\newcommand{\qqn}{\bv{q}_{n}}
+\newcommand{\bij}{\bv{b}_{ij}}
+\newcommand{\bbj}{\bv{b}_j}
+\newcommand{\BBij}{B_{ij}}
+\newcommand{\BBj}{B_j}
+\newcommand{\LL}{\Lambda}
+\newcommand{\CC}{C}
+\newcommand{\WW}{W}
+\newcommand{\RR}{R}
+\newcommand{\WWj}{W_j}
+\newcommand{\RRi}{R_i}
+\newcommand{\SSi}{S_i}
+\newcommand{\VVj}{V_j}
+\newcommand{\II}{I}
+\newcommand{\uu}{\bv{\mu}}
+\newcommand{\mm}{\bv{m}}
+\newcommand{\mmj}{\bv{m}_j}
+\newcommand{\mmk}{\bv{m}_k}
+\newcommand{\pii}{\psi^{-1}}
+\newcommand{\alphaj}{\alpha_j}
+\newcommand{\betaj}{\beta_j}
+\newcommand{\alphak}{\alpha_k}
+\renewcommand{\SS}{S}
+%\renewcommand{\AA}{A}
+%\newcommand{\Fb}{{F}}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{\bf Projected Mixtures}
+
+\author{Blanton, Hogg, Johnston, Roweis, Zaldarriaga}
+
+\maketitle
+%\sloppy
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{abstract}
+Research notes about the projected mixtures model.
+This is what Hogg calls the ``uber algorithm''. There are some
+underlying true quantities $\xx$ which cannot be observed but over which we
+want to fit a density in the form of a Gaussian or mixture of
+Gaussians. What we can observe are quantities $\yy$, and each time we
+get such an observation we are told a (possibly nonsquare) matrix that
+was used to project the true $\xx$ onto the $\yy$ we observed as well
+as the covariance matrix (in $\yy$ space) for the observation. These
+projection matrices and noise covariances can be different for each
+observation. The goal is to fit a mixture in the underlying
+(unobserved) space which maximizes the marginal likelihood of the
+observations, integrating over all possible values of the unknown true
+quantity. This note derives an EM algorithm for maximizing this
+marginal likelihood on a dataset.
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The Model}
+The setup is as follows:
+\begin{itemize}
+\item high dimensional, unobserved data $\xxi$ drawn independent and
+identically distributed (iid) from $p(\xx)$
+\item low dimensional observations $\yyi=\RRi \xxi + \mathrm{noise}$
+\item known nonsquare projection matrices $\RRi$
+\item known measurement noise covariance $\SSi$ (assumed Gaussian)
+\end{itemize}
+
+We parametrize the density model for $\xx$ as a mixture of $K$
+Gaussians:
+\beqa
+p(j) &=& \alphaj\\
+p(\xx|j) &=& {\cal N}(\xx|\mmj,\VVj)\\
+p(\xx) &=& \sum_{j=1}^K \alphaj {\cal N}(\xx|\mmj,\VVj)
+\eeqa
+
+For a known projection matrix and noise covariance in
+$\yy$ space the induced density is a conditional mixture of 
+Gaussians on $\yy$:
+\beqa
+p(\yy,\xx,j) &=& p(\yy|\xx)p(\xx|j)p(j)\\
+p(\yy|\xx,\RR,\SS) &=& {\cal N}(\yy|\RR\xx,\SS)\\
+p(\yy|\RR,\SS) &=& \sum_j \int_{\xx} p(\yy|\xx)p(\xx|j)p(j) d\xx\\
+p(\yyi|\RRi,\SSi) &=& \sum_{j=1}^K \alphaj {\cal N}(\yyi|\RRi\mmj,\TTij)\\
+\TTij &=& \RRi\VVj\RRi\T+\SSi
+\eeqa
+
+
+\section{Objective Function}
+The objective is to maximize the conditional likelihood of the
+low-dimensional projected observations given the nonsquare matrices
+and the error covariances. Assuming the noise on each observation is
+independent of other observation noises this gives:
+\beqa
+\phi &=& \log p(\{\yy\}|\{\RR,\SS\})\\
+&=& \sum_i \log p(\yyi|\RRi,\SSi)\\
+&=& \sum_i \log \sum_j \alphaj {\cal N}(\yyi|\RRi\mmj,\TTij)
+\eeqa
+
+We can optimize this in several ways. One approach is to directly take
+gradients and use a generic (e.g. conjugate gradient) optmizer to
+ascend the objective (see ???). Another approach is to view the
+high-dimensional quantities as hidden variables and use the
+expectation-maximization (EM) algorithm to iteratively maximize the
+likelihood function. 
+
+
+\section{EM algorithm generalities}
+The EM algorithm optimizes the likelihood by
+establishing a variational free energy which is a lower bound on the
+likelihood and increasing this lower bound by coordinate ascent.
+
+For any distribution $\qq(\xx,j|\yy)$ we can lower bound $\log p(\yy)$
+by a functional $F(\qq)$:
+\beqa
+\log p(\yy|\theta) &=& \log \sum_j \int_{\xx} p(\yy,\xx,j|\theta) d\xx\\
+&=& \log \sum_j \int_{\xx} \qq \frac{p(\yy,\xx,j|\theta)}{\qq} d\xx\\
+&\geq& \sum_j \int_{\xx} \qq \log \frac{p(\yy,\xx,j|\theta)}{\qq} d\xx 
+= F(\yy|\qq,\theta)\\
+&\geq& F(\yy|\qq,\theta) = \sum_j \int_{\xx} \qq(\xx,j|\yy)
+ \left [ \log p(\yy,\xx,j|\theta)  - \log \qq (\xx,j|\yy) \right ] d\xx\\
+\log p(\yy|\theta) &\geq& F(\yy|\qq,\theta) = 
+\left \langle \log p(\yy,\xx,j|\theta) \right
+\rangle_{\qq} + {\cal H}(\qq)
+\eeqa
+
+Our strategy is now coordinate maximization of $F$.
+
+In the ``E-step'' we maximize $F$ with respect to the 
+variational distribution $\qq$. It is easy to show (for example by
+checking that it saturates the bound on $F$) that the maximizing
+distribution $q$ is the conditional distribution of $\xx$ and $j$
+given the observations $\yy$ and the current parameters:\\[.2in]
+\centerline{{\bf E-step}: $\quad q^{t+1}(\xx,j) = p(\xx,j|\yy,\theta^t)$}
+
+In the ``M-step'' we maximize $F$ with respect to
+the parameters $\theta$. This maximization reduces to maximization of
+the expected complete log likelihood under the current variational
+distribution (since the entropy of $q$ does not depend on $\theta$):\\[.2in]
+\centerline{{\bf M-step}: $\quad \theta^{t+1} \: = 
+\mathrm{argmax}_\theta \: \sum_j\int_{\xx} q^{t+1}(\xx,j) 
+\log p(\yy,\xx,j|\theta^t)$ d\xx}
+
+
+\section{EM Algorithm for Projected Mixtures}
+Deriving the E-step and M-step for the particular projected mixtures
+model given above leads to the following update equations:
+\begin{itemize}
+\item E-step:
+\beqa
+\qq(\xx,j|\yyi) &=& \qq(j|\yyi)\qq(\xx|j,\yyi)\\
+ q(j|\yyi) &=& \qij = \frac{\alphaj {\cal N}(\yyi|\RRi\mmj,\TTij)}
+{\sum_k \alphak {\cal N}(\yyi|\RRi\mmk,\TTik)}\\
+q(j) &=& \qqj = \sum_i \qij\\
+q(\xx|\yyi,j) &=& {\cal N}(\xx|\bij,\BBij)\\
+\bij &=& \mmj+\VVj\RRi\T\TTij\inv(\yy-\RRi\mmj)\\
+\BBij &=& \VVj-\VVj\RRi\T\TTij\inv\RRi\VVj\T
+\eeqa
+\item M-step:
+\beqa
+\alphaj &\leftarrow& \frac{1}{N} \sum_i \qij\\
+\mmj &\leftarrow& \frac{1}{\qqj} \sum_i \qij \bij\\
+\VVj &\leftarrow& \frac{1}{\qqj} \sum_i \qij \left [
+(\mmj-\bij)(\mmj-\bij)\T+\BBij \right]\\
+\TTij &\leftarrow& \RRi\VVj\RRi\T+\SSi
+\eeqa
+\end{itemize}
+
+Some care must be taken to implement these equations in a numerically
+stable way. In particular, care should be taken to avoid underflow
+when computing the ratio of a small probability over the sum of other
+small probabilities. Notice that we don't have to explicitly enforce
+constraints on parameters, e.g. keeping covariances symmetric and
+positive definite since this is taken care of by the updates.
+For example, the update equation for
+$\VVj$ is guaranteed by its form to produce a symmetric nonnegative
+definite matrix.) 
+
+
+\section{Application to Hipparcos Data}
+Potentially, the hidden points $\xx$ could be velocities, or phase
+pairs of position-velocity or phase-colour-magnitude tuples.
+In the case of the Hipparcos data, we view $\xxi$ as the true
+three-dimensional velocity of star $i$, $\yyi$ as the measurement of
+its tangential velocity and $\RRi$ as a nonsquare projection matrix
+specific to the star that depends on the position at which it was
+observed. The quantities $\yyi$ and $\RRi$ can be computed 
+trigonometrically from $RA$, $Dec$, the parallax $\mu$ and
+the proper motions $\dot{RA}$,$\dot{Dec}$. (In particular, Hogg has a
+piece of code started from some of KVJ's code to do this.)
+The errors are not really Gaussian at all, but for small errors
+we can make this approximation we think.
+
+
+\section{Local Mimina, Initialization, Number of Clusters}
+Local minima can be a problem. We can use split-merge techniques
+to quickly search by way of non-local moves. We can also initialize to
+a good spot rather than randomly. The ``one-step-lookahead'' heuristic
+is useful for this also.
+
+\subsection{Initialization with Projected K-means}
+Hard assign each point $\yyi$ to the cluster $c(i)$ which
+minimizes its error:
+\beq
+c(i) = \arg\min_j \quad (\yyi - \RRi\mmj)\T\SSi\inv(\yyi - \RRi\mmj)
+\eeq
+Now update the means $\mmj$ to minimize the average error:
+\beq
+\mmj \leftarrow \left ( \sum_{c(i)=j} \RRi\T \SSi\inv \RRi \right )\inv 
+\left ( \sum_{c(i)=j} \RRi\T\SSi\inv \yyi \right )
+\eeq
+
+\subsection{Chosing number of clusters}
+Model does not include a way of setting number of clusters.
+If we just seek to maximize likelihood then we will overfit
+and use 1 cluster per datapoint in the absurd limit.
+
+One strategy: come up with entropy-style penalizers. I think this is a
+bad idea. 
+
+Another strategy: use cross validation on density of hold-out data to
+esimate number of clusters. This tells you the real money answer: if
+you had to pay for overfitting/underfitting, what would you do.
+
+
+\subsection{Alternate fitting approach: direct gradients}
+
+Also possible to optimize by directly computing gradients of
+the parameters, and forgetting EM. Then we can just use gradient
+ascent or conjugate gradient or whatever. (ie implicitly integrating
+over the 3d velocities)
+
+Since many optimizers operate with unconstrained
+parameters, if we want to follow this programme, it may help to
+reparametrize the model in terms of unconstrained quantities:
+\beqa
+\alphaj &= \frac{\exp(\betaj)}{\sum_{j'} \exp(\beta_{j'})}\\
+\VVj &= \WWj\WWj\T
+\eeqa
+which automatically enforces $\sum_j \alphaj =1$ and $\VVj$ symmetric
+nonegative-definite for any values of $\betaj$ and $\WWj$.
+
+The derviatives of the objective function with respect
+to these new parameters are given by:
+
+SAM TO FILL IN HERE EVENTUALLY, BUT EM IS WORKING FINE FOR NOW
+
+\subsection*{References}
+
+\end{document}
+

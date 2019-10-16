@@ -1,0 +1,215 @@
+\documentclass[12pt]{article}
+\usepackage{amssymb,amsmath}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\tvector}[1]{\boldsymbol{\vec{#1}}}
+\newcommand{\unitz}{\tvector{\hat{z}}}
+\newcommand{\vx}{\tvector{x}}
+\newcommand{\vv}{\tvector{v}}
+\newcommand{\vI}{\tvector{I}}
+\newcommand{\vphi}{\tvector{\phi}}
+\newcommand{\vomega}{\tvector{\omega}}
+\newcommand{\LL}{\tvector{L}}
+\newcommand{\rperi}{\ensuremath{r_{\mbox{{\footnotesize peri}}}}}
+\newcommand{\rap}{\ensuremath{r_{\mbox{{\footnotesize ap}}}}}
+\newcommand{\matrixleft}{\left[}
+\newcommand{\matrixright}{\right]}
+\newcommand{\freqrfreqphiprop}{I}
+\newcommand{\eqnname}{equation}
+\newcommand{\T}{^{\scriptscriptstyle \top}}   % transpose
+\begin{document}
+
+Remarkably, when a satellite of the Galaxy is tidally stripped---that
+is, when stars leave orbits that circumnavigate the satellite and
+enter onto orbits that circumnavigate only the larger Galaxy---the
+tidal debris generically forms into long, thin structures in
+configuration space, hewing close to the original satellite orbit.
+This document investigates the theoretical properties of these tidal
+streams by asking the following: Does a cold stellar stream created by
+tidal stripping of a cold satellite ``trace out'' a test-particle
+orbit?  Clearly it does not, exactly, but here I seek to make the
+question extremely precise, and answer it.
+
+In what follows, I will assume that the satellite and tidal debris are
+of vanishing mass compared to the parent Galaxy, and that the parent
+Galaxy potential is time-independent and integrable.  That is, I will
+assume that the phase-space position $[\vx,\vv]$ of a particle
+orbiting in the Galaxy potential can be written as (canonically
+transformed to) new coordinates $[\vI,\vphi]$, where $\vI$ is the
+position in the three-dimensional space of conserved
+(time-independent) actions and $\vphi$ is the position in the
+three-dimensional space of conjugate angles, which cycle linearly with
+time at angular velocity $\vomega$.  By construction, the angular
+velocity is independent of time (or position in angle space), but in
+general it is a function of position in action space.
+
+There are two senses in which one could mean to say that a stream does
+\emph{not} trace out a test-particle orbit.  The first (and to my
+mind, trivial) sense is that because the different stars in the stream
+have different \emph{actions}.  There is, at least at late times, an
+action gradient along the stream; this is what causes the stream to
+elongate with time.  The existence of this action gradient means that
+the stream does not trace out or enclose a single test-particle orbit:
+The different stars in the stream are in fact on minutely different
+orbits.
+
+The second sense in which a stream might not trace out an orbit is
+\emph{in addition} to this; it is the sense in which the
+\emph{direction of elongation} of the stream need not be in the
+\emph{orbital direction}.  Consider two test particles, $i$ and $j$,
+with very slightly different phase-space positions.  For definiteness,
+let's define a mean phase-space position
+\begin{equation}
+[\vI,\vphi] \equiv \frac{1}{2}
+ \,\left([\vI_j,\vphi_j] + [\vI_i,\vphi_i]\right) \quad ,
+\end{equation}
+and a displacement from the mean
+\begin{equation}
+[\delta\vI,\delta\vphi] \equiv \frac{1}{2}
+ \,\left([\vI_j,\vphi_j] - [\vI_i,\vphi_i]\right) \quad ,
+\end{equation}
+and the equivalents in the $[\vx,\vv]$ coordinates.
+
+Begin (at time $t=0$) with infinitesimal displacements
+$[\delta\vI,\delta\vphi(0)]$.  The angle-space part of the phase-space
+positions of the particles will diverge; the displacement
+$[\delta\vI,\delta\vphi(t)]$ will grow with time $t$.  Will these
+particles diverge along the direction of motion; will $\delta\vphi(t)$
+grow parallel to $\vomega$ or will $\delta\vx(t)$ grow parallel to
+$\vv(t)$?  Again, not \emph{exactly}, since they are on slightly
+different orbits.  But we can take the limits
+$[\delta\vI,\delta\vphi(0)]\rightarrow [0,0]$ and $t\rightarrow
+\infty$ such that the magnitude of the displacement $\delta\vphi(t)$
+is kept small but finite.  In this limit, will the line segment
+joining the two particles lie along an orbit?
+
+It is particularly instructive to think about this problem in
+action--angle space.  In these coordinates, $\delta\vI$ is not a
+function of time at all, because the actions are conserved (by
+construction).  Divergence of the trajectories is confined to the
+angle subspace.  Furthermore, because all particles cycle their angles
+linearly, the particles will diverge linearly in the angle subspace;
+that is
+\begin{equation}
+\delta\vphi(t) = \delta\vphi(0) + \delta\vomega\,t \quad ,
+\end{equation}
+where $\delta\omega$ is a constant angular frequency that can be
+computed from the action displacement
+\begin{equation}
+\delta\vomega = \frac{\dd\vomega}{\dd\vI}\cdot\delta\vI \quad ,
+\end{equation}
+where we are thinking of the vectors like column vectors, the
+derivative is the full $3\times 3$ matrix of derivatives, we have used
+the fact that $\vomega$ depends only on the actions $\vI$, and we have
+implicitly taken the limit $\delta\vI\rightarrow 0$.  In these
+coordinates, the question of whether the displacement grows in the
+direction of the stream can be written as follows: Is $\delta\vomega$
+parallel to $\vomega$ for generic action displacements $\delta\vI$?
+
+Obviously, the general answer is ``no'' in that we \emph{can} find
+action displacements $\delta\vI$ for which the angular velocities
+$\vomega$ and $\delta\vomega$ will not be parallel, provided that the
+matrix of derivatives has high rank.  However, the question is not a
+mathematical one; it is a physical one: One sense in which the answer
+might be ``yes'' is if the matrix of derivatives is of low rank;
+another is if the matrix of derivatives has has one eigenvalue that is
+substantially larger than the others, with an eigenvector parallel to
+$\vomega$ (or something like that, no?).  In these cases, although not
+\emph{all} pairs of test particles will diverge along the orbit
+direction, given a cloud or ball of test particles in phase-space, the
+direction that would elongate most quickly would be parallel to the
+direction of motion.
+
+Now, is \emph{this} true in general, or at least of the Galaxy?  It
+certainly seems to be true in certain limits, for example when
+considering nearly circular orbits in a spherical potential (although
+in a spherical potential, I am not sure that the matrix of derivatives
+is of high rank).  
+
+\paragraph{The relation between $\omega_r$ and
+$\omega_\phi$ in a spherical potential} 
+We write the energy for a spherical potential $u(r)$ as
+\begin{equation}
+\epsilon= u(r) + \frac{|\LL|^2}{2\,r^2} + \frac{1}{2}v_r^2\, .
+\end{equation}
+Choosing coordinates such that $\LL = L_z\,\unitz$, we can take the actions to be
+\begin{align}
+J_\phi &= L_z\, ,\\
+J_\theta &=0\, ,\\
+J_r &= \frac{1}{\pi} \int_{\rperi}^{\rap} \dd r\, \frac{1}{r} \sqrt{2[\epsilon-u(r)]\, r^2 - L^2}\, ,
+\end{align}
+where we have defined $L^2 \equiv |\LL|^2$. In order to find the
+orbital frequencies $\omega_i = \frac{\dd H}{\dd J_i}$, where $H$ is
+the Hamiltonian, we can consider the following
+\begin{align}
+\frac{\partial J_r}{\partial H} &= \frac{1}{\pi} \int_{\rperi}^{\rap} \dd r\, \frac{r}{\sqrt{2[\epsilon-u(r)]\,r^2-L^2}}\, ,\\
+\frac{\partial J_r}{\partial L_z} &= -\frac{1}{\pi} \int_{\rperi}^{\rap} \dd \,\frac{1}{r}\,\frac{L_z}{\sqrt{2[\epsilon-u(r)]\,r^2-L^2}}\, ,\\
+\frac{\partial J_\phi}{\partial H} &= 0\, ,\\
+\frac{\partial J_\phi}{\partial L_z} &= 1\, .
+\end{align}
+Inverting the matrix $\frac{\partial(J_r,J_\phi)}{\partial(H,L_z)}$
+gives us
+\begin{equation}
+\frac{\partial (J_r, J_\phi)}{\partial (H,L_z)} = \matrixleft \begin{array}{cc} \frac{2\,\pi}{T_r} & \frac{2\,\pi}{T_r}\freqrfreqphiprop  \\ 0 & \frac{2\,\pi}{T_r}\end{array}\matrixright\, ,
+\end{equation}
+where we have defined the radial period
+\begin{equation}
+T_r \equiv 2\int_{\rperi}^{\rap} \dd r\, \frac{r}{\sqrt{2[\epsilon-u(r)]\,r^2-L^2}}\,
+\end{equation}
+and the function $\freqrfreqphiprop$
+\begin{equation}
+\freqrfreqphiprop= \frac{1}{\pi} \int_{\rperi}^{\rap} \dd r\, \frac{1}{r} \, \frac{L_z}{\sqrt{2[\epsilon-u(r)]\,r^2-L^2}}\, .
+\end{equation}
+Therefore, we see that the following relation holds between the radial
+frequency $\omega_r$ and the azimuthal frequency $\omega_\phi$
+\begin{equation}
+\omega_\phi = I\, \omega_r\, .
+\end{equation}
+
+
+\paragraph{Does a cold stellar stream trace out a test-particle orbit?}
+In the simplest case the factor I does not depend on the actions. This
+is, for example, the case for a Kepler potential (for which $I=1$), or
+for the harmonic oscillator potential (for which $I=1/2$). In this
+case a cold stellar stream will trace out an orbit, since the matrix
+of derivatives $\frac{\dd\vomega}{\dd\vI}$ is then of the form
+\begin{equation}\label{eq:constmatrix}
+\matrixleft \begin{array}{cc} A & B\\ A\,I& B\,I\end{array}\matrixright\, ,
+\end{equation}
+because
+\begin{equation}
+\frac{\partial \omega_\phi}{\partial J_i} = I\,\frac{\partial
+  \omega_r}{\partial J_i} \qquad \qquad i=r,\phi\, .
+\end{equation}
+The matrix in \eqnname~(\ref{eq:constmatrix}) has eigenvalues 0,
+$A+B\,I$, with associated eigenvalues $\matrixleft \begin{array}{cc} B
+& -A \end{array}\matrixright\T$ and $\matrixleft \begin{array}{cc} 1
+&I\end{array}\matrixright\T$. Therefore, the dominant eigenvector is
+in the direction of $\vomega$, while the eigenvalue associated with
+the other eigenvalue is zero. Therefore, the stream will trace out an
+orbit in all cases.
+
+Now, if the proportionality factor $I$ between $\omega_\phi$ and
+$\omega_r$ is not constant, then when
+\begin{equation}
+\delta \equiv \frac{\partial \ln I}{\partial \ln \omega_r} \ll 0 \qquad \qquad \epsilon \equiv \frac{\partial \ln I}{\partial \ln \omega_\phi} \ll 0\, ,
+\end{equation}
+then the tidal stream will approximately trace out an orbit. In this
+case the eigenvalues are $ABI(\epsilon-\delta)/(A+BI)$ and $(A+BI) +\
+\frac{BI}{A+BI}(A\delta+BI\epsilon)$, with associated eigenvectors
+$\matrixleft \begin{array}{cc} -\frac{B}{A} +
+\frac{B^2I}{2A(A+BI)}(\delta-\epsilon) & 1 \end{array}\matrixright\T$
+and $\matrixleft \begin{array}{cc} \frac{1}{I}
++\frac{1}{A+BI}(B\epsilon-A\delta) &1\end{array}\matrixright\T$ (BOVY:
+check this).
+
+\paragraph{The case of the logarithmic potential}
+The potential $u(r)$ for an isothermal sphere is given by
+\begin{equation}
+u(r) = v_c(r_0)^2 \ln (\frac{r}{r_0})\, .
+\end{equation}
+The factor $I$ is then given by
+\begin{equation}
+I = 
+\end{equation}
+
+ \end{document}

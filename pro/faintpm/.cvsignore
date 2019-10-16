@@ -1,0 +1,7 @@
+[0-9][0-9]
+*.ps
+*.jpg
+*.fits.gz
+*.fits
+*.sav
+figures

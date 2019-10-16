@@ -1,0 +1,152 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,fullpage}
+
+
+\title{The Experimental Set up}
+\begin{document}
+
+\section{Introduction}
+
+This document is intended to be a (somewhat) detailed explaination of how the code will be structured 
+for the ``Measuring Gravitational Potentials using Cold Streams'' project. The document will be structured 
+as follows. Each section will correspond to a distinct unit of the code, that is a distinct .py file, and the
+sub-sections will pertain to the corresponding classes and methods etc. The main portions of the code should
+be structured as follows: Simulator, Similarity/data analysis package, Fitting routine (MCMC), Experiments.
+
+
+
+\section{Simulator.py}
+The goal of this file is to handle all of the physics of the problem. That is this code will create the 
+``data' and ``models'', and will perform the relevant physics for them (i.e. integrate them). A coding
+note: All physical constants that are EVER used in the code MUST be put at the TOP of the file in a special
+section that willl be allocated for them and their units MUST be specified. Any equation involving 
+physics (i.e. integrating) MUST specify units to ensure dimensional correctness (this should hold for all of
+the code involved in this project though, if the code is structured correctly this should be the only 
+file for which this is relevant).
+
+
+\subsection{class ColdStream}
+This class is what will correspond to a cold stream of stars. There are many ways to generate a coldstream,
+we choose neither the most physical (literally disrupting a globular cluster) nor the simple approximation 
+to the most physical that we had be using in the past for the Perturbation project(creating a glob that 
+periodically ejects stars), but rather the approximation that most closely models the 
+idea behind the project itself: A cold stream of stars should be treated as a (random) sampling of the 
+trajectory of a single object flying through the potential. As such we will be generating the 
+stream by picking a fiducial point and integrating both forward and 
+backward from that fiducial point.In order to take into account randomness in the sampling we will sample
+te curve and then randomly remove points in this sampling.
+
+
+Note: APW suggests creating children for this class, a data class and a model class. 
+
+\subsubsection{variables}
+self.fiducualPoint,self.numForward, self.numBackward, self.numRemaining, self.timeStep
+\subsubsection{ \_\_init\_\_ (self,numForward=10, numBackward=10, timestep=0, fiducualPoint=None, numRemaining=-1, integrationScheme=''forwardEuler'',covarianceOfFiducialPoint=None) }
+This will handle the creation of the creation of a stream with a given fiducial 6-vector fiducualPoint, a given number 
+of ``stars'' (read: sampled points in the streams full orbit) to be integrated in front numForward (i.e. sampling 
+from a later point in the trajectory than the given fiducual point), a given number of ``stars'' to be
+ integrated in reverse numBackward (i.e. sampling from an earlier point in the trajectory than the given fiducual point), a time step for the integrator 
+dt (in the relevant units) and a number of stars that are to remain in the end after randomly removing points. If no fiducual point 
+is specified a random one will be generated. if no numRemaining is given then all stars will remain.
+
+\subsubsection{integrate(self,dt=None,numForward=None,numBackward=None)}
+This will be a function pointer, which will point to whatever integration scheme the user chooses. 
+(i.e. euler's method, runge-kutta methods, leap frog). It will handle the actual integration of the stream.
+\subsubsection{fowardEuler(self,dt=None,numForward=None,numBackward=None)}
+\subsubsection{changeSampleRate(self, sampleRate=1.0)}
+This will change the sample rate of the stream. the dt will be taken to the new time step for the integrator, the relevant calculations will be made so that
+the front and the back of the stream both have the same arclengths as they had in the past. 
+
+\subsubsection{addStars(self,numFront=0,numBack=0)}
+this will sample the stream further forwards in time numFront more steps etc. 
+
+\subsubsection{plot(self)}
+This will return a 6-D array, each dimension will correspond to a single protion of the phase space 
+formation of the star (i.e. [ [pos1],[pos2],[pos3],[vel1], .... ] )
+
+
+
+
+\subsection{Class Star}
+This will be exactly what is sounds like, a container of all of the relevant information for a given sampled 
+point in the stream. The relevant info will be the stars phase space position and its corresponding covariance matrix. If this
+is a model star the covariance matrix should be None type. Note: Flesh out more.
+
+\subsubsection{\_\_init\_\_(self, phasePos, covarianceMatrix=None)}
+
+
+\subsection{Class Simulation}
+This will be the interface for the user. It will handle the creation of n streams,with n fiducialPoints each with numBackwards, 
+numForwards stars integrated backward and forward from their fiducualPoints, all using the integration scheme integrationScheme, with time step dt. It will also set 
+the physics, e.g. what family of potentials and what particular element of this family we are using. It will also contain the suite of functional tests for the simulator.
+
+\subsubsection{\_\_init\_\_(self, seedVal=20, numStreams=1,timestep=1 , potential=LN, fiducualPoints=None, numForwards=10, numBackwards=10,integrationScheme='forwardEuler',numRemaining=-1)}
+This will create numStream streams  with fiducial points fiducialPoints (if not specified then random) in the potential potential with numForwards steps forward and numBackwards steps backward
+
+\subsubsection{plotH(self, streamnum)}
+Plots total energy of the points in the stream as if it were a single particle (i.e. H(t) where H($t_i$) is the energy of the ith point)
+
+\subsubsection{plotStream(self, streamnum)}
+plots 9 panels of phase space.
+
+
+
+\section{Similarity.py}
+This should perform our data analysis. It should have all of the methods of evaluating the simularity, and everything that that might entail. APW: read closestPoints,
+i have changed things slightly in taht this code will be some what specialized for our problem, but I'll try to make it so that this isnt wont be a problem
+if/when we do the generalization.
+
+\subsection{metric(dataStar)}
+creates the metric for the given data star using said data stars covariance matrix
+
+\subsection{dot(dataStar,modelStar)}
+dot product of the 6 vector for the data star into the 6 vector of the model star through the metric.
+
+\subsection{norm(star,metricTensor=None)}
+returns the norm of a given vector through its own metric. for model stars one will want to specify the metric through which you want to do the dot product.
+
+\subsection{chiSquared(star1, star2,metricTensor=None)}
+finds the chiSquared (squared distance) between star1 and star2 using star1's metric unless another metric is provided.
+
+\subsection{distance(star1, star2, metricTensor=None)}
+returns sqrt(chiSquared(star1,star2,metricTensor))
+
+\subsection{closestPoints(data, model,forceEvaluate=False)}
+finds the two closest points among the model points to each of the data points and will return them along with their distances. 
+if any point in the data has as a closest point either end point of 
+the model and forceEvaluation==False it should add a point to your model in the relevant direction and try again.
+
+\subsection{closestLinePoints(data,model,forceEvaluate=False)}
+finds the closest point on the model using linear interpolation and returns its location and its distance. if forceEvaluate==false the same holdes as in closestPoints.
+
+\subsection{similarity(data,model,forceEvaluate=False)}
+returns the similairty scalar of the data to the model. As above if forceEvaluate==False.
+
+
+\subsection{Functional tests}
+TBD
+
+
+
+\section{MCMCFitter.py}
+This will handle the MCMC portion of this project. everything mcmc related, from wandering about to cooling shoudl be taken care of here. 
+
+\subsection{mcmc(streams,prior\_info,step\_info, nsteps,multiple=0)}
+obvious from name
+
+\subsection{createStream(...)}
+obvious from name
+\subsection{perturbation(...)}
+obvious from name
+\subsection{log\_posterior\_probability(...)}
+\subsection{prior(prior\_info)}
+\subsection{anneal()}
+\subsection{plot\_var\_vs\_t()}
+\subsection{plot\_histogram()}
+\subsection{plot\_streans()}
+\subsection{Functional Test}
+
+\section{Experiments.py}
+Experiments will be done here.
+
+\end{document}
