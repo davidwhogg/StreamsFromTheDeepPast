@@ -1,10 +1,11 @@
 # StreamsFromTheDeepPast
-Code from Hogg, Bovy, Roweis, and Blanton to do stuff with local disk velocity structure
+Code to find and analyze local disk velocity structure.
 
 # Authors
 - **Michael Blanton** (NYU)
 - **Jo Bovy** (Toronto)
 - **David W. Hogg** (NYU)
+- **Kathryn V. Johnston** (Columbia)
 - **Sam Roweis** (deceased)
 
 # License
